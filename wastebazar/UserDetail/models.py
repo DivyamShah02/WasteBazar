@@ -38,7 +38,7 @@ class User(AbstractUser):
     name = models.CharField(max_length=255)
     contact_number = models.CharField(max_length=15, unique=True)
     email = models.EmailField(unique=True)
-    is_approved = models.BooleanField(default=True)
+    is_approved = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
 
     # Override save to assign user_id automatically
@@ -49,8 +49,8 @@ class User(AbstractUser):
             self.username = new_user_id
 
         # if self.role in ['buyer_corporate', 'seller_corporate']:
-        if self.role == 'buyer_corporate':
-            self.is_approved = False
+        if self.role != 'buyer_corporate':
+            self.is_approved = True
 
         super().save(*args, **kwargs)
 
@@ -70,9 +70,11 @@ class CorporateUserDetail(models.Model):
     address = models.TextField()
     certificate_url = models.URLField(blank=True, null=True)  # S3 link or similar
     is_approved = models.BooleanField(default=False)
+    approved_at = models.DateTimeField(blank=True, null=True)
+    is_rejected = models.BooleanField(default=False)
+    rejected_at = models.DateTimeField(blank=True, null=True)
     rejection_reason = models.TextField(blank=True, null=True)
     requested_at = models.DateTimeField(auto_now_add=True)
-    approved_at = models.DateTimeField(blank=True, null=True)
     is_deleted = models.BooleanField(default=False)
 
     def __str__(self):

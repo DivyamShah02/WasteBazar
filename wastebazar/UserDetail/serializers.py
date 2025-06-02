@@ -22,6 +22,9 @@ class CorporateUserDetailSerializer(serializers.ModelSerializer):
         model = CorporateUserDetail
         fields = [
             'user_id',
+            'name',
+            'contact_number',
+            'email',
             'company_name',
             'pan_number',
             'gst_number',

@@ -5,15 +5,11 @@ from django.utils import timezone
 
 from .models import *
 from .serializers import *
+from .utils import generate_send_otp
 
 from utils.decorators import handle_exceptions, check_authentication
 
-import random
 from datetime import timedelta
-
-
-def generate_send_otp():
-    return ''.join(random.choices('0123456789', k=6))
 
 
 class OtpAuthViewSet(viewsets.ViewSet):
@@ -33,7 +29,7 @@ class OtpAuthViewSet(viewsets.ViewSet):
                 "error": "Mobile number is required."
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        otp = generate_send_otp()
+        otp = generate_send_otp(contact_number=mobile)
         otp_obj = OTPVerification.objects.create(
             mobile=mobile,
             otp=otp,
@@ -41,8 +37,6 @@ class OtpAuthViewSet(viewsets.ViewSet):
             is_verified=False,
             attempt_count=0
         )
-
-        # Optional: send SMS here
 
         return Response({
             "success": True,
@@ -151,7 +145,7 @@ class OtpAuthViewSet(viewsets.ViewSet):
 class UserDetailViewSet(viewsets.ViewSet):
 
     @handle_exceptions
-    # @check_authentication
+    @check_authentication()
     def update(self, request, pk):
         """
         API 3: Fill User Details after OTP verification
@@ -228,4 +222,187 @@ class UserDetailViewSet(viewsets.ViewSet):
             "data": None,
             "error": serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CorporateBuyerViewSet(viewsets.ViewSet):
+    
+    @handle_exceptions
+    @check_authentication(required_role='admin')
+    def list(self, request):
+        unapproved_corporate_profiles_obj = CorporateUserDetail.objects.filter(is_approved=False, is_deleted=False, is_rejected=False)
+        unapproved_corporate_profiles = CorporateUserDetailSerializer(unapproved_corporate_profiles_obj, many=True).data
+
+        return Response({
+            "success": True,
+            "user_not_logged_in": False,
+            "user_unauthorized": False,
+            "data": unapproved_corporate_profiles,
+            "error": None
+        }, status=status.HTTP_200_OK)
+
+    @handle_exceptions
+    @check_authentication(required_role='admin')
+    def update(self, request, pk):
+        user_id = pk
+
+        corporate_buyer_obj = CorporateUserDetail.objects.get(user_id=user_id, is_deleted=False)
+        if not corporate_buyer_obj:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": "Corporate Buyer with this id doesnot exists."
+            }, status=status.HTTP_200_OK)
+        
+        is_approved = request.data.get('is_approved')
+        reason = request.data.get('reason')
+
+        if is_approved is True:
+            corporate_buyer_obj.is_rejected = False
+            corporate_buyer_obj.is_approved = True
+            corporate_buyer_obj.approved_at = timezone.now()
+            corporate_buyer_obj.save()
+
+            return Response({
+                "success": True,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": "Approved.",
+                "error": None
+            }, status=status.HTTP_200_OK)
+        
+        else:
+            corporate_buyer_obj.is_approved = False
+            corporate_buyer_obj.is_rejected = True
+            corporate_buyer_obj.rejected_at = timezone.now()
+            corporate_buyer_obj.rejection_reason = reason
+            corporate_buyer_obj.save()
+
+            return Response({
+                    "success": True,
+                    "user_not_logged_in": False,
+                    "user_unauthorized": False,
+                    "data": "UnApproved due to mentioned reason.",
+                    "error": None
+                }, status=status.HTTP_200_OK)
+
+
+class AccountCreationViewSet(viewsets.ViewSet):
+    
+    @handle_exceptions
+    @check_authentication(required_role='admin')
+    def create(self, request):
+            name = request.data.get('name')
+            password = request.data.get('password')
+            contact_number = request.data.get('contact_number')
+            email = request.data.get('email')
+            role = request.data.get('role')            
+
+            USER_ROLES = [
+                'admin',
+                'buyer_individual',
+                'buyer_corporate',
+                'seller_individual',
+                'seller_corporate',
+            ]
+
+
+            email_already_user = User.objects.filter(is_active=True, email=email).exists()
+            contact_number_already_user = User.objects.filter(is_active=True, contact_number=contact_number).exists()
+
+            if email_already_user or contact_number_already_user:
+                return Response(
+                        {
+                            "success": False,                            
+                            "user_not_logged_in": False,
+                            "user_unauthorized": False,
+                            "data":None,
+                            "error": "User already registered."
+                        }, status=status.HTTP_400_BAD_REQUEST)
+
+            if not name or not contact_number or not email or role not in USER_ROLES:
+                return Response(
+                        {
+                            "success": False,                            
+                            "user_not_logged_in": False,
+                            "user_unauthorized": False,
+                            "data":None,
+                            "error": "Missing required fields."
+                        }, status=status.HTTP_400_BAD_REQUEST)
+
+
+            if str(role) == 'admin':
+                user = User.objects.create_superuser(
+                    username=email,
+                    password = password,
+                    email=email,
+                    name=name,
+                    contact_number=contact_number,
+                    role=role,
+                )
+            
+            else:
+                user = User.objects.create_user(
+                    username=email,
+                    password = password,
+                    email=email,
+                    name=name,
+                    contact_number=contact_number,
+                    role=role,
+                    is_approved=True,
+                )
+
+            user_detail_serializer = UserSerializer(user)
+            user_data = user_detail_serializer.data
+
+            if role in ['buyer_corporate', 'seller_corporate']:
+                company_name = request.data.get("company_name")
+                pan_number = request.data.get("pan_number")
+                gst_number = request.data.get("gst_number")
+                address = request.data.get("address")
+                certificate_url = request.data.get("certificate_url")
+                is_approved = True 
+
+                if not company_name or not pan_number or not address:
+                    return Response({
+                        "success": False,
+                        "user_not_logged_in": False,
+                        "user_unauthorized": False,
+                        "data": None,
+                        "error": "Corporate fields missing: company_name, pan_number, address are required."
+                    }, status=status.HTTP_400_BAD_REQUEST)
+
+                # Save corporate details
+                CorporateUserDetail.objects.update_or_create(
+                    user_id=user.user_id,
+                    defaults={
+                        "name": name,
+                        "contact_number": contact_number,
+                        "email": email,
+                        "company_name": company_name,
+                        "pan_number": pan_number,
+                        "gst_number": gst_number,
+                        "address": address,
+                        "certificate_url": certificate_url,
+                        "requested_at": timezone.now(),
+                        "is_approved": is_approved,
+                        "approved_at": timezone.now(),
+                        "is_deleted": False,
+                        "rejection_reason": None,
+                    }
+                )
+
+                # Corporate users are inactive until approved
+                user.is_active = False
+                user.save()
+
+            return Response(
+                        {
+                            "success": True,  
+                            "user_not_logged_in": False,
+                            "user_unauthorized": False,                       
+                            "data": user_data,
+                            "error": None
+                        }, status=status.HTTP_201_CREATED)
 

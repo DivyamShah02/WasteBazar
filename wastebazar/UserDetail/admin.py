@@ -25,11 +25,11 @@ class UserAdmin(admin.ModelAdmin):
 @admin.register(CorporateUserDetail)
 class CorporateUserDetailAdmin(admin.ModelAdmin):
     list_display = (
-        'user_id', 'company_name', 'pan_number', 'gst_number',
-        'is_approved', 'requested_at', 'approved_at', 'is_deleted'
+        'user_id', 'company_name', 'name',
+        'is_approved', 'requested_at', 'is_rejected'
     )
-    list_filter = ('is_approved', 'is_deleted')
-    search_fields = ('user_id', 'company_name', 'pan_number', 'gst_number')
+    list_filter = ('is_approved', 'is_deleted', 'is_rejected')
+    search_fields = ('user_id', 'name', 'email', 'contact_number', 'company_name', 'pan_number', 'gst_number')
 
 
 # Admin for OTPVerification
