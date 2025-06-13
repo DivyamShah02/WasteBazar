@@ -561,7 +561,11 @@ body {
 }
 
 .search-tab.active {
-    color: white;
+    /* color: var(--gradient-primary); */
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     box-shadow: var(--shadow-md);
 }
 
@@ -1573,8 +1577,9 @@ body {
 
 .step-number {
     position: absolute;
-    top: -25px;
+    top: -13px;
     left: 50%;
+    padding-top: 10px;
     transform: translateX(-50%);
     width: 50px;
     height: 50px;
