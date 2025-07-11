@@ -2562,3 +2562,164 @@ body {
         font-size: 0.9rem;
     }
 }
+
+
+
+
+
+
+/* Progressive Search Form Styles */
+.search-step {
+    transition: all 0.3s ease;
+}
+
+.search-progress {
+    margin-top: 2rem;
+}
+
+.progress-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.step-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.progress-step.active .step-number {
+    background: #0074E8;
+    color: white;
+    transform: scale(1.1);
+}
+
+.progress-step.active .step-label {
+    color: #0074E8;
+    font-weight: 600;
+}
+
+.progress-step.completed .step-number {
+    background: #10b981;
+    color: white;
+}
+
+.progress-step.completed .step-label {
+    color: #10b981;
+}
+
+.progress-line {
+    width: 80px;
+    height: 2px;
+    background: #e2e8f0;
+    margin: 0 1rem;
+    position: relative;
+
+    transition: all 0.3s ease;
+}
+
+.progress-line.completed {
+    background: #10b981;
+}
+
+.search-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #e2e8f0 !important;
+    color: #94a3b8 !important;
+}
+
+.search-btn:disabled:hover {
+    transform: none !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.btn-outline-secondary {
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    background: transparent;
+}
+
+.btn-outline-secondary:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+    transform: translateY(-1px);
+    border-color: #e2e8f0;
+}
+
+.search-step {
+    animation: fadeInUp 0.4s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .progress-container {
+        transform: scale(0.8);
+    }
+
+    .progress-line {
+        width: 60px;
+        margin: 0 0.5rem;
+    }
+
+    .step-number {
+        width: 35px;
+        height: 35px;
+        font-size: 0.8rem;
+    }
+
+    .step-label {
+        font-size: 0.7rem;
+    }
+
+    .col-md-6 {
+        margin-bottom: 1rem;
+    }
+
+    .search-btn,
+    .btn-outline-secondary {
+        width: 100%;
+    }
+}

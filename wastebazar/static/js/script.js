@@ -27,14 +27,14 @@ document.querySelectorAll('.search-tab').forEach(tab => {
         console.log('Search tab changed to:', tabType);
 
         // Update form placeholder text based on tab
-        const searchBtn = document.querySelector('.search-btn');
-        if (tabType === 'buy') {
-            searchBtn.innerHTML = '<i class="fas fa-search me-2"></i>Find Sellers';
-        } else if (tabType === 'sell') {
-            searchBtn.innerHTML = '<i class="fas fa-search me-2"></i>Find Buyers';
-        } else {
-            searchBtn.innerHTML = '<i class="fas fa-search me-2"></i>View Requirements';
-        }
+        // const searchBtn = document.querySelector('.search-btn');
+        // if (tabType === 'buy') {
+        //     searchBtn.innerHTML = '<i class="fas fa-search me-2"></i>Find Sellers';
+        // } else if (tabType === 'sell') {
+        //     searchBtn.innerHTML = '<i class="fas fa-search me-2"></i>Find Buyers';
+        // } else {
+        //     searchBtn.innerHTML = '<i class="fas fa-search me-2"></i>View Requirements';
+        // }
     });
 });
 
@@ -46,9 +46,9 @@ document.getElementById('searchForm').addEventListener('submit', function (e) {
         category: document.getElementById('category').value,
         subcategory: document.getElementById('subcategory').value,
         location: document.getElementById('location').value,
-        minQuantity: document.getElementById('minQuantity').value,
-        maxQuantity: document.getElementById('maxQuantity').value,
-        priceRange: document.getElementById('priceRange').value
+        // minQuantity: document.getElementById('minQuantity').value,
+        // maxQuantity: document.getElementById('maxQuantity').value,
+        // priceRange: document.getElementById('priceRange').value
     };
 
     console.log('Search submitted:', formData);
