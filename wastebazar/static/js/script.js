@@ -325,6 +325,248 @@ document.querySelectorAll('.listing-card, .requirement-card, .testimonial-card')
     });
 });
 
+// Interactive Category Explorer functionality
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('🔧 Initializing category explorer...');
+
+    // Electronic Devices Section - Category switching functionality
+    const categoryItems = document.querySelectorAll('.category-main-item');
+    const subcategorySections = document.querySelectorAll('.subcategory-section');
+
+    console.log('📂 Found category items:', categoryItems.length);
+    console.log('📋 Found subcategory sections:', subcategorySections.length);
+
+    // Category data mapping for Electronic Devices
+    const categoryData = {
+        'Mobile Phones': {
+            id: 'mobile-phones',
+            title: 'Mobile Phones',
+            subcategories: [
+                { icon: 'fas fa-mobile-alt', name: 'Smartphones' },
+                { icon: 'fas fa-tablet-alt', name: 'Tablets' },
+                { icon: 'fas fa-headphones', name: 'Earphones & Headsets' },
+                { icon: 'fas fa-battery-half', name: 'Mobile Batteries' }
+            ]
+        },
+        'Laptops & Computers': {
+            id: 'laptops-computers',
+            title: 'Laptops & Computers',
+            subcategories: [
+                { icon: 'fas fa-laptop', name: 'Laptops' },
+                { icon: 'fas fa-desktop', name: 'Desktop Computers' },
+                { icon: 'fas fa-server', name: 'Servers' },
+                { icon: 'fas fa-memory', name: 'RAM & Storage' }
+            ]
+        },
+        'Electronic Components': {
+            id: 'electronic-components',
+            title: 'Electronic Components',
+            subcategories: [
+                { icon: 'fas fa-keyboard', name: 'Keyboards' },
+                { icon: 'fas fa-mouse', name: 'Computer Mouse' },
+                { icon: 'fas fa-tv', name: 'Monitors' },
+                { icon: 'fas fa-print', name: 'Printers' }
+            ]
+        },
+        'Accessories & Parts': {
+            id: 'accessories-parts',
+            title: 'Accessories & Parts',
+            subcategories: [
+                { icon: 'fas fa-microchip', name: 'Circuit Boards' },
+                { icon: 'fas fa-plug', name: 'Power Adapters' },
+                { icon: 'fas fa-wifi', name: 'Network Equipment' },
+                { icon: 'fas fa-camera', name: 'Camera Equipment' }
+            ]
+        }
+    };
+
+    // Function to update subcategory content for Electronic Devices
+    function updateSubcategoryContent(categoryName) {
+        const data = categoryData[categoryName];
+        if (!data) return;
+
+        // Hide all subcategory sections
+        subcategorySections.forEach(section => {
+            section.style.display = 'none';
+        });
+
+        // Find or create the target section
+        let targetSection = document.getElementById(data.id);
+        if (targetSection) {
+            targetSection.style.display = 'block';
+        } else {
+            // Create new section if it doesn't exist
+            const subcategoryGrid = document.getElementById('subcategory-content');
+            targetSection = document.createElement('div');
+            targetSection.className = 'subcategory-section';
+            targetSection.id = data.id;
+            targetSection.style.display = 'block';
+
+            const titleElement = document.createElement('h4');
+            titleElement.className = 'subcategory-title';
+            titleElement.textContent = data.title;
+
+            const itemsContainer = document.createElement('div');
+            itemsContainer.className = 'subcategory-items';
+
+            data.subcategories.forEach(sub => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'subcategory-item';
+                itemElement.innerHTML = `
+                    <div class="item-icon"><i class="${sub.icon}"></i></div>
+                    <span>${sub.name}</span>
+                `;
+
+                // Add click handler for subcategory items
+                itemElement.addEventListener('click', function () {
+                    console.log('Subcategory clicked:', sub.name);
+                    window.location.href = `listings.html?category=${encodeURIComponent(categoryName)}&subcategory=${encodeURIComponent(sub.name)}`;
+                });
+
+                itemsContainer.appendChild(itemElement);
+            });
+
+            targetSection.appendChild(titleElement);
+            targetSection.appendChild(itemsContainer);
+            subcategoryGrid.appendChild(targetSection);
+        }
+    }
+
+    // Add click handlers to Electronic Devices category items
+    categoryItems.forEach(item => {
+        item.addEventListener('click', function () {
+            // Remove active class from all items in the same section
+            categoryItems.forEach(i => i.classList.remove('active'));
+
+            // Add active class to clicked item
+            this.classList.add('active');
+
+            // Get category name and update content
+            const categoryName = this.textContent.trim();
+            updateSubcategoryContent(categoryName);
+
+            console.log('Electronic Device category switched to:', categoryName);
+        });
+    });
+
+    // Metal Scrap & Alloys Section Functionality
+    const metalCategoryItems = document.querySelectorAll('.metal-main-item');
+    const metalSubcategorySections = document.querySelectorAll('.metal-subcategory-section');
+
+    console.log('🔩 Found metal category items:', metalCategoryItems.length);
+    console.log('⚡ Found metal subcategory sections:', metalSubcategorySections.length);
+
+    // Metal category mapping
+    const metalCategoryMapping = {
+        'Ferrous Metals': 'ferrous-metals',
+        'Non-Ferrous Metals': 'non-ferrous-metals',
+        'Precious Metals': 'precious-metals',
+        'Industrial Alloys': 'industrial-alloys'
+    };
+
+    // Add click handlers to Metal category items
+    metalCategoryItems.forEach(item => {
+        item.addEventListener('click', function () {
+            // Remove active class from all metal items
+            metalCategoryItems.forEach(i => i.classList.remove('active'));
+
+            // Add active class to clicked item
+            this.classList.add('active');
+
+            // Get category name and show corresponding subcategory section
+            const categoryName = this.textContent.trim();
+            const targetId = metalCategoryMapping[categoryName];
+
+            // Hide all metal subcategory sections
+            metalSubcategorySections.forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // Show the target section
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+
+            console.log('Metal category switched to:', categoryName);
+        });
+    });
+
+    // Add click handlers to metal subcategory items
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('.metal-subcategory-section .subcategory-item')) {
+            const item = e.target.closest('.subcategory-item');
+            const subcategoryName = item.querySelector('span').textContent;
+            const sectionTitle = item.closest('.metal-subcategory-section').querySelector('.subcategory-title').textContent;
+            console.log('Metal subcategory clicked:', subcategoryName, 'in section:', sectionTitle);
+            window.location.href = `listings.html?category=Metal Scrap & Alloys&subcategory=${encodeURIComponent(subcategoryName)}`;
+        }
+    });
+
+    // Plastic & Polymer Waste Section Functionality
+    const plasticCategoryItems = document.querySelectorAll('.plastic-main-item');
+    const plasticSubcategorySections = document.querySelectorAll('.plastic-subcategory-section');
+
+    console.log('🧪 Found plastic category items:', plasticCategoryItems.length);
+    console.log('♻️ Found plastic subcategory sections:', plasticSubcategorySections.length);
+
+    // Plastic category mapping
+    const plasticCategoryMapping = {
+        'PET & HDPE': 'pet-hdpe',
+        'Industrial Plastics': 'industrial-plastics',
+        'Packaging Materials': 'packaging-materials',
+        'Polymer Films': 'polymer-films'
+    };
+
+    // Add click handlers to Plastic category items
+    plasticCategoryItems.forEach(item => {
+        item.addEventListener('click', function () {
+            // Remove active class from all plastic items
+            plasticCategoryItems.forEach(i => i.classList.remove('active'));
+
+            // Add active class to clicked item
+            this.classList.add('active');
+
+            // Get category name and show corresponding subcategory section
+            const categoryName = this.textContent.trim();
+            const targetId = plasticCategoryMapping[categoryName];
+
+            // Hide all plastic subcategory sections
+            plasticSubcategorySections.forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // Show the target section
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+
+            console.log('Plastic category switched to:', categoryName);
+        });
+    });
+
+    // Add click handlers to plastic subcategory items
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('.plastic-subcategory-section .subcategory-item')) {
+            const item = e.target.closest('.subcategory-item');
+            const subcategoryName = item.querySelector('span').textContent;
+            const sectionTitle = item.closest('.plastic-subcategory-section').querySelector('.subcategory-title').textContent;
+            console.log('Plastic subcategory clicked:', subcategoryName, 'in section:', sectionTitle);
+            window.location.href = `listings.html?category=Plastic & Polymer Waste&subcategory=${encodeURIComponent(subcategoryName)}`;
+        }
+    });
+
+    // Add hover effects to subcategory items for all sections
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('.subcategory-item')) {
+            const item = e.target.closest('.subcategory-item');
+            const subcategoryName = item.querySelector('span').textContent;
+            console.log('Subcategory item clicked:', subcategoryName);
+        }
+    });
+});
+
 // Initialize platform
 console.log('🚀 WasteBazar platform initialized successfully!');
 console.log('📊 Platform features: Information sharing, Direct connections, Market insights');

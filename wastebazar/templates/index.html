@@ -43,6 +43,9 @@
                         <a class="nav-link" href="listings.html">Browse Listings</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="listings.html">View Requirements</a>
+                    </li>
+                    {% comment %} <li class="nav-item">
                         <a class="nav-link" href="#market-insights">Market Insights</a>
                     </li>
                     <li class="nav-item">
@@ -50,12 +53,12 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#about">About</a>
-                    </li>
+                    </li> {% endcomment %}
                 </ul>
                 
                 <div class="d-flex gap-2">
                     <button class="btn btn-outline-primary">Login</button>
-                    <button class="btn btn-primary">Post Listing</button>
+                    <button class="btn btn-primary">Register</button>
                 </div>
             </div>
         </div>
@@ -115,14 +118,193 @@
                         <span class="stat-label">Connections Made</span>
                     </div>
                 </div>
-                
+{% comment %}                 
                 <div class="hero-cta" data-aos="fade-up" data-aos-delay="400">
                     <button class="btn-hero">Browse Listings</button>
                     <button class="btn-hero-outline">Post Your Listing</button>
+                </div> {% endcomment %}
+            </div>
+        </div>
+    </section>
+
+     <!-- Company Story Section -->
+    <section class="company-story" id="about">
+        <div class="container">
+            <div class="story-container" data-aos="fade-up" data-aos-duration="1000">
+                <div class="row">
+                    <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                        <div class="story-content">
+                            <h2 class="">Revolutionizing Scrap Trading in India</h2>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row story-content">
+                            <div class="col-12 col-lg-6">
+                                <p>Founded in 2019, WasteBazar emerged from a simple vision: to create a transparent, efficient, and accessible platform where scrap traders could connect, share information, and grow their businesses together.</p>
+                                
+                                <p>We recognized that the traditional scrap trading industry lacked a centralized information hub. Buyers struggled to find reliable sellers, and sellers couldn't reach their ideal customers. WasteBazar bridges this gap by providing a comprehensive platform for information sharing and direct connections.</p>
+                            </div>
+                            <div class="col-12 col-lg-6">
+                            
+                                <div class="story-highlights ">
+                                    <a  href="#ewaste" class="highlight-item" >
+                                        <div class="highlight-icon">
+                                            <i class="fas fa-laptop"></i>
+                                        </div>
+                                        <div class="highlight-text" >E-Waste</div>
+                                    </a>
+                                    <a href="#metalscrap" class="highlight-item">
+                                        <div class="highlight-icon">
+                                            <i class="fas fa-cog"></i>
+                                        </div>
+                                        <div class="highlight-text">Metal Scrap</div>
+                                    </a>
+                                    <a href="#plasticwaste" class="highlight-item">
+                                        <div class="highlight-icon">
+                                            <i class="fas fa-recycle"></i>
+                                        </div>
+                                        <div class="highlight-text">Plastic Waste</div>
+                                    </a>
+                                    <div class="highlight-item">
+                                        <div class="highlight-icon">
+                                            <i class="fas fa-newspaper"></i>
+                                        </div>
+                                        <div class="highlight-text">Paper waste</div>
+                                    </div>
+                                    
+                                    <div class="highlight-item">
+                                        <div class="highlight-icon">
+                                            <i class="fas fa-tshirt"></i>
+                                        </div>
+                                        <div class="highlight-text">Textile Waste</div>
+                                    </div>
+                                    <div class="highlight-item">
+                                        <div class="highlight-icon">
+                                            <i class="fas fa-wine-bottle"></i>
+                                        </div>
+                                        <div class="highlight-text">Glass Waste</div>
+                                    </div>                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% comment %} <div class="story-visual">
+                    <div class="story-image">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="floating-elements">
+                        <div class="floating-element">
+                            <i class="fas fa-chart-line text-primary"></i>
+                            <small>Growth</small>
+                        </div>
+                        <div class="floating-element">
+                            <i class="fas fa-users text-success"></i>
+                            <small>Community</small>
+                        </div>
+                        <div class="floating-element">
+                            <i class="fas fa-handshake text-warning"></i>
+                            <small>Trust</small>
+                        </div>
+                    </div>
+                </div> {% endcomment %}
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up" data-aos-duration="1000">
+                <h2 class="section-title">How WasteBazar Works</h2>
+                <p class="section-subtitle">Simple steps to connect with the right trading partners</p>
+            </div>
+            
+            <div class="steps-container">
+                <div class="step-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h3 class="step-title">Register & Verify</h3>
+                    <p class="step-description">Create your free account and complete the verification process. Upload your business documents to build trust and credibility.</p>
+                </div>
+                
+                <div class="step-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <h3 class="step-title">Post or Browse</h3>
+                    <p class="step-description">Post your listings or requirements with detailed information. Browse through thousands of verified listings and requirements.</p>
+                </div>
+                
+                <div class="step-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="step-title">Search & Filter</h3>
+                    <p class="step-description">Use our advanced search and filtering options to find exactly what you need based on location, quantity, and material type.</p>
+                </div>
+                
+                <!-- <div class="step-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="step-number">4</div>
+                    <div class="step-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h3 class="step-title">Connect Directly</h3>
+                    <p class="step-description">Get direct contact information and connect with buyers or sellers. Negotiate terms and finalize deals offline.</p>
+                </div> -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Indicators -->
+    <section class="trust-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up" data-aos-duration="1000">
+                <h2 class="section-title">Why Choose WasteBazar?</h2>
+                <p class="section-subtitle">Your trusted partner in scrap trading information</p>
+            </div>
+            
+            <div class="trust-indicators">
+                <div class="trust-item" data-aos="fade-up" data-aos-delay="100">
+                    <div class="trust-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="trust-title">100% Verified Information</h3>
+                    <p class="trust-description">All listings and requirements undergo strict verification to ensure authenticity and reliability of information shared on our platform.</p>
+                </div>
+                
+                <div class="trust-item" data-aos="fade-up" data-aos-delay="200">
+                    <div class="trust-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="trust-title">Advanced Search & Filters</h3>
+                    <p class="trust-description">Find exactly what you need with our powerful search engine and comprehensive filtering options for location, quantity, and material type.</p>
+                </div>
+                
+                <div class="trust-item" data-aos="fade-up" data-aos-delay="300">
+                    <div class="trust-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="trust-title">Direct Contact Information</h3>
+                    <p class="trust-description">Get direct access to seller and buyer contact details to negotiate and finalize deals offline at your convenience.</p>
+                </div>
+                
+                <div class="trust-item" data-aos="fade-up" data-aos-delay="400">
+                    <div class="trust-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="trust-title">Real-Time Market Insights</h3>
+                    <p class="trust-description">Stay updated with live market prices, trends, and industry insights to make informed trading decisions.</p>
                 </div>
             </div>
         </div>
     </section>
+
 
     <!-- Advanced Search Section -->
     <section class="search-section">
@@ -248,91 +430,7 @@
         </div>
     </section>
 
-    <!-- Company Story Section -->
-    <section class="company-story" id="about">
-        <div class="container">
-            <div class="story-container" data-aos="fade-up" data-aos-duration="1000">
-                <div class="row">
-                    <div class="col-12 col-lg-6 mb-4 mb-lg-0">
-                        <div class="story-content">
-                            <h2 class="">Revolutionizing Scrap Trading in India</h2>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="row story-content">
-                            <div class="col-12 col-lg-6">
-                                <p>Founded in 2019, WasteBazar emerged from a simple vision: to create a transparent, efficient, and accessible platform where scrap traders could connect, share information, and grow their businesses together.</p>
-                                
-                                <p>We recognized that the traditional scrap trading industry lacked a centralized information hub. Buyers struggled to find reliable sellers, and sellers couldn't reach their ideal customers. WasteBazar bridges this gap by providing a comprehensive platform for information sharing and direct connections.</p>
-                            </div>
-                            <div class="col-12 col-lg-6">
-                            
-                                <div class="story-highlights ">
-                                    <div class="highlight-item">
-                                        <div class="highlight-icon">
-                                            <i class="fas fa-recycle"></i>
-                                        </div>
-                                        <div class="highlight-text">Plastic Waste</div>
-                                    </div>
-                                    <div class="highlight-item">
-                                        <div class="highlight-icon">
-                                            <i class="fas fa-newspaper"></i>
-                                        </div>
-                                        <div class="highlight-text">Paper waste</div>
-                                    </div>
-                                    <div class="highlight-item">
-                                        <div class="highlight-icon">
-                                            <i class="fas fa-cog"></i>
-                                        </div>
-                                        <div class="highlight-text">Metal Scrap</div>
-                                    </div>
-                                    <div class="highlight-item">
-                                        <div class="highlight-icon">
-                                            <i class="fas fa-laptop"></i>
-                                        </div>
-                                        <div class="highlight-text">E-Waste</div>
-                                    </div>
-                                    <div class="highlight-item">
-                                        <div class="highlight-icon">
-                                            <i class="fas fa-tshirt"></i>
-                                        </div>
-                                        <div class="highlight-text">Textile Waste</div>
-                                    </div>
-                                    <div class="highlight-item">
-                                        <div class="highlight-icon">
-                                            <i class="fas fa-wine-bottle"></i>
-                                        </div>
-                                        <div class="highlight-text">Glass Waste</div>
-                                    </div>                        
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                {% comment %} <div class="story-visual">
-                    <div class="story-image">
-                        <i class="fas fa-building"></i>
-                    </div>
-                    <div class="floating-elements">
-                        <div class="floating-element">
-                            <i class="fas fa-chart-line text-primary"></i>
-                            <small>Growth</small>
-                        </div>
-                        <div class="floating-element">
-                            <i class="fas fa-users text-success"></i>
-                            <small>Community</small>
-                        </div>
-                        <div class="floating-element">
-                            <i class="fas fa-handshake text-warning"></i>
-                            <small>Trust</small>
-                        </div>
-                    </div>
-                </div> {% endcomment %}
-            </div>
-        </div>
-    </section>
-
+   
     <!-- Featured Listings Section -->
     <section class="featured-listings">
         <div class="container">
@@ -482,7 +580,7 @@
                 <p class="section-subtitle">Fresh buying requirements from verified businesses</p>
             </div>
             
-            <div class="requirements-grid">
+            {% comment %} <div class="requirements-grid">
                 <div class="requirement-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="requirement-header">
                         <div class="requirement-type">Buying</div>
@@ -559,6 +657,132 @@
                         <div class="requirement-date">1 day ago</div>
                     </div>
                 </div>
+            </div> {% endcomment %}
+
+            <div class="listings-grid">
+                <div class="listing-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="listing-image">
+                        <i class="fas fa-recycle"></i>
+                        <div class="listing-badge">Buying</div>
+                    </div>
+                    <div class="listing-content">
+                        <h3 class="listing-title">Need 100 Tons Aluminum Scrap</h3>
+                        <div class="listing-details">
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-weight-hanging"></i>
+                                </div>
+                                <div class="detail-text">100 Tons</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="detail-text">Chennai, TN</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-certificate"></i>
+                                </div>
+                                <div class="detail-text"> Industrial Grade</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-truck"></i>
+                                </div>
+                                <div class="detail-text">Pickup Available</div>
+                            </div>
+                        </div>
+                        <div class="listing-price">Budget:  ₹120,000/Ton</div>
+                        <div class="listing-footer">
+                            <div class="listing-date">Posted 2 days ago</div>
+                            <button class="btn-view-details">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="listing-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="listing-image">
+                        <i class="fas fa-cog"></i>
+                        <div class="listing-badge">Buying</div>
+                    </div>
+                    <div class="listing-content">
+                        <h3 class="listing-title">Looking for Paper Waste</h3>
+                        <div class="listing-details">
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-weight-hanging"></i>
+                                </div>
+                                <div class="detail-text">50 Tons </div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="detail-text">Delhi, NCR</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-industry"></i>
+                                </div>
+                                <div class="detail-text">Industrial Grade</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="detail-text">Immediate</div>
+                            </div>
+                        </div>
+                        <div class="listing-price">Budget:  ₹42,000/Ton</div>
+                        <div class="listing-footer">
+                            <div class="listing-date">Posted 1 day ago</div>
+                            <button class="btn-view-details">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="listing-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="listing-image">
+                        <i class="fas fa-laptop"></i>
+                        <div class="listing-badge">Buying</div>
+                    </div>
+                    <div class="listing-content">
+                        <h3 class="listing-title">E-Waste Components</h3>
+                        <div class="listing-details">
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-weight-hanging"></i>
+                                </div>
+                                <div class="detail-text">10 Tons Available</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="detail-text">Bangalore, KA</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-microchip"></i>
+                                </div>
+                                <div class="detail-text">Mixed Components</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-icon">
+                                    <i class="fas fa-recycle"></i>
+                                </div>
+                                <div class="detail-text">Recyclable</div>
+                            </div>
+                        </div>
+
+                        <div class="listing-price">Budget:  ₹85,000/Ton</div>
+                        <div class="listing-footer">
+                            <div class="listing-date">Posted 3 hours ago</div>
+                            <button class="btn-view-details">View Details</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div class="see-more-container" data-aos="fade-up" data-aos-delay="400">
@@ -569,49 +793,7 @@
         </div>
     </section>
 
-    <!-- Trust Indicators -->
-    <section class="trust-section">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up" data-aos-duration="1000">
-                <h2 class="section-title">Why Choose WasteBazar?</h2>
-                <p class="section-subtitle">Your trusted partner in scrap trading information</p>
-            </div>
-            
-            <div class="trust-indicators">
-                <div class="trust-item" data-aos="fade-up" data-aos-delay="100">
-                    <div class="trust-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3 class="trust-title">100% Verified Information</h3>
-                    <p class="trust-description">All listings and requirements undergo strict verification to ensure authenticity and reliability of information shared on our platform.</p>
-                </div>
-                
-                <div class="trust-item" data-aos="fade-up" data-aos-delay="200">
-                    <div class="trust-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <h3 class="trust-title">Advanced Search & Filters</h3>
-                    <p class="trust-description">Find exactly what you need with our powerful search engine and comprehensive filtering options for location, quantity, and material type.</p>
-                </div>
-                
-                <div class="trust-item" data-aos="fade-up" data-aos-delay="300">
-                    <div class="trust-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3 class="trust-title">Direct Contact Information</h3>
-                    <p class="trust-description">Get direct access to seller and buyer contact details to negotiate and finalize deals offline at your convenience.</p>
-                </div>
-                
-                <div class="trust-item" data-aos="fade-up" data-aos-delay="400">
-                    <div class="trust-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="trust-title">Real-Time Market Insights</h3>
-                    <p class="trust-description">Stay updated with live market prices, trends, and industry insights to make informed trading decisions.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    
 
     <!-- Top Categories -->
     {% comment %} <section class="categories-section" id="categories">
@@ -705,8 +887,8 @@
 
     <!-- Detailed Category Sections -->
     
-    <!-- Electronic Devices & Components Section -->
-    <section class="detailed-category-section">
+    <!-- Interactive Category Explorer Section -->
+    <section id="ewaste" class="detailed-category-section">
         <div class="container">
             <div class="category-detail-container" data-aos="fade-up" data-aos-duration="1000">
                 <div class="category-main">
@@ -715,23 +897,24 @@
                         <div class="category-bg-gradient"></div>
                         <div class="category-overlay">
                             <div class="category-main-content">
-                                <h3 class="category-main-title">Electronic Devices</h3>
+                                <h3 class="category-main-title" id="main-category-title">Electronic Devices</h3>
                                 <div class="category-main-items">
-                                    <span class="category-main-item">Mobile Phones</span>
-                                    <span class="category-main-item">Laptops & Computers</span>
-                                    <span class="category-main-item">Electronic Components</span>
-                                    <span class="category-main-item">Accessories & Parts</span>
+                                    <span class="category-main-item active" data-category="electronic-devices">Mobile Phones</span>
+                                    <span class="category-main-item" data-category="electronic-devices">Laptops & Computers</span>
+                                    <span class="category-main-item" data-category="electronic-devices">Electronic Components</span>
+                                    <span class="category-main-item" data-category="electronic-devices">Accessories & Parts</span>
                                 </div>
-                                <button class="btn-view-all">View All</button>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="category-subcategories">
-                    <div class="subcategory-grid">
-                        <div class="subcategory-section">
-                            <h4 class="subcategory-title">Mobile Devices</h4>
+                    <div class="subcategory-grid" id="subcategory-content">
+                        <!-- Mobile Phones subcategories (default) -->
+                        <div class="subcategory-section" id="mobile-phones" style="display: block;">
+                            <h4 class="subcategory-title">Mobile Phones</h4>
                             <div class="subcategory-items">
                                 <div class="subcategory-item">
                                     <div class="item-icon"><i class="fas fa-mobile-alt"></i></div>
@@ -752,8 +935,9 @@
                             </div>
                         </div>
                         
-                        <div class="subcategory-section">
-                            <h4 class="subcategory-title">Computing Devices</h4>
+                        <!-- Laptops & Computers subcategories -->
+                        <div class="subcategory-section" id="laptops-computers" style="display: none;">
+                            <h4 class="subcategory-title">Laptops & Computers</h4>
                             <div class="subcategory-items">
                                 <div class="subcategory-item">
                                     <div class="item-icon"><i class="fas fa-laptop"></i></div>
@@ -774,8 +958,9 @@
                             </div>
                         </div>
                         
-                        <div class="subcategory-section">
-                            <h4 class="subcategory-title">Peripherals</h4>
+                        <!-- Electronic Components subcategories -->
+                        <div class="subcategory-section" id="electronic-components" style="display: none;">
+                            <h4 class="subcategory-title">Electronic Components</h4>
                             <div class="subcategory-items">
                                 <div class="subcategory-item">
                                     <div class="item-icon"><i class="fas fa-keyboard"></i></div>
@@ -796,8 +981,9 @@
                             </div>
                         </div>
                         
-                        <div class="subcategory-section">
-                            <h4 class="subcategory-title">Electronic Components</h4>
+                        <!-- Accessories & Parts subcategories -->
+                        <div class="subcategory-section" id="accessories-parts" style="display: none;">
+                            <h4 class="subcategory-title">Accessories & Parts</h4>
                             <div class="subcategory-items">
                                 <div class="subcategory-item">
                                     <div class="item-icon"><i class="fas fa-microchip"></i></div>
@@ -818,49 +1004,6 @@
                             </div>
                         </div>
                         
-                        <div class="subcategory-section">
-                            <h4 class="subcategory-title">Home Appliances</h4>
-                            <div class="subcategory-items">
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-blender"></i></div>
-                                    <span>Kitchen Appliances</span>
-                                </div>
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-fan"></i></div>
-                                    <span>Cooling Devices</span>
-                                </div>
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-lightbulb"></i></div>
-                                    <span>LED & Lighting</span>
-                                </div>
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-volume-up"></i></div>
-                                    <span>Audio Systems</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="subcategory-section">
-                            <h4 class="subcategory-title">Gaming & Entertainment</h4>
-                            <div class="subcategory-items">
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-gamepad"></i></div>
-                                    <span>Gaming Consoles</span>
-                                </div>
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-vr-cardboard"></i></div>
-                                    <span>VR Equipment</span>
-                                </div>
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-compact-disc"></i></div>
-                                    <span>Media Players</span>
-                                </div>
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-satellite-dish"></i></div>
-                                    <span>Set-top Boxes</span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -868,7 +1011,7 @@
     </section>
 
     <!-- Metal Scrap & Alloys Section -->
-    <section class="detailed-category-section">
+    <section id="metalscrap" class="detailed-category-section">
         <div class="container">
             <div class="category-detail-container" data-aos="fade-up" data-aos-duration="1000">
                 <div class="category-main">
@@ -876,22 +1019,23 @@
                         <div class="category-bg-gradient"></div>
                         <div class="category-overlay">
                             <div class="category-main-content">
-                                <h3 class="category-main-title">Metal Scrap & Alloys</h3>
-                                <div class="category-main-items">
-                                    <span class="category-main-item">Ferrous Metals</span>
-                                    <span class="category-main-item">Non-Ferrous Metals</span>
-                                    <span class="category-main-item">Precious Metals</span>
-                                    <span class="category-main-item">Industrial Alloys</span>
+                                <h3 class="category-main-title" id="metal-category-title">Metal Scrap & Alloys</h3>
+                                <div class="metal-main-items">
+                                    <span class="metal-main-item active" data-category="metal-scrap">Ferrous Metals</span>
+                                    <span class="metal-main-item" data-category="metal-scrap">Non-Ferrous Metals</span>
+                                    <span class="metal-main-item" data-category="metal-scrap">Precious Metals</span>
+                                    <span class="metal-main-item" data-category="metal-scrap">Industrial Alloys</span>
                                 </div>
-                                <button class="btn-view-all">View All</button>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="category-subcategories">
-                    <div class="subcategory-grid">
-                        <div class="subcategory-section">
+                    <div class="metal-subcategory-grid" id="metal-subcategory-content">
+                        <!-- Ferrous Metals subcategories (default) -->
+                        <div class="metal-subcategory-section" id="ferrous-metals" style="display: block;">
                             <h4 class="subcategory-title">Ferrous Metals</h4>
                             <div class="subcategory-items">
                                 <div class="subcategory-item">
@@ -913,7 +1057,8 @@
                             </div>
                         </div>
                         
-                        <div class="subcategory-section">
+                        <!-- Non-Ferrous Metals subcategories -->
+                        <div class="metal-subcategory-section" id="non-ferrous-metals" style="display: none;">
                             <h4 class="subcategory-title">Non-Ferrous Metals</h4>
                             <div class="subcategory-items">
                                 <div class="subcategory-item">
@@ -935,7 +1080,8 @@
                             </div>
                         </div>
                         
-                        <div class="subcategory-section">
+                        <!-- Precious Metals subcategories -->
+                        <div class="metal-subcategory-section" id="precious-metals" style="display: none;">
                             <h4 class="subcategory-title">Precious Metals</h4>
                             <div class="subcategory-items">
                                 <div class="subcategory-item">
@@ -957,7 +1103,8 @@
                             </div>
                         </div>
                         
-                        <div class="subcategory-section">
+                        <!-- Industrial Alloys subcategories -->
+                        <div class="metal-subcategory-section" id="industrial-alloys" style="display: none;">
                             <h4 class="subcategory-title">Industrial Alloys</h4>
                             <div class="subcategory-items">
                                 <div class="subcategory-item">
@@ -978,50 +1125,6 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="subcategory-section">
-                            <h4 class="subcategory-title">Construction Metals</h4>
-                            <div class="subcategory-items">
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-building"></i></div>
-                                    <span>Structural Steel</span>
-                                </div>
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-home"></i></div>
-                                    <span>Roofing Materials</span>
-                                </div>
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-pipe"></i></div>
-                                    <span>Metal Pipes</span>
-                                </div>
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-door-open"></i></div>
-                                    <span>Metal Fixtures</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="subcategory-section">
-                            <h4 class="subcategory-title">Specialty Metals</h4>
-                            <div class="subcategory-items">
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-atom"></i></div>
-                                    <span>Rare Earth Metals</span>
-                                </div>
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-flask"></i></div>
-                                    <span>Laboratory Metals</span>
-                                </div>
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-satellite"></i></div>
-                                    <span>Aerospace Alloys</span>
-                                </div>
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-heartbeat"></i></div>
-                                    <span>Medical Metals</span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -1029,7 +1132,7 @@
     </section>
 
     <!-- Plastic & Polymer Waste Section -->
-    <section class="detailed-category-section">
+    <section id="plasticwaste" class="detailed-category-section">
         <div class="container">
             <div class="category-detail-container" data-aos="fade-up" data-aos-duration="1000">
                 <div class="category-main">
@@ -1038,22 +1141,23 @@
                         <div class="category-overlay">
                             <div class="category-main-content">
                                 <h3 class="category-main-title">Plastic & Polymer Waste</h3>
-                                <div class="category-main-items">
-                                    <span class="category-main-item">PET & HDPE</span>
-                                    <span class="category-main-item">Industrial Plastics</span>
-                                    <span class="category-main-item">Packaging Materials</span>
-                                    <span class="category-main-item">Polymer Films</span>
+                                <div class="plastic-main-items">
+                                    <span class="plastic-main-item active" data-category="plastic-waste">PET & HDPE</span>
+                                    <span class="plastic-main-item" data-category="plastic-waste">Industrial Plastics</span>
+                                    <span class="plastic-main-item" data-category="plastic-waste">Packaging Materials</span>
+                                    <span class="plastic-main-item" data-category="plastic-waste">Polymer Films</span>
                                 </div>
-                                <button class="btn-view-all">View All</button>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="category-subcategories">
-                    <div class="subcategory-grid">
-                        <div class="subcategory-section">
-                            <h4 class="subcategory-title">Bottle & Container Plastics</h4>
+                    <div class="plastic-subcategory-grid" id="plastic-subcategory-content">
+                        <!-- PET & HDPE subcategories (default) -->
+                        <div class="plastic-subcategory-section" id="pet-hdpe" style="display: block;">
+                            <h4 class="subcategory-title">PET & HDPE</h4>
                             <div class="subcategory-items">
                                 <div class="subcategory-item">
                                     <div class="item-icon"><i class="fas fa-wine-bottle"></i></div>
@@ -1074,29 +1178,8 @@
                             </div>
                         </div>
                         
-                        <div class="subcategory-section">
-                            <h4 class="subcategory-title">Packaging Materials</h4>
-                            <div class="subcategory-items">
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-shopping-bag"></i></div>
-                                    <span>Plastic Bags</span>
-                                </div>
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-box"></i></div>
-                                    <span>Packaging Films</span>
-                                </div>
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-tape"></i></div>
-                                    <span>Stretch Wrap</span>
-                                </div>
-                                <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-layer-group"></i></div>
-                                    <span>Bubble Wrap</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="subcategory-section">
+                        <!-- Industrial Plastics subcategories -->
+                        <div class="plastic-subcategory-section" id="industrial-plastics" style="display: none;">
                             <h4 class="subcategory-title">Industrial Plastics</h4>
                             <div class="subcategory-items">
                                 <div class="subcategory-item">
@@ -1118,33 +1201,53 @@
                             </div>
                         </div>
                         
-                        <div class="subcategory-section">
-                            <h4 class="subcategory-title">Foam & Insulation</h4>
+                        <!-- Packaging Materials subcategories -->
+                        <div class="plastic-subcategory-section" id="packaging-materials" style="display: none;">
+                            <h4 class="subcategory-title">Packaging Materials</h4>
                             <div class="subcategory-items">
                                 <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-cloud"></i></div>
-                                    <span>Polystyrene Foam</span>
+                                    <div class="item-icon"><i class="fas fa-shopping-bag"></i></div>
+                                    <span>Plastic Bags</span>
                                 </div>
                                 <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-couch"></i></div>
-                                    <span>Polyurethane Foam</span>
+                                    <div class="item-icon"><i class="fas fa-box"></i></div>
+                                    <span>Packaging Films</span>
                                 </div>
                                 <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-home"></i></div>
-                                    <span>Insulation Materials</span>
+                                    <div class="item-icon"><i class="fas fa-tape"></i></div>
+                                    <span>Stretch Wrap</span>
                                 </div>
                                 <div class="subcategory-item">
-                                    <div class="item-icon"><i class="fas fa-box-open"></i></div>
-                                    <span>Packaging Foam</span>
+                                    <div class="item-icon"><i class="fas fa-layer-group"></i></div>
+                                    <span>Bubble Wrap</span>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="subcategory-section">
-                            <h4 class="subcategory-title">Automotive Plastics</h4>
+                        <!-- Polymer Films subcategories -->
+                        <div class="plastic-subcategory-section" id="polymer-films" style="display: none;">
+                            <h4 class="subcategory-title">Polymer Films</h4>
                             <div class="subcategory-items">
                                 <div class="subcategory-item">
                                     <div class="item-icon"><i class="fas fa-car-side"></i></div>
+                                    <span>Automotive Plastics</span>
+                                </div>
+                                <div class="subcategory-item">
+                                    <div class="item-icon"><i class="fas fa-chair"></i></div>
+                                    <span>Interior Parts</span>
+                                </div>
+                                <div class="subcategory-item">
+                                    <div class="item-icon"><i class="fas fa-microscope"></i></div>
+                                    <span>Laboratory Plastics</span>
+                                </div>
+                                <div class="subcategory-item">
+                                    <div class="item-icon"><i class="fas fa-recycle"></i></div>
+                                    <span>Biodegradable Plastics</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                         {% comment %} </div>
                                     <span>Bumpers & Panels</span>
                                 </div>
                                 <div class="subcategory-item">
@@ -1160,9 +1263,9 @@
                                     <span>Fluid Containers</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                         
-                        <div class="subcategory-section">
+                        {% comment %} <div class="subcategory-section">
                             <h4 class="subcategory-title">Specialty Polymers</h4>
                             <div class="subcategory-items">
                                 <div class="subcategory-item">
@@ -1182,60 +1285,14 @@
                                     <span>Biodegradable Plastics</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works -->
-    <section class="how-it-works" id="how-it-works">
-        <div class="container">
-            <div class="section-header" data-aos="fade-up" data-aos-duration="1000">
-                <h2 class="section-title">How WasteBazar Works</h2>
-                <p class="section-subtitle">Simple steps to connect with the right trading partners</p>
-            </div>
-            
-            <div class="steps-container">
-                <div class="step-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="step-number">1</div>
-                    <div class="step-icon">
-                        <i class="fas fa-user-plus"></i>
-                    </div>
-                    <h3 class="step-title">Register & Verify</h3>
-                    <p class="step-description">Create your free account and complete the verification process. Upload your business documents to build trust and credibility.</p>
-                </div>
-                
-                <div class="step-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="step-number">2</div>
-                    <div class="step-icon">
-                        <i class="fas fa-plus-circle"></i>
-                    </div>
-                    <h3 class="step-title">Post or Browse</h3>
-                    <p class="step-description">Post your listings or requirements with detailed information. Browse through thousands of verified listings and requirements.</p>
-                </div>
-                
-                <div class="step-card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="step-number">3</div>
-                    <div class="step-icon">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <h3 class="step-title">Search & Filter</h3>
-                    <p class="step-description">Use our advanced search and filtering options to find exactly what you need based on location, quantity, and material type.</p>
-                </div>
-                
-                <!-- <div class="step-card" data-aos="fade-up" data-aos-delay="400">
-                    <div class="step-number">4</div>
-                    <div class="step-icon">
-                        <i class="fas fa-phone"></i>
-                    </div>
-                    <h3 class="step-title">Connect Directly</h3>
-                    <p class="step-description">Get direct contact information and connect with buyers or sellers. Negotiate terms and finalize deals offline.</p>
-                </div> -->
-            </div>
-        </div>
-    </section>
+    
 
     <!-- Market Insights -->
     <section class="market-insights" id="market-insights">
@@ -1245,8 +1302,8 @@
                 <p class="section-subtitle">Stay updated with real-time market trends and pricing information</p>
             </div>
             
-            <div class="insights-grid">
-                <div class="insight-card" data-aos="fade-up" data-aos-delay="100">
+            <div class=" row">
+                <div class="insight-card col-12" data-aos="fade-up" data-aos-delay="100">
                     <div class="insight-header">
                         <div class="insight-icon">
                             <i class="fas fa-chart-line"></i>
@@ -1285,49 +1342,11 @@
                     </div>
                 </div>
                 
-                <div class="insight-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="insight-header">
-                        <div class="insight-icon">
-                            <i class="fas fa-globe-asia"></i>
-                        </div>
-                        <h3 class="insight-title">Platform Activity</h3>
-                    </div>
-                    
-                    <div class="price-trend">
-                        <div>
-                            <strong>Active Listings</strong>
-                            <div class="price-value">52,430</div>
-                        </div>
-                        <div class="price-change">
-                            <i class="fas fa-arrow-up me-1"></i>+15%
-                        </div>
-                    </div>
-                    
-                    <div class="price-trend">
-                        <div>
-                            <strong>New Requirements</strong>
-                            <div class="price-value">1,850</div>
-                        </div>
-                        <div class="price-change">
-                            <i class="fas fa-arrow-up me-1"></i>+22%
-                        </div>
-                    </div>
-                    
-                    <div class="price-trend">
-                        <div>
-                            <strong>Daily Connections</strong>
-                            <div class="price-value">3,240</div>
-                        </div>
-                        <div class="price-change">
-                            <i class="fas fa-arrow-up me-1"></i>+18%
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- Testimonials -->
+    {% comment %} <!-- Testimonials -->
     <section class="testimonials-section">
         <div class="container">
             <div class="section-header" data-aos="fade-up" data-aos-duration="1000">
@@ -1434,7 +1453,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> {% endcomment %}
 
     <!-- FAQ Section -->
     <section class="faq-section">
