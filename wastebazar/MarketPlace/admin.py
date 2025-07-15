@@ -25,6 +25,6 @@ class SellerListingAdmin(admin.ModelAdmin):
 
 @admin.register(BuyerRequirement)
 class BuyerRequirementAdmin(admin.ModelAdmin):
-    list_display = ['requirement_id', 'buyer_user_id', 'subcategory', 'quantity', 'unit', 'is_active', 'created_at']
+    list_display = ['requirement_id', 'buyer_user_id', 'subcategory', 'quantity', 'unit', 'created_at']
     search_fields = ['requirement_id', 'buyer_user_id', 'subcategory']
-    list_filter = ['is_active', 'is_deleted', 'created_at']
+    list_filter = [ 'created_at']

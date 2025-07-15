@@ -150,6 +150,13 @@ def generate_requirement_id():
             return requirement_id
 
 class BuyerRequirement(models.Model):
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+        ('requirementfulfilled', 'Requirementfulfilled'),
+        ('deleted', 'Deleted'),
+    ]
+
     requirement_id = models.CharField(max_length=15)
     category = models.CharField(max_length=15)
     subcategory = models.CharField(max_length=15)
@@ -165,14 +172,19 @@ class BuyerRequirement(models.Model):
     pincode_location = models.CharField(max_length=100)
     address = models.TextField()
 
-    is_urgent = models.BooleanField(default=False)
-    attachment = models.FileField(upload_to="requirement_attachments/", null=True, blank=True)
 
-    is_active = models.BooleanField(default=True)
-    is_deleted = models.BooleanField(default=False)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
+
+    # is_urgent = models.BooleanField(default=False)
+    # attachment = models.FileField(upload_to="requirement_attachments/", null=True, blank=True)
+
+    # is_active = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
-    expires_at = models.DateTimeField(null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    revived_at = models.DateTimeField(null=True, blank=True)  # Remove auto_now_add=True
+    valid_until = models.DateTimeField(null=True, blank=True)
+
 
     def save(self, *args, **kwargs):
         if not self.requirement_id:
