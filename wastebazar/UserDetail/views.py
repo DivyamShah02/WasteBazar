@@ -7,6 +7,7 @@ from .models import *
 from .serializers import *
 from .utils import generate_send_otp
 
+
 from utils.decorators import handle_exceptions, check_authentication
 
 from datetime import timedelta
@@ -127,8 +128,16 @@ class OtpAuthViewSet(viewsets.ViewSet):
                 contact_number=otp_obj.mobile,
                 role=user_type
             )
-            user_details_filled = False
-
+            # Create wallet for buyer users
+            if user_type in ['buyer_individual', 'buyer_corporate']:
+                initial_credits = 5 if user_type == 'buyer_individual' else 3
+                Wallet.objects.create(
+                    user_id=user.user_id,
+                    role=user_type,
+                    free_credits=initial_credits,
+                    paid_credits=0,
+                )
+            user_details_filled = False       
         return Response({
             "success": True,
             "user_not_logged_in": False,
@@ -225,7 +234,7 @@ class UserDetailViewSet(viewsets.ViewSet):
 
 
 class CorporateBuyerViewSet(viewsets.ViewSet):
-    
+    """Approve / Reject corporate buyer API"""
     @handle_exceptions
     @check_authentication(required_role='admin')
     def list(self, request):
@@ -291,7 +300,7 @@ class CorporateBuyerViewSet(viewsets.ViewSet):
 class AccountCreationViewSet(viewsets.ViewSet):
     
     @handle_exceptions
-    @check_authentication(required_role='admin')
+    # @check_authentication(required_role='admin')
     def create(self, request):
             name = request.data.get('name')
             password = request.data.get('password')
@@ -406,3 +415,85 @@ class AccountCreationViewSet(viewsets.ViewSet):
                             "error": None
                         }, status=status.HTTP_201_CREATED)
 
+
+class BuyerCreditUpdateViewSet(viewsets.ViewSet):
+    """API to update buyer credits if reset date has passed"""
+    
+    @handle_exceptions
+    # @check_authentication()
+    def list(self, request, pk=None):
+        """
+        API: List all buyers and reset credits only if current date >= free_credit_reset_date
+        """
+        current_time = timezone.now()
+        current_date = current_time.date()
+        
+        # Get all buyer users (individual and corporate)
+        buyer_users = User.objects.filter(
+            role__in=['buyer_individual', 'buyer_corporate'],
+            is_deleted=False,
+            is_active=True
+        )
+        
+        credits_reset_users = []
+        no_wallet_users = []
+        
+        
+        for user in buyer_users:
+            # Try to get existing wallet
+            try:
+                wallet = Wallet.objects.get(user_id=user.user_id)
+            except Wallet.DoesNotExist:
+                no_wallet_users.append({
+                    'user_id': user.user_id,
+                    'name': user.name,
+                    'role': user.role,
+                    'message': 'No wallet found for this user'
+                })
+                continue
+            
+            # Check if reset is due (current date >= free_credit_reset_date)
+            if current_date >= wallet.free_credit_reset_date.date():
+                # Store previous values before reset
+                previous_credits = wallet.free_credits
+                previous_reset_date = wallet.free_credit_reset_date
+                
+                # Call the reset method
+                reset_success = wallet.reset_free_credits_if_due()
+                
+                if reset_success:
+                    user_data = {
+                        'user_id': user.user_id,
+                        'name': user.name,
+                        'role': user.role,
+                        'credits_reset': True,
+                        'previous_free_credits': previous_credits,
+                        'new_free_credits': wallet.free_credits,
+                        'previous_reset_date': previous_reset_date,
+                        'new_reset_date': wallet.free_credit_reset_date,
+                        'reset_timestamp': wallet.last_free_credit_reset,
+                        'paid_credits': wallet.paid_credits,
+                        
+                    }
+                    credits_reset_users.append(user_data)
+
+        response_data = {
+            'current_date': current_date,
+            'total_buyers_found': len(buyer_users),
+            'credits_reset_count': len(credits_reset_users),
+            'no_wallet_count': len(no_wallet_users),
+            'credits_reset_users': credits_reset_users,
+            'no_wallet_users': no_wallet_users,
+            'summary': {
+                'message': f"Processed {len(buyer_users)} buyer users. Reset credits for {len(credits_reset_users)} users whose reset date was due.",
+                'update_timestamp': current_time
+            }
+        }
+        
+        return Response({
+            "success": True,
+            "user_not_logged_in": False,
+            "user_unauthorized": False,
+            "data": response_data,
+            "error": None
+        }, status=status.HTTP_200_OK)

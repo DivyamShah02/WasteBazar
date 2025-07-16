@@ -9,7 +9,7 @@ router.register(r'user-details-api', UserDetailViewSet, basename='user-details-a
 router.register(r'corporate-buyer-api', CorporateBuyerViewSet, basename='corporate-buyer-api')
 
 router.register(r'admin-user-creation-api', AccountCreationViewSet, basename='admin-user-creation-api')
-
+router.register(r'buyer-credit-reset-api', BuyerCreditUpdateViewSet, basename='buyer-credit-reset-api')
 
 urlpatterns = [
     path('', include(router.urls)),
