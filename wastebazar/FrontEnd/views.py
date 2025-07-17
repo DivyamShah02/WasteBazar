@@ -26,3 +26,10 @@ class ListingDetailViewSet(viewsets.ViewSet):
     def list(self, request):
         return render(request, "listing-detail.html")
 
+
+class LoginViewSet(viewsets.ViewSet):
+    
+    def list(self, request):
+        return render(request, "login.html")
+
+    
