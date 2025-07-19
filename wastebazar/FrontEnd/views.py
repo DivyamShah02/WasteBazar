@@ -25,6 +25,13 @@ class ListingDetailViewSet(viewsets.ViewSet):
 
     def list(self, request):
         return render(request, "listing-detail.html")
+    
+    def retrieve(self, request, pk=None):
+        """Render listing detail page for a specific listing ID"""
+        context = {
+            'listing_id': pk
+        }
+        return render(request, "listing-detail.html", context)
 
 
 class LoginViewSet(viewsets.ViewSet):
@@ -32,4 +39,9 @@ class LoginViewSet(viewsets.ViewSet):
     def list(self, request):
         return render(request, "login.html")
 
+
+class ProfileViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        return render(request, "buyer_profile.html")
     

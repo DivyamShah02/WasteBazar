@@ -407,9 +407,33 @@ class AllListingsViewset(viewsets.ViewSet):
             "data": serializer.data,
             "error": None
         })
+
+    @handle_exceptions
+    def retrieve(self, request, pk=None):
+        """Get detailed information for a specific listing"""
+        try:
+            listing = SellerListing.objects.get(
+                listing_id=pk,
+                status='approved'  # Only allow viewing approved listings
+            )
+        except SellerListing.DoesNotExist:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": "Listing not found or not available."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = SellerListingSerializer(listing)
+        return Response({
+            "success": True,
+            "user_not_logged_in": False,
+            "user_unauthorized": False,
+            "data": serializer.data,
+            "error": None
+        })
     
-
-
 
 class BuyerRequirementsViewset(viewsets.ViewSet):
 

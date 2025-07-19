@@ -10,7 +10,7 @@ router.register(r'admin-listings-rejection', AdminListingrejectionViewSet, basen
 router.register(r'all-listings', AllListingsViewset, basename='all-listings')
 router.register(r'buyer-requirements', BuyerRequirementsViewset, basename='buyer-requirements')
 router.register(r'admin-buyer-requirements', AdminBuyerRequirementsViewSet, basename='admin-buyer-requirements')
-# router.register(r'public-listings', PublicListingViewSet, basename='public-listings')
+router.register(r'all-buyer-requirements', AllBuyerRequirementsViewset, basename='all-buyer-requirements')
 
 urlpatterns = [
     path('', include(router.urls)),

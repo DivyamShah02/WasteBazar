@@ -1,10 +1,37 @@
-// Listings Page JavaScript
+// Listings Page JavaScript - API Driven
 
 // Import necessary libraries
 const AOS = window.AOS // Declare AOS variable
 const bootstrap = window.bootstrap // Declare bootstrap variable
 
-// Sample listings data
+// Global variables for API endpoints and CSRF token
+let csrf_token = null;
+let all_listings_api_url = null;
+
+// Initialize app function
+async function ListingsApp(csrf_token_param, all_listings_api_url_param) {
+  console.log("🚀 Initializing WasteBazar Listings Page");
+  console.log("🔧 CSRF Token:", csrf_token_param ? "Present" : "Missing");
+  console.log("🔧 API URL:", all_listings_api_url_param);
+
+  csrf_token = csrf_token_param;
+  all_listings_api_url = all_listings_api_url_param;
+
+  if (!csrf_token || !all_listings_api_url) {
+    console.error("❌ Missing required parameters for ListingsApp");
+    console.error("❌ CSRF Token:", csrf_token);
+    console.error("❌ API URL:", all_listings_api_url);
+    return;
+  }
+
+  initializePage();
+}
+
+function getCsrfToken() {
+  return csrf_token;
+}
+
+// Sample listings data (keeping as fallback)
 const sampleListings = [
   {
     id: 1,
@@ -126,7 +153,8 @@ const advertisements = [
 ]
 
 // Global variables
-let currentListings = [...sampleListings]
+let currentListings = []
+let apiListings = [] // Store API data
 let currentPage = 1
 const itemsPerPage = 20
 let currentView = "grid"
@@ -142,9 +170,8 @@ let filters = {
 
 // Initialize page
 document.addEventListener("DOMContentLoaded", () => {
-  initializePage()
+  console.log("📄 DOM Content Loaded");
   setupEventListeners()
-  loadListings()
   initializeMobileAds()
 
   // Initialize AOS
@@ -153,9 +180,13 @@ document.addEventListener("DOMContentLoaded", () => {
     once: true,
     offset: 100,
   })
+
+  // Note: initializePage() will be called from ListingsApp() after API parameters are set
 })
 
 function initializePage() {
+  console.log("🔧 Initializing page...");
+
   // Navbar scroll effect
   window.addEventListener("scroll", () => {
     const navbar = document.getElementById("navbar")
@@ -170,48 +201,277 @@ function initializePage() {
   const urlParams = new URLSearchParams(window.location.search)
   if (urlParams.get("category")) {
     filters.category = urlParams.get("category")
-    document.getElementById("categoryFilter").value = filters.category
+    const categoryFilter = document.getElementById("categoryFilter")
+    if (categoryFilter) {
+      categoryFilter.value = filters.category
+    }
   }
   if (urlParams.get("search")) {
     filters.search = urlParams.get("search")
-    document.getElementById("searchInput").value = filters.search
+    const searchInput = document.getElementById("searchInput")
+    if (searchInput) {
+      searchInput.value = filters.search
+    }
+  }
+
+  // Load listings from API
+  loadListingsFromAPI()
+}
+
+// API Functions
+async function loadListingsFromAPI() {
+  try {
+    console.log("🔄 Loading listings from API...");
+
+    // Check if API URL is available
+    if (!all_listings_api_url) {
+      console.error("❌ API URL is not set, using sample data");
+      currentListings = [...sampleListings];
+      applyFilters();
+      loadListings();
+      return;
+    }
+
+    // Show loading state
+    showLoadingState();
+
+    // Build query parameters based on current filters
+    let queryParams = {};
+
+    // Only add parameters if they have actual values
+    if (filters.category && filters.category.trim() !== '') {
+      queryParams.category = filters.category;
+    }
+    if (filters.search && filters.search.trim() !== '') {
+      queryParams.search = filters.search;
+    }
+    if (filters.minQuantity && filters.minQuantity.trim() !== '') {
+      queryParams.min_quantity = filters.minQuantity;
+    }
+    if (filters.maxQuantity && filters.maxQuantity.trim() !== '') {
+      queryParams.max_quantity = filters.maxQuantity;
+    }
+
+    // Add sorting only if it's not the default
+    if (filters.sort && filters.sort !== 'newest') {
+      if (filters.sort === 'oldest') {
+        queryParams.sort_by = 'created_at';
+        queryParams.sort_order = 'asc';
+      } else if (filters.sort === 'quantity-low') {
+        queryParams.sort_by = 'quantity';
+        queryParams.sort_order = 'asc';
+      } else if (filters.sort === 'quantity-high') {
+        queryParams.sort_by = 'quantity';
+        queryParams.sort_order = 'desc';
+      }
+    }
+
+    // Build query string - only add if we have parameters
+    const queryString = Object.keys(queryParams).length > 0 ? '?' + new URLSearchParams(queryParams).toString() : '';
+    const apiUrl = all_listings_api_url + queryString;
+
+    console.log("🔍 API URL:", apiUrl);
+    console.log("📋 Query Params:", queryParams);
+
+    const [success, result] = await callApi("GET", apiUrl, null, getCsrfToken());
+
+    if (success && result.success) {
+      apiListings = result.data || [];
+      console.log("✅ API Response Success:", result);
+      console.log("✅ Loaded", apiListings.length, "listings from API");
+
+      // Transform API data to match frontend format
+      currentListings = transformApiListings(apiListings);
+
+      // Apply any additional client-side filters
+      applyFilters();
+
+      // Load listings into UI
+      loadListings();
+
+      // Update results count
+      updateResultsCount();
+
+    } else {
+      console.error("❌ API Response Error:", result);
+      console.error("❌ Failed to load listings from API:", result.error || "Unknown error");
+      showErrorState("Failed to load listings. Please try again.");
+
+      // Fallback to sample data
+      console.log("🔄 Using sample data as fallback");
+      currentListings = [...sampleListings];
+      applyFilters();
+      loadListings();
+    }
+
+  } catch (error) {
+    console.error("❌ Error loading listings:", error);
+    showErrorState("Network error. Please check your connection.");
+
+    // Fallback to sample data
+    console.log("🔄 Using sample data as fallback");
+    currentListings = [...sampleListings];
+    applyFilters();
+    loadListings();
+  }
+}
+
+// Show loading state
+function showLoadingState() {
+  const container = document.getElementById("listingsContainer");
+  if (container) {
+    container.innerHTML = createLoadingSkeletons();
+  }
+}
+
+// Show error state
+function showErrorState(message) {
+  const container = document.getElementById("listingsContainer");
+  if (container) {
+    container.innerHTML = `
+      <div class="error-state">
+        <div class="error-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3>Something went wrong</h3>
+        <p>${message}</p>
+        <button class="btn btn-primary" onclick="loadListingsFromAPI()">Try Again</button>
+      </div>
+    `;
+  }
+}
+
+// Transform API data to match frontend format
+function transformApiListings(apiData) {
+  return apiData.map(listing => ({
+    id: listing.listing_id,
+    title: `${listing.category} - ${listing.subcategory}`,
+    category: listing.category.toLowerCase(),
+    location: listing.city_location.toLowerCase(),
+    price: 0, // API doesn't have price, using 0
+    quantity: listing.quantity,
+    grade: listing.subcategory,
+    availability: "Available",
+    badge: "Verified",
+    postedDate: formatDate(listing.created_at),
+    icon: getCategoryIcon(listing.category),
+    unit: listing.unit,
+    description: listing.description || '',
+    city: listing.city_location,
+    state: listing.state_location,
+    address: listing.address || '',
+    seller_id: listing.seller_user_id
+  }));
+}
+
+// Get category icon
+function getCategoryIcon(category) {
+  const categoryIcons = {
+    'plastic': 'fas fa-recycle',
+    'metal': 'fas fa-cog',
+    'paper': 'fas fa-newspaper',
+    'electronic': 'fas fa-laptop',
+    'textile': 'fas fa-tshirt',
+    'glass': 'fas fa-wine-glass',
+    'default': 'fas fa-box'
+  };
+
+  return categoryIcons[category.toLowerCase()] || categoryIcons['default'];
+}
+
+// Format date
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffTime = Math.abs(now - date);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 1) {
+    return "1 day ago";
+  } else if (diffDays < 7) {
+    return `${diffDays} days ago`;
+  } else {
+    return date.toLocaleDateString();
+  }
+}
+
+// Update results count
+function updateResultsCount() {
+  const resultsCountElement = document.getElementById("resultsCount");
+  const resultsDescriptionElement = document.getElementById("resultsDescription");
+
+  if (resultsCountElement) {
+    const totalCount = currentListings.length;
+    const startIndex = (currentPage - 1) * itemsPerPage + 1;
+    const endIndex = Math.min(currentPage * itemsPerPage, totalCount);
+
+    resultsCountElement.textContent = `Showing ${startIndex}-${endIndex} of ${totalCount} listings`;
+  }
+
+  if (resultsDescriptionElement) {
+    resultsDescriptionElement.textContent = "Premium scrap materials from verified sellers";
   }
 }
 
 function setupEventListeners() {
+  console.log("🔧 Setting up event listeners...");
+
   // Search functionality
-  document.getElementById("searchBtn").addEventListener("click", performSearch)
-  document.getElementById("searchInput").addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-      performSearch()
-    }
-  })
+  const searchBtn = document.getElementById("searchBtn");
+  const searchInput = document.getElementById("searchInput");
+
+  if (searchBtn) {
+    searchBtn.addEventListener("click", performSearch);
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        performSearch();
+      }
+    });
+  }
 
   // Filter changes
-  document.getElementById("categoryFilter").addEventListener("change", updateFilters)
-  document.getElementById("locationFilter").addEventListener("change", updateFilters)
-  document.getElementById("priceFilter").addEventListener("change", updateFilters)
-  document.getElementById("minQuantity").addEventListener("input", updateFilters)
-  document.getElementById("maxQuantity").addEventListener("input", updateFilters)
-  document.getElementById("sortFilter").addEventListener("change", updateFilters)
+  const categoryFilter = document.getElementById("categoryFilter");
+  const locationFilter = document.getElementById("locationFilter");
+  const priceFilter = document.getElementById("priceFilter");
+  const minQuantity = document.getElementById("minQuantity");
+  const maxQuantity = document.getElementById("maxQuantity");
+  const sortFilter = document.getElementById("sortFilter");
+
+  if (categoryFilter) categoryFilter.addEventListener("change", updateFilters);
+  if (locationFilter) locationFilter.addEventListener("change", updateFilters);
+  if (priceFilter) priceFilter.addEventListener("change", updateFilters);
+  if (minQuantity) minQuantity.addEventListener("input", updateFilters);
+  if (maxQuantity) maxQuantity.addEventListener("input", updateFilters);
+  if (sortFilter) sortFilter.addEventListener("change", updateFilters);
 
   // Clear filters
-  document.getElementById("clearFilters").addEventListener("click", clearAllFilters)
+  const clearFiltersBtn = document.getElementById("clearFilters");
+  if (clearFiltersBtn) {
+    clearFiltersBtn.addEventListener("click", clearAllFilters);
+  }
 
   // View toggle
-  document.getElementById("gridView").addEventListener("click", () => setView("grid"))
-  document.getElementById("listView").addEventListener("click", () => setView("list"))
+  const gridView = document.getElementById("gridView");
+  const listView = document.getElementById("listView");
+
+  if (gridView) gridView.addEventListener("click", () => setView("grid"));
+  if (listView) listView.addEventListener("click", () => setView("list"));
 
   // Category dropdown navigation
   document.querySelectorAll("[data-category]").forEach((item) => {
     item.addEventListener("click", function (e) {
-      e.preventDefault()
-      const category = this.dataset.category
-      filters.category = category
-      document.getElementById("categoryFilter").value = category
-      updateFilters()
-    })
-  })
+      e.preventDefault();
+      const category = this.dataset.category;
+      filters.category = category;
+      if (categoryFilter) {
+        categoryFilter.value = category;
+      }
+      updateFilters();
+    });
+  });
 }
 
 function performSearch() {
@@ -230,34 +490,22 @@ function updateFilters() {
   filters.maxQuantity = document.getElementById("maxQuantity").value
   filters.sort = document.getElementById("sortFilter").value
 
-  // Apply filters and reload listings
-  applyFilters()
-  loadListings()
+  // Reload listings from API with new filters
+  loadListingsFromAPI()
 }
 
 function applyFilters() {
-  let filteredListings = [...sampleListings]
+  let filteredListings = [...currentListings]
 
-  // Search filter
-  if (filters.search) {
-    filteredListings = filteredListings.filter(
-      (listing) =>
-        listing.title.toLowerCase().includes(filters.search.toLowerCase()) ||
-        listing.grade.toLowerCase().includes(filters.search.toLowerCase()),
+  // Location filter (since API doesn't support location filtering)
+  if (filters.location) {
+    filteredListings = filteredListings.filter((listing) =>
+      listing.location.toLowerCase().includes(filters.location.toLowerCase()) ||
+      listing.city.toLowerCase().includes(filters.location.toLowerCase())
     )
   }
 
-  // Category filter
-  if (filters.category) {
-    filteredListings = filteredListings.filter((listing) => listing.category === filters.category)
-  }
-
-  // Location filter
-  if (filters.location) {
-    filteredListings = filteredListings.filter((listing) => listing.location === filters.location)
-  }
-
-  // Price range filter
+  // Price range filter (if needed for client-side filtering)
   if (filters.priceRange) {
     const [min, max] = filters.priceRange.split("-").map(Number)
     filteredListings = filteredListings.filter((listing) => {
@@ -269,31 +517,16 @@ function applyFilters() {
     })
   }
 
-  // Quantity filters
-  if (filters.minQuantity) {
-    filteredListings = filteredListings.filter((listing) => listing.quantity >= Number.parseInt(filters.minQuantity))
-  }
-  if (filters.maxQuantity) {
-    filteredListings = filteredListings.filter((listing) => listing.quantity <= Number.parseInt(filters.maxQuantity))
-  }
-
-  // Sort listings
-  filteredListings.sort((a, b) => {
-    switch (filters.sort) {
-      case "price-low":
+  // Additional client-side sorting for price-based sorts
+  if (filters.sort === "price-low" || filters.sort === "price-high") {
+    filteredListings.sort((a, b) => {
+      if (filters.sort === "price-low") {
         return a.price - b.price
-      case "price-high":
+      } else {
         return b.price - a.price
-      case "quantity-low":
-        return a.quantity - b.quantity
-      case "quantity-high":
-        return b.quantity - a.quantity
-      case "oldest":
-        return a.id - b.id
-      default: // newest
-        return b.id - a.id
-    }
-  })
+      }
+    })
+  }
 
   currentListings = filteredListings
   currentPage = 1
@@ -320,10 +553,8 @@ function clearAllFilters() {
     sort: "newest",
   }
 
-  // Reload all listings
-  currentListings = [...sampleListings]
-  currentPage = 1
-  loadListings()
+  // Reload listings from API
+  loadListingsFromAPI()
 }
 
 function setView(viewType) {
@@ -382,6 +613,14 @@ function createListingCard(listing) {
     hyderabad: "Hyderabad, TS",
   }
 
+  // Handle both API and sample data format
+  const displayLocation = listing.city && listing.state ?
+    `${listing.city}, ${listing.state}` :
+    (locationNames[listing.location] || listing.location);
+
+  const displayPrice = listing.price ? `₹${listing.price.toLocaleString()}/Ton` : 'Price on Request';
+  const displayQuantity = listing.unit ? `${listing.quantity} ${listing.unit}` : `${listing.quantity} Tons Available`;
+
   return `
         <div class="listing-card" data-listing-id="${listing.id}" data-aos="fade-up">
             <div class="listing-image">
@@ -395,13 +634,13 @@ function createListingCard(listing) {
                         <div class="detail-icon">
                             <i class="fas fa-weight-hanging"></i>
                         </div>
-                        <div class="detail-text">${listing.quantity} Tons Available</div>
+                        <div class="detail-text">${displayQuantity}</div>
                     </div>
                     <div class="detail-item">
                         <div class="detail-icon">
                             <i class="fas fa-map-marker-alt"></i>
                         </div>
-                        <div class="detail-text">${locationNames[listing.location] || listing.location}</div>
+                        <div class="detail-text">${displayLocation}</div>
                     </div>
                     <div class="detail-item">
                         <div class="detail-icon">
@@ -416,10 +655,10 @@ function createListingCard(listing) {
                         <div class="detail-text">${listing.availability}</div>
                     </div>
                 </div>
-                <div class="listing-price">₹${listing.price.toLocaleString()}/Ton</div>
+                <div class="listing-price">${displayPrice}</div>
                 <div class="listing-footer">
                     <div class="listing-date">Posted ${listing.postedDate}</div>
-                    <button class="btn-view-details" onclick="event.stopPropagation(); viewListingDetails(${listing.id})">
+                    <button class="btn-view-details" onclick="event.stopPropagation(); viewListingDetails('${listing.id}')">
                         View Details
                     </button>
                 </div>
@@ -561,8 +800,8 @@ function changePage(page) {
 
 function viewListingDetails(listingId) {
   console.log("Viewing details for listing:", listingId)
-  // In a real application, this would navigate to a detailed listing page
-  alert(`Viewing details for listing ${listingId}. This would navigate to a detailed page.`)
+  // Navigate to the listing detail page with the listing ID
+  window.location.href = `/listing_detail/${listingId}/`
 }
 
 // Advertisement Management
@@ -598,7 +837,7 @@ function initializeMobileAds() {
 
   // Show ad every 5 minutes (300000 ms)
   const adInterval = 300000
-  
+
 
   if (!lastAdTime || now - Number.parseInt(lastAdTime) >= adInterval) {
     showMobileAd(currentAdIndex)
@@ -660,7 +899,7 @@ function debounce(func, wait) {
 }
 
 // Add debounced search
-document.getElementById("searchInput").addEventListener(
+document.getElementById("searchInput")?.addEventListener(
   "input",
   debounce(function () {
     if (this.value.length >= 3 || this.value.length === 0) {
@@ -668,6 +907,16 @@ document.getElementById("searchInput").addEventListener(
     }
   }, 500),
 )
+
+// Fallback initialization if ListingsApp is not called
+setTimeout(() => {
+  if (!all_listings_api_url) {
+    console.log("⚠️  ListingsApp not initialized, using sample data");
+    currentListings = [...sampleListings];
+    applyFilters();
+    loadListings();
+  }
+}, 2000);
 
 console.log("🚀 Listings page initialized successfully!")
 console.log("📊 Features: Advanced filtering, Search, Pagination, Mobile ads")
