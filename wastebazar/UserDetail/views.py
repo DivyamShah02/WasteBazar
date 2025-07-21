@@ -95,7 +95,7 @@ class OtpAuthViewSet(viewsets.ViewSet):
                 "error": None
             }, status=status.HTTP_200_OK)
 
-        if otp_obj.attempt_count >= 3:
+        if otp_obj.attempt_count >= 2:
             return Response({
                 "success": True,
                 "user_not_logged_in": False,

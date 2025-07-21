@@ -3373,7 +3373,7 @@ body {
 
 .materials-tabs-navigation {
     display: flex;
-    background: linear-gradient(135deg, #0074E8 0%, #06985c 100%);
+    background: linear-gradient(135deg, #0074E8 0%, #E13CCF 100%);
     padding: 1rem;
     gap: 1rem;
     flex-wrap: wrap;
@@ -3576,5 +3576,295 @@ body {
 
     .materials-tab-content .tab-pane {
         padding: 1.5rem 1rem;
+    }
+}
+
+/* Buy and Sell Material Section */
+.buy-sell-material {
+    padding: 100px 0;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.buy-sell-material::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    animation: float 20s ease-in-out infinite;
+}
+
+.buy-sell-material .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 800;
+    font-size: 2.5rem;
+    color: var(--text-dark);
+    text-align: center;
+    margin-bottom: 3rem;
+    letter-spacing: 0.02em;
+}
+
+.buy-sell-material .main-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 2.2rem;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
+
+.buy-sell-material .intro-description {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+.material-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--glass-border);
+    transition: all 0.4s ease;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.material-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: 20px;
+}
+
+.material-card:hover::before {
+    opacity: 0.05;
+}
+
+.material-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-2xl);
+}
+
+/* .buy-material-card {
+    border-left: 4px solid var(--primary-color);
+} */
+/* 
+.sell-material-card {
+    border-left: 4px solid var(--secondary-color);
+} */
+
+.card-content {
+    position: relative;
+    z-index: 2;
+}
+
+.card-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.buy-material-card .card-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: var(--primary-color);
+    border-radius: 2px;
+}
+
+.sell-material-card .card-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: var(--secondary-color);
+    border-radius: 2px;
+}
+
+.features-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+}
+
+.features-list li {
+    position: relative;
+    padding-left: 2rem;
+    margin-bottom: 1rem;
+    color: var(--text-light);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.features-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.material-btn {
+    background: var(--gradient-primary);
+    border: none;
+    font-weight: 600;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.material-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.material-btn:hover::before {
+    left: 100%;
+}
+
+.material-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-xl);
+    text-decoration: none;
+    color: white;
+}
+
+.sell-material-card .material-btn {
+    background: var(--gradient-secondary);
+}
+
+.card-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+}
+
+.material-img {
+    border-radius: 15px;
+    transition: all 0.4s ease;
+    object-fit: cover;
+    height: 300px;
+    width: 100%;
+}
+
+.material-card:hover .material-img {
+    transform: scale(1.05);
+}
+
+/* Responsive Design for Buy Sell Material Section */
+@media (max-width: 768px) {
+    .buy-sell-material {
+        padding: 60px 0;
+    }
+
+    .buy-sell-material .section-title {
+        font-size: 2rem;
+    }
+
+    .buy-sell-material .main-heading {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .buy-sell-material .intro-description {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .material-card {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .features-list {
+        margin-bottom: 2rem;
+    }
+
+    .material-btn {
+        width: 100%;
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .card-image {
+        margin-top: 1.5rem;
+        text-align: center;
+    }
+
+    .material-img {
+        height: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .buy-sell-material .section-title {
+        font-size: 1.7rem;
+    }
+
+    .buy-sell-material .main-heading {
+        font-size: 1.5rem;
+    }
+
+    .material-card {
+        padding: 1rem;
+    }
+
+    .card-title {
+        font-size: 1.3rem;
+    }
+
+    .features-list li {
+        font-size: 0.9rem;
+    }
+
+    .material-img {
+        height: 200px;
     }
 }
