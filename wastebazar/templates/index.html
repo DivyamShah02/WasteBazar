@@ -988,7 +988,7 @@
     <!-- Detailed Category Sections -->
     
     <!-- Interactive Category Explorer Section -->
-    <section id="ewaste" class="detailed-category-section">
+    {% comment %} <section id="ewaste" class="detailed-category-section">
         <div class="container">
             <div class="category-detail-container" data-aos="fade-up" data-aos-duration="1000">
                 <div class="category-main">
@@ -1108,10 +1108,10 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> {% endcomment %}
 
     <!-- Metal Scrap & Alloys Section -->
-    <section id="metalscrap" class="detailed-category-section">
+    {% comment %} <section id="metalscrap" class="detailed-category-section">
         <div class="container">
             <div class="category-detail-container" data-aos="fade-up" data-aos-duration="1000">
                 <div class="category-main">
@@ -1229,10 +1229,10 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> {% endcomment %}
 
     <!-- Plastic & Polymer Waste Section -->
-    <section id="plasticwaste" class="detailed-category-section">
+    {% comment %} <section id="plasticwaste" class="detailed-category-section">
         <div class="container">
             <div class="category-detail-container" data-aos="fade-up" data-aos-duration="1000">
                 <div class="category-main">
@@ -1385,14 +1385,531 @@
                                     <span>Biodegradable Plastics</span>
                                 </div>
                             </div>
-                        </div> {% endcomment %}
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> {% endcomment %}
+
+    <!-- WasteBazar Materials Section -->
+    <section class="wastebazar-materials" id="wastebazar-materials">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up" data-aos-duration="1000">
+                <h2 class="section-title">WasteBazar Materials. <span style="color: #06985c;">Sell your material with us.</span></h2>
+                <p class="section-subtitle">Explore our comprehensive range of recyclable materials and their specifications</p>
+            </div>
+
+            <!-- Mobile Version -->
+            <div class="materials-mobile d-md-none" data-aos="fade-up" data-aos-duration="1000">
+                <div class="container">
+                    <div class="materials-tabs-section">
+                        <div class="materials-tabs-nav">
+                            <ul class="nav nav-pills justify-content-center mb-4" id="materials-mobile-tabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active materials-tab-btn" id="mobile-pet-tab" data-bs-toggle="pill" 
+                                            data-bs-target="#mobile-pet" type="button" role="tab" aria-controls="mobile-pet" aria-selected="true">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 77 77" fill="none">
+                                            <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="currentColor" stroke-width="3"></circle>
+                                            <text x="38" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="currentColor">1</text>
+                                        </svg>
+                                        <span>PET</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link materials-tab-btn" id="mobile-hdpe-tab" data-bs-toggle="pill" 
+                                            data-bs-target="#mobile-hdpe" type="button" role="tab" aria-controls="mobile-hdpe" aria-selected="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 77 77" fill="none">
+                                            <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="currentColor" stroke-width="3"></circle>
+                                            <text x="38" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="currentColor">2</text>
+                                        </svg>
+                                        <span>HDPE</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link materials-tab-btn" id="mobile-pvc-tab" data-bs-toggle="pill" 
+                                            data-bs-target="#mobile-pvc" type="button" role="tab" aria-controls="mobile-pvc" aria-selected="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 77 77" fill="none">
+                                            <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="currentColor" stroke-width="3"></circle>
+                                            <text x="38" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="currentColor">3</text>
+                                        </svg>
+                                        <span>PVC</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link materials-tab-btn" id="mobile-ldpe-tab" data-bs-toggle="pill" 
+                                            data-bs-target="#mobile-ldpe" type="button" role="tab" aria-controls="mobile-ldpe" aria-selected="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 77 77" fill="none">
+                                            <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="currentColor" stroke-width="3"></circle>
+                                            <text x="38" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="currentColor">4</text>
+                                        </svg>
+                                        <span>LDPE</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link materials-tab-btn" id="mobile-pp-tab" data-bs-toggle="pill" 
+                                            data-bs-target="#mobile-pp" type="button" role="tab" aria-controls="mobile-pp" aria-selected="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 77 77" fill="none">
+                                            <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="currentColor" stroke-width="3"></circle>
+                                            <text x="38" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="currentColor">5</text>
+                                        </svg>
+                                        <span>PP</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link materials-tab-btn" id="mobile-ps-tab" data-bs-toggle="pill" 
+                                            data-bs-target="#mobile-ps" type="button" role="tab" aria-controls="mobile-ps" aria-selected="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 77 77" fill="none">
+                                            <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="currentColor" stroke-width="3"></circle>
+                                            <text x="38" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="currentColor">6</text>
+                                        </svg>
+                                        <span>PS</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link materials-tab-btn" id="mobile-pc-tab" data-bs-toggle="pill" 
+                                            data-bs-target="#mobile-pc" type="button" role="tab" aria-controls="mobile-pc" aria-selected="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 77 77" fill="none">
+                                            <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="currentColor" stroke-width="3"></circle>
+                                            <text x="38" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="currentColor">7</text>
+                                        </svg>
+                                        <span>PC</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link materials-tab-btn" id="mobile-abs-tab" data-bs-toggle="pill" 
+                                            data-bs-target="#mobile-abs" type="button" role="tab" aria-controls="mobile-abs" aria-selected="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 77 77" fill="none">
+                                            <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="currentColor" stroke-width="3"></circle>
+                                            <text x="38" y="42" text-anchor="middle" font-size="12" font-weight="bold" fill="currentColor">ABS</text>
+                                        </svg>
+                                        <span>ABS</span>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link materials-tab-btn" id="mobile-eps-tab" data-bs-toggle="pill" 
+                                            data-bs-target="#mobile-eps" type="button" role="tab" aria-controls="mobile-eps" aria-selected="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 77 77" fill="none">
+                                            <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="currentColor" stroke-width="3"></circle>
+                                            <text x="38" y="42" text-anchor="middle" font-size="12" font-weight="bold" fill="currentColor">EPS</text>
+                                        </svg>
+                                        <span>EPS</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="tab-content materials-tab-content" id="materials-mobile-content">
+                            <!-- PET Mobile Tab -->
+                            <div class="tab-pane fade show active" id="mobile-pet" role="tabpanel" aria-labelledby="mobile-pet-tab">
+                                <div class="row align-items-center">
+                                    <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                                        <h3 class="material-title">PET Recycling</h3>
+                                        <p class="material-description">
+                                            <strong>PET</strong> - PET is the abbreviation for Polyethylene Terephthalate, which is formed when ethylene glycol and terephthalic acid are combined. It is a clear plastic that is both strong and lightweight enough to be popularly used for food and beverage packaging, with close to all single-use plastic drinks bottles being made from PET. It is also a popular choice for a great many other products, such as bottles for hygiene products and even tennis ball canisters.
+                                        </p>
+                                        <a href="https://www.wastetrade.com/polyethylene-terephthalate-pet/" target="_self" class="btn btn-outline-primary">Learn more about PET</a>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PET-plastic-straps-baled.jpg" 
+                                             alt="PET-plastic-straps-baled.jpg" class="img-fluid rounded material-image">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- HDPE Mobile Tab -->
+                            <div class="tab-pane fade" id="mobile-hdpe" role="tabpanel" aria-labelledby="mobile-hdpe-tab">
+                                <div class="row align-items-center">
+                                    <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                                        <h3 class="material-title">HDPE Recycling</h3>
+                                        <p class="material-description">
+                                            <strong>HDPE</strong> - HDPE is the abbreviation for High-Density Polyethylene, which is made from the monomer ethylene. It is a thermoplastic, which means that it can become softer when heated in order to be moulded and will then harden when cooled without any alteration to the material's properties. The material is incredibly versatile as it is lightweight, strong, malleable, impact resistant, weather resistant and long lasting. It is used across a wide variety of products over a range of different industries. For example, it is used for milk jugs, fuel tanks, piping, children's toys, and even bread bags and cereal box liners.
+                                        </p>
+                                        <a href="https://www.wastetrade.com/high-density-polyethylene-hdpe/" target="_self" class="btn btn-outline-primary">Learn more about HDPE</a>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/hdpe-piping-1.jpg" 
+                                             alt="hdpe-piping-1.jpg" class="img-fluid rounded material-image">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PVC Mobile Tab -->
+                            <div class="tab-pane fade" id="mobile-pvc" role="tabpanel" aria-labelledby="mobile-pvc-tab">
+                                <div class="row align-items-center">
+                                    <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                                        <h3 class="material-title">PVC Recycling</h3>
+                                        <p class="material-description">
+                                            <strong>PVC</strong> - PVC is the abbreviation Polyvinyl Chloride. It is made by the combination of chlorine and ethylene to form the monomer vinyl chloride, which is then sequenced to make the polymer Polyvinyl Chloride. PVC is a very strong and tough material that can be easily shaped, which gives it many different uses in terms of what it can be manufactured into. PVC can also be made soft and flexible when mixed with certain additives. This means that whereas PVC can be used for construction, automotive and medical items, it can also be used for items such as polyvinyl flooring, clothing and upholstery.
+                                        </p>
+                                        <a href="https://www.wastetrade.com/polyvinyl-chloride-pvc/" target="_self" class="btn btn-outline-primary">Learn more about PVC</a>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PVC-Plastic-scaled-1-1-2.jpg" 
+                                             alt="PVC-Plastic-scaled-1-1-2.jpg" class="img-fluid rounded material-image">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- LDPE Mobile Tab -->
+                            <div class="tab-pane fade" id="mobile-ldpe" role="tabpanel" aria-labelledby="mobile-ldpe-tab">
+                                <div class="row align-items-center">
+                                    <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                                        <h3 class="material-title">LDPE Recycling</h3>
+                                        <p class="material-description">
+                                            <strong>LDPE</strong> - LDPE is the abbreviation of Low-Density Polyethylene, which is made from the monomer ethylene. LDPE is a thermoplastic, which means that when heated it can become softer in order to be moulded and will then harden when cooled without any alteration to the material's properties. The plastic is lightweight, strong, impact resistant and chemical resistant. LDPE is an ideal material for the manufacturing of thin, flexible products such as plastic bags, shrink-wrap, stretch film, container lids, squeezable bottles and so on.
+                                        </p>
+                                        <a href="https://www.wastetrade.com/low-density-polyethylene-ldpe/" target="_self" class="btn btn-outline-primary">Learn more about LDPE</a>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/LDPE-on-a-roll-in-a-factory-1.jpg" 
+                                             alt="LDPE-on-a-roll-in-a-factory-1.jpg" class="img-fluid rounded material-image">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PP Mobile Tab -->
+                            <div class="tab-pane fade" id="mobile-pp" role="tabpanel" aria-labelledby="mobile-pp-tab">
+                                <div class="row align-items-center">
+                                    <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                                        <h3 class="material-title">PP Recycling</h3>
+                                        <p class="material-description">
+                                            <strong>PP</strong> - PP is the abbreviation of Polypropylene, which is a thermoplastic made from the monomer propylene. Being a thermoplastic means that when heated it can become softer in order to be moulded and will then harden when cooled without any alteration to the material's properties. PP is tough, lightweight, chemical resistant and moisture resistant. The plastic is used for a wide range of products, such as packaging products, automotive parts and consumer goods.
+                                        </p>
+                                        <a href="https://www.wastetrade.com/polypropylene-pp/" target="_self" class="btn btn-outline-primary">Learn more about PP</a>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PP1-1-1-2.jpg" 
+                                             alt="PP1-1-1-2.jpg" class="img-fluid rounded material-image">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PS Mobile Tab -->
+                            <div class="tab-pane fade" id="mobile-ps" role="tabpanel" aria-labelledby="mobile-ps-tab">
+                                <div class="row align-items-center">
+                                    <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                                        <h3 class="material-title">PS Recycling</h3>
+                                        <p class="material-description">
+                                            <strong>PS</strong> - PS is the abbreviation for Polystyrene. Polystyrene is a polymer made from the monomer styrene. It is lightweight and tough and is good for use as insulation. It is used in a number of different products such as packaging material, furniture and sports equipment.
+                                        </p>
+                                        <a href="https://www.wastetrade.com/polystyrene-ps/" target="_self" class="btn btn-outline-primary">Learn more about PS</a>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/polystyrene-foam.jpg" 
+                                             alt="polystyrene-foam.jpg" class="img-fluid rounded material-image">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- PC Mobile Tab -->
+                            <div class="tab-pane fade" id="mobile-pc" role="tabpanel" aria-labelledby="mobile-pc-tab">
+                                <div class="row align-items-center">
+                                    <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                                        <h3 class="material-title">PC Recycling</h3>
+                                        <p class="material-description">
+                                            <strong>PC</strong> - PC is the abbreviation for Polycarbonate. It is made by the combination of chlorine and ethylene to form the monomer vinyl chloride, which is then sequenced to make the polymer Polycarbonate. PC is a very strong and tough material that can be easily shaped, which gives it many different uses in terms of what it can be manufactured into.
+                                        </p>
+                                        <a href="https://www.wastetrade.com/polycarbonate-pc/" target="_self" class="btn btn-outline-primary">Learn more about PC</a>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/polycarbonate-sheets.jpg" 
+                                             alt="polycarbonate-sheets.jpg" class="img-fluid rounded material-image">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ABS Mobile Tab -->
+                            <div class="tab-pane fade" id="mobile-abs" role="tabpanel" aria-labelledby="mobile-abs-tab">
+                                <div class="row align-items-center">
+                                    <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                                        <h3 class="material-title">ABS Recycling</h3>
+                                        <p class="material-description">
+                                            <strong>ABS</strong> - ABS is the abbreviation of Acrylonitrile Butadiene Styrene, a polymer made from the monomers acrylonitrile, butadiene and styrene. It is stiff, strong, impact resistant and chemical resistant. It is used in a number of different products such as computer parts, tools, plug socket faces and toys.
+                                        </p>
+                                        <a href="https://www.wastetrade.com/acrylonitrile-butadiene-styreneabs-abs/" target="_self" class="btn btn-outline-primary">Learn more about ABS</a>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/ABS-Preview.jpg" 
+                                             alt="ABS-Preview.jpg" class="img-fluid rounded material-image">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- EPS Mobile Tab -->
+                            <div class="tab-pane fade" id="mobile-eps" role="tabpanel" aria-labelledby="mobile-eps-tab">
+                                <div class="row align-items-center">
+                                    <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                                        <h3 class="material-title">EPS Recycling</h3>
+                                        <p class="material-description">
+                                            <strong>EPS</strong> - EPS is the abbreviation for Expanded Polystyrene. Polystyrene is a polymer made from the monomer styrene, and EPS is made from beads of Polystyrene expanded by gas. It is lightweight and tough and is good for use as insulation. It is used in a number of different products such as packaging material, furniture and sports equipment.
+                                        </p>
+                                        <a href="https://www.wastetrade.com/expanded-polystyrene-eps/" target="_self" class="btn btn-outline-primary">Learn more about EPS</a>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" 
+                                             alt="EPS-Preview.jpg" class="img-fluid rounded material-image">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desktop Version -->
+            <div class="materials-desktop d-none d-md-block" data-aos="fade-up" data-aos-duration="1000">
+                <div class="materials-tabs-container">
+                    <div class="materials-tabs-navigation">
+                        <div class="materials-tab-button active" data-tab="desktop-pet">
+                            <div class="materials-tab-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="77" height="77" viewBox="0 0 77 77" fill="none">
+                                    <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="white" stroke-width="3"></circle>
+                                    <text x="38" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="white">1</text>
+                                </svg>
+                            </div>
+                            <div class="materials-tab-title">PET</div>
+                        </div>
+
+                        <div class="materials-tab-button" data-tab="desktop-hdpe">
+                            <div class="materials-tab-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="77" height="77" viewBox="0 0 77 77" fill="none">
+                                    <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="white" stroke-width="3"></circle>
+                                    <text x="38" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="white">2</text>
+                                </svg>
+                            </div>
+                            <div class="materials-tab-title">HDPE</div>
+                        </div>
+
+                        <div class="materials-tab-button" data-tab="desktop-pvc">
+                            <div class="materials-tab-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="77" height="77" viewBox="0 0 77 77" fill="none">
+                                    <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="white" stroke-width="3"></circle>
+                                    <text x="38" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="white">3</text>
+                                </svg>
+                            </div>
+                            <div class="materials-tab-title">PVC</div>
+                        </div>
+
+                        <div class="materials-tab-button" data-tab="desktop-ldpe">
+                            <div class="materials-tab-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="77" height="77" viewBox="0 0 77 77" fill="none">
+                                    <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="white" stroke-width="3"></circle>
+                                    <text x="38" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="white">4</text>
+                                </svg>
+                            </div>
+                            <div class="materials-tab-title">LDPE</div>
+                        </div>
+
+                        <div class="materials-tab-button" data-tab="desktop-pp">
+                            <div class="materials-tab-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="77" height="77" viewBox="0 0 77 77" fill="none">
+                                    <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="white" stroke-width="3"></circle>
+                                    <text x="38" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="white">5</text>
+                                </svg>
+                            </div>
+                            <div class="materials-tab-title">PP</div>
+                        </div>
+
+                        <div class="materials-tab-button" data-tab="desktop-ps">
+                            <div class="materials-tab-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="77" height="77" viewBox="0 0 77 77" fill="none">
+                                    <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="white" stroke-width="3"></circle>
+                                    <text x="38" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="white">6</text>
+                                </svg>
+                            </div>
+                            <div class="materials-tab-title">PS</div>
+                        </div>
+
+                        <div class="materials-tab-button" data-tab="desktop-pc">
+                            <div class="materials-tab-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="77" height="77" viewBox="0 0 77 77" fill="none">
+                                    <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="white" stroke-width="3"></circle>
+                                    <text x="38" y="45" text-anchor="middle" font-size="16" font-weight="bold" fill="white">7</text>
+                                </svg>
+                            </div>
+                            <div class="materials-tab-title">PC</div>
+                        </div>
+
+                        <div class="materials-tab-button" data-tab="desktop-abs">
+                            <div class="materials-tab-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="77" height="77" viewBox="0 0 77 77" fill="none">
+                                    <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="white" stroke-width="3"></circle>
+                                    <text x="38" y="42" text-anchor="middle" font-size="12" font-weight="bold" fill="white">ABS</text>
+                                </svg>
+                            </div>
+                            <div class="materials-tab-title">ABS</div>
+                        </div>
+
+                        <div class="materials-tab-button" data-tab="desktop-eps">
+                            <div class="materials-tab-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="77" height="77" viewBox="0 0 77 77" fill="none">
+                                    <circle cx="38.1168" cy="38.1168" r="36.6168" stroke="white" stroke-width="3"></circle>
+                                    <text x="38" y="42" text-anchor="middle" font-size="12" font-weight="bold" fill="white">EPS</text>
+                                </svg>
+                            </div>
+                            <div class="materials-tab-title">EPS</div>
+                        </div>
+                    </div>
+
+                    <div class="materials-tabs-content">
+                        <!-- PET Desktop Tab -->
+                        <div class="materials-tab-panel active" id="desktop-pet">
+                            <div class="row align-items-center">
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <h3 class="material-title">PET Recycling</h3>
+                                    <p class="material-description">
+                                        <strong>PET</strong> - PET is the abbreviation for Polyethylene Terephthalate, which is formed when ethylene glycol and terephthalic acid are combined. It is a clear plastic that is both strong and lightweight enough to be popularly used for food and beverage packaging, with close to all single-use plastic drinks bottles being made from PET. It is also a popular choice for a great many other products, such as bottles for hygiene products and even tennis ball canisters.
+                                    </p>
+                                    <a href="https://www.wastetrade.com/polyethylene-terephthalate-pet/" target="_self" class="btn btn-outline-primary">Learn more about PET</a>
+                                </div>
+                                <div class="col-lg-6">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PET-plastic-straps-baled.jpg" 
+                                         alt="PET-plastic-straps-baled.jpg" class="img-fluid rounded material-image">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- HDPE Desktop Tab -->
+                        <div class="materials-tab-panel" id="desktop-hdpe">
+                            <div class="row align-items-center">
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <h3 class="material-title">HDPE Recycling</h3>
+                                    <p class="material-description">
+                                        <strong>HDPE</strong> - HDPE is the abbreviation for High-Density Polyethylene, which is made from the monomer ethylene. It is a thermoplastic, which means that it can become softer when heated in order to be moulded and will then harden when cooled without any alteration to the material's properties. The material is incredibly versatile as it is lightweight, strong, malleable, impact resistant, weather resistant and long lasting. It is used across a wide variety of products over a range of different industries. For example, it is used for milk jugs, fuel tanks, piping, children's toys, and even bread bags and cereal box liners.
+                                    </p>
+                                    <a href="https://www.wastetrade.com/high-density-polyethylene-hdpe/" target="_self" class="btn btn-outline-primary">Learn more about HDPE</a>
+                                </div>
+                                <div class="col-lg-6">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/hdpe-piping-1.jpg" 
+                                         alt="hdpe-piping-1.jpg" class="img-fluid rounded material-image">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PVC Desktop Tab -->
+                        <div class="materials-tab-panel" id="desktop-pvc">
+                            <div class="row align-items-center">
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <h3 class="material-title">PVC Recycling</h3>
+                                    <p class="material-description">
+                                        <strong>PVC</strong> - PVC is the abbreviation Polyvinyl Chloride. It is made by the combination of chlorine and ethylene to form the monomer vinyl chloride, which is then sequenced to make the polymer Polyvinyl Chloride. PVC is a very strong and tough material that can be easily shaped, which gives it many different uses in terms of what it can be manufactured into. PVC can also be made soft and flexible when mixed with certain additives. This means that whereas PVC can be used for construction, automotive and medical items, it can also be used for items such as polyvinyl flooring, clothing and upholstery.
+                                    </p>
+                                    <a href="https://www.wastetrade.com/polyvinyl-chloride-pvc/" target="_self" class="btn btn-outline-primary">Learn more about PVC</a>
+                                </div>
+                                <div class="col-lg-6">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PVC-Plastic-scaled-1-1-2.jpg" 
+                                         alt="PVC-Plastic-scaled-1-1-2.jpg" class="img-fluid rounded material-image">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LDPE Desktop Tab -->
+                        <div class="materials-tab-panel" id="desktop-ldpe">
+                            <div class="row align-items-center">
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <h3 class="material-title">LDPE Recycling</h3>
+                                    <p class="material-description">
+                                        <strong>LDPE</strong> - LDPE is the abbreviation of Low-Density Polyethylene, which is made from the monomer ethylene. LDPE is a thermoplastic, which means that when heated it can become softer in order to be moulded and will then harden when cooled without any alteration to the material's properties. The plastic is lightweight, strong, impact resistant and chemical resistant. LDPE is an ideal material for the manufacturing of thin, flexible products such as plastic bags, shrink-wrap, stretch film, container lids, squeezable bottles and so on.
+                                    </p>
+                                    <a href="https://www.wastetrade.com/low-density-polyethylene-ldpe/" target="_self" class="btn btn-outline-primary">Learn more about LDPE</a>
+                                </div>
+                                <div class="col-lg-6">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/LDPE-on-a-roll-in-a-factory-1.jpg" 
+                                         alt="LDPE-on-a-roll-in-a-factory-1.jpg" class="img-fluid rounded material-image">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PP Desktop Tab -->
+                        <div class="materials-tab-panel" id="desktop-pp">
+                            <div class="row align-items-center">
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <h3 class="material-title">PP Recycling</h3>
+                                    <p class="material-description">
+                                        <strong>PP</strong> - PP is the abbreviation of Polypropylene, which is a thermoplastic made from the monomer propylene. Being a thermoplastic means that when heated it can become softer in order to be moulded and will then harden when cooled without any alteration to the material's properties. PP is tough, lightweight, chemical resistant and moisture resistant. The plastic is used for a wide range of products, such as packaging products, automotive parts and consumer goods.
+                                    </p>
+                                    <a href="https://www.wastetrade.com/polypropylene-pp/" target="_self" class="btn btn-outline-primary">Learn more about PP</a>
+                                </div>
+                                <div class="col-lg-6">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PP1-1-1-2.jpg" 
+                                         alt="PP1-1-1-2.jpg" class="img-fluid rounded material-image">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PS Desktop Tab -->
+                        <div class="materials-tab-panel" id="desktop-ps">
+                            <div class="row align-items-center">
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <h3 class="material-title">PS Recycling</h3>
+                                    <p class="material-description">
+                                        <strong>PS</strong> - PS is the abbreviation for Polystyrene. Polystyrene is a polymer made from the monomer styrene. It is lightweight and tough and is good for use as insulation. It is used in a number of different products such as packaging material, furniture and sports equipment.
+                                    </p>
+                                    <a href="https://www.wastetrade.com/polystyrene-ps/" target="_self" class="btn btn-outline-primary">Learn more about PS</a>
+                                </div>
+                                <div class="col-lg-6">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/polystyrene-foam.jpg" 
+                                         alt="polystyrene-foam.jpg" class="img-fluid rounded material-image">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PC Desktop Tab -->
+                        <div class="materials-tab-panel" id="desktop-pc">
+                            <div class="row align-items-center">
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <h3 class="material-title">PC Recycling</h3>
+                                    <p class="material-description">
+                                        <strong>PC</strong> - PC is the abbreviation for Polycarbonate. It is made by the combination of chlorine and ethylene to form the monomer vinyl chloride, which is then sequenced to make the polymer Polycarbonate. PC is a very strong and tough material that can be easily shaped, which gives it many different uses in terms of what it can be manufactured into.
+                                    </p>
+                                    <a href="https://www.wastetrade.com/polycarbonate-pc/" target="_self" class="btn btn-outline-primary">Learn more about PC</a>
+                                </div>
+                                <div class="col-lg-6">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/polycarbonate-sheets.jpg" 
+                                         alt="polycarbonate-sheets.jpg" class="img-fluid rounded material-image">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ABS Desktop Tab -->
+                        <div class="materials-tab-panel" id="desktop-abs">
+                            <div class="row align-items-center">
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <h3 class="material-title">ABS Recycling</h3>
+                                    <p class="material-description">
+                                        <strong>ABS</strong> - ABS is the abbreviation of Acrylonitrile Butadiene Styrene, a polymer made from the monomers acrylonitrile, butadiene and styrene. It is stiff, strong, impact resistant and chemical resistant. It is used in a number of different products such as computer parts, tools, plug socket faces and toys.
+                                    </p>
+                                    <a href="https://www.wastetrade.com/acrylonitrile-butadiene-styreneabs-abs/" target="_self" class="btn btn-outline-primary">Learn more about ABS</a>
+                                </div>
+                                <div class="col-lg-6">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/ABS-Preview.jpg" 
+                                         alt="ABS-Preview.jpg" class="img-fluid rounded material-image">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- EPS Desktop Tab -->
+                        <div class="materials-tab-panel" id="desktop-eps">
+                            <div class="row align-items-center">
+                                <div class="col-lg-6 mb-4 mb-lg-0">
+                                    <h3 class="material-title">EPS Recycling</h3>
+                                    <p class="material-description">
+                                        <strong>EPS</strong> - EPS is the abbreviation for Expanded Polystyrene. Polystyrene is a polymer made from the monomer styrene, and EPS is made from beads of Polystyrene expanded by gas. It is lightweight and tough and is good for use as insulation. It is used in a number of different products such as packaging material, furniture and sports equipment.
+                                    </p>
+                                    <a href="https://www.wastetrade.com/expanded-polystyrene-eps/" target="_self" class="btn btn-outline-primary">Learn more about EPS</a>
+                                </div>
+                                <div class="col-lg-6">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" 
+                                         alt="EPS-Preview.jpg" class="img-fluid rounded material-image">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
-    
 
     <!-- Market Insights -->
     <section class="market-insights" id="market-insights">

@@ -614,6 +614,39 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log('Subcategory item clicked:', subcategoryName);
         }
     });
+
+    // WasteBazar Materials Section - Desktop Tab functionality
+    const materialsTabButtons = document.querySelectorAll('.materials-tab-button');
+    const materialsTabPanels = document.querySelectorAll('.materials-tab-panel');
+
+    materialsTabButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const targetTab = this.dataset.tab;
+
+            // Remove active class from all buttons and panels
+            materialsTabButtons.forEach(btn => btn.classList.remove('active'));
+            materialsTabPanels.forEach(panel => panel.classList.remove('active'));
+
+            // Add active class to clicked button
+            this.classList.add('active');
+
+            // Show corresponding panel
+            const targetPanel = document.getElementById(targetTab);
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            }
+        });
+    });
+
+    // WasteBazar Materials Section - Mobile Tab functionality (Bootstrap)
+    const mobileTabTriggers = document.querySelectorAll('#materials-mobile-tabs button[data-bs-toggle="pill"]');
+    
+    mobileTabTriggers.forEach(trigger => {
+        trigger.addEventListener('shown.bs.tab', function (e) {
+            // Add any additional functionality when mobile tabs are switched
+            console.log('Mobile materials tab switched to:', e.target.getAttribute('aria-controls'));
+        });
+    });
 });
 
 // Initialize platform
