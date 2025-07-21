@@ -1,4 +1,53 @@
 
+// How It Works Section - Tab functionality
+document.addEventListener('DOMContentLoaded', function () {
+    // Tab switching functionality
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const targetTab = this.dataset.tab;
+
+            // Remove active class from all tabs and panels
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabPanels.forEach(panel => panel.classList.remove('active'));
+
+            // Add active class to clicked tab
+            this.classList.add('active');
+
+            // Show corresponding panel
+            const targetPanel = document.getElementById(targetTab + '-panel');
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            }
+        });
+    });
+
+    // Video play functionality
+    const playButtons = document.querySelectorAll('.video-play-button');
+
+    playButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const videoUrl = this.dataset.video;
+            const videoWrapper = this.closest('.video-wrapper');
+
+            if (videoUrl && videoWrapper) {
+                // Create iframe element
+                const iframe = document.createElement('iframe');
+                iframe.src = videoUrl + '?autoplay=1';
+                iframe.className = 'video-iframe';
+                iframe.allowFullscreen = true;
+                iframe.allow = 'autoplay';
+
+                // Replace thumbnail with iframe
+                videoWrapper.innerHTML = '';
+                videoWrapper.appendChild(iframe);
+            }
+        });
+    });
+});
+
 // Initialize AOS
 AOS.init({
     duration: 1000,
