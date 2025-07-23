@@ -1,26 +1,26 @@
 /**
- * Buyer Profile Script for WasteBazar
- * Handles buyer profile page functionality and API integration
+ * Seller Profile Script for WasteBazar
+ * Handles seller profile page functionality and API integration
  */
 
-class BuyerProfileApp {
-    constructor(csrfToken, userDetailsApiUrl, requirementsApiUrl, purchasesApiUrl) {
+class SellerProfileApp {
+    constructor(csrfToken, userDetailsApiUrl, listingsApiUrl, salesApiUrl) {
         this.csrfToken = csrfToken;
         this.userDetailsApiUrl = userDetailsApiUrl;
-        this.requirementsApiUrl = requirementsApiUrl;
-        this.purchasesApiUrl = purchasesApiUrl;
-        this.buyerDetailApiUrl = "/user-api/buyer-detail-api/";
+        this.listingsApiUrl = listingsApiUrl;
+        this.salesApiUrl = salesApiUrl;
+        this.sellerDetailApiUrl = "/user-api/seller-detail-api/";
         this.currentUserId = null;
-        this.buyerData = null;
+        this.sellerData = null;
 
-        console.log('🚀 Buyer Profile App initialized');
+        console.log('🚀 Seller Profile App initialized');
         this.init();
     }
 
     init() {
         this.getCurrentUserId();
         this.setupTabs();
-        this.loadBuyerProfile();
+        this.loadSellerProfile();
     }
 
     getCurrentUserId() {
@@ -40,34 +40,34 @@ class BuyerProfileApp {
         console.log('👤 Current user ID:', this.currentUserId);
     }
 
-    async loadBuyerProfile() {
+    async loadSellerProfile() {
         try {
-            console.log('📥 Loading buyer profile...');
+            console.log('📥 Loading seller profile...');
 
-            const response = await this.makeApiCall(`${this.buyerDetailApiUrl}${this.currentUserId}/`, {
+            const response = await this.makeApiCall(`${this.sellerDetailApiUrl}${this.currentUserId}/`, {
                 method: 'GET'
             });
 
             if (response.success) {
-                this.buyerData = response.data;
-                console.log('✅ Buyer profile loaded:', this.buyerData);
+                this.sellerData = response.data;
+                console.log('✅ Seller profile loaded:', this.sellerData);
 
                 this.renderProfile();
                 this.renderWalletInfo();
-                this.loadRequirements();
+                this.loadListings();
             } else {
-                console.error('❌ Failed to load buyer profile:', response.error);
+                console.error('❌ Failed to load seller profile:', response.error);
                 this.showError(response.error || 'Failed to load profile');
             }
         } catch (error) {
-            console.error('❌ Error loading buyer profile:', error);
+            console.error('❌ Error loading seller profile:', error);
             this.showError('Network error. Please try again.');
         }
     }
 
     renderProfile() {
-        const userDetails = this.buyerData.user_details;
-        const corporateDetails = this.buyerData.corporate_details;
+        const userDetails = this.sellerData.user_details;
+        const corporateDetails = this.sellerData.corporate_details;
 
         // Render profile header
         this.renderProfileHeader(userDetails, corporateDetails);
@@ -81,11 +81,11 @@ class BuyerProfileApp {
 
     renderProfileHeader(userDetails, corporateDetails) {
         const profileInfo = document.querySelector('.profile-info');
-        const isIndividual = userDetails.role === 'buyer_individual';
-        const isCorporate = userDetails.role === 'buyer_corporate';
+        const isIndividual = userDetails.role === 'seller_individual';
+        const isCorporate = userDetails.role === 'seller_corporate';
 
         // Get name and determine avatar
-        const displayName = userDetails.name || 'Buyer';
+        const displayName = userDetails.name || 'Seller';
         const avatarInitial = displayName.charAt(0).toUpperCase();
 
         // Create company name for corporate users
@@ -94,7 +94,7 @@ class BuyerProfileApp {
 
         profileInfo.innerHTML = `
             <div class="profile-avatar">
-                <i class="fas fa-user"></i>
+                <i class="fas fa-store"></i>
             </div>
             <div class="profile-details">
                 <h1>${displayName}</h1>
@@ -102,7 +102,7 @@ class BuyerProfileApp {
                 <div class="profile-badges">
                     <span class="profile-badge">
                         <i class="fas fa-${isIndividual ? 'user' : 'building'} me-1"></i>
-                        ${isIndividual ? 'Individual' : 'Corporate'} Buyer
+                        ${isIndividual ? 'Individual' : 'Corporate'} Seller
                     </span>
                     ${corporateDetails && corporateDetails.is_approved ?
                 '<span class="profile-badge"><i class="fas fa-check-circle me-1"></i>Verified</span>' :
@@ -133,7 +133,7 @@ class BuyerProfileApp {
     }
 
     renderWalletInfo() {
-        const walletDetails = this.buyerData.wallet_details;
+        const walletDetails = this.sellerData.wallet_details;
 
         if (walletDetails && !walletDetails.message) {
             // Update wallet stats in the stats cards
@@ -151,10 +151,10 @@ class BuyerProfileApp {
         const totalCredits = (walletDetails.free_credits || 0) + (walletDetails.paid_credits || 0);
 
         // You can customize these based on your actual data
-        document.getElementById('totalRequirements').textContent = '0'; // Will be updated when requirements are loaded
-        document.getElementById('activeRequirements').textContent = '0';
-        document.getElementById('completedDeals').textContent = '0';
-        document.getElementById('totalSpent').textContent = `${totalCredits} Credits`;
+        document.getElementById('totalListings').textContent = '0'; // Will be updated when listings are loaded
+        document.getElementById('activeListings').textContent = '0';
+        document.getElementById('soldItems').textContent = '0';
+        document.getElementById('totalEarnings').textContent = `${totalCredits} Credits`;
     }
 
     renderWalletSidebar(walletDetails) {
@@ -326,11 +326,11 @@ class BuyerProfileApp {
         tabsContainer.className = 'content-tabs mb-4';
 
         tabsContainer.innerHTML = `
-            <button class="tab-button active" data-tab="requirements">
-                <i class="fas fa-list me-2"></i>My Requirements
+            <button class="tab-button active" data-tab="listings">
+                <i class="fas fa-boxes me-2"></i>My Listings
             </button>
-            <button class="tab-button" data-tab="history">
-                <i class="fas fa-history me-2"></i>Purchase History
+            <button class="tab-button" data-tab="sales">
+                <i class="fas fa-chart-line me-2"></i>Sales History
             </button>
             <button class="tab-button" data-tab="settings">
                 <i class="fas fa-cog me-2"></i>Settings
@@ -364,36 +364,36 @@ class BuyerProfileApp {
 
         // Add new tab contents
         const tabContentHTML = `
-            <div class="tab-content active" id="requirements-tab">
+            <div class="tab-content active" id="listings-tab">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3>My Requirements</h3>
+                    <h3>My Listings</h3>
                     <button class="btn btn-primary">
-                        <i class="fas fa-plus me-2"></i>New Requirement
+                        <i class="fas fa-plus me-2"></i>New Listing
                     </button>
                 </div>
-                <div id="requirements-container">
+                <div id="listings-container">
                     <div class="empty-state">
                         <div class="empty-icon">
-                            <i class="fas fa-clipboard-list"></i>
+                            <i class="fas fa-boxes"></i>
                         </div>
-                        <h4>No Requirements Yet</h4>
-                        <p>Start by posting your first requirement to find sellers.</p>
+                        <h4>No Listings Yet</h4>
+                        <p>Start by creating your first listing to sell your waste materials.</p>
                         <button class="btn btn-primary-custom">
-                            <i class="fas fa-plus me-2"></i>Post First Requirement
+                            <i class="fas fa-plus me-2"></i>Create First Listing
                         </button>
                     </div>
                 </div>
             </div>
             
-            <div class="tab-content" id="history-tab">
-                <h3 class="mb-4">Purchase History</h3>
-                <div id="history-container">
+            <div class="tab-content" id="sales-tab">
+                <h3 class="mb-4">Sales History</h3>
+                <div id="sales-container">
                     <div class="empty-state">
                         <div class="empty-icon">
-                            <i class="fas fa-shopping-cart"></i>
+                            <i class="fas fa-chart-line"></i>
                         </div>
-                        <h4>No Purchases Yet</h4>
-                        <p>Your purchase history will appear here once you start buying.</p>
+                        <h4>No Sales Yet</h4>
+                        <p>Your sales history will appear here once you start selling.</p>
                     </div>
                 </div>
             </div>
@@ -404,7 +404,7 @@ class BuyerProfileApp {
                     <div class="card">
                         <div class="card-body">
                             <h5>Profile Information</h5>
-                            <p>Update your profile details and preferences.</p>
+                            <p>Update your profile details and business preferences.</p>
                             <button class="btn btn-outline-primary">Edit Profile</button>
                         </div>
                     </div>
@@ -431,18 +431,18 @@ class BuyerProfileApp {
         console.log(`📑 Switched to ${tabName} tab`);
     }
 
-    async loadRequirements() {
+    async loadListings() {
         try {
-            console.log('📋 Loading requirements...');
-            // This would call your requirements API
+            console.log('📦 Loading listings...');
+            // This would call your listings API
             // For now, we'll show the empty state
 
-            // Update requirements count in stats
-            document.getElementById('totalRequirements').textContent = '0';
-            document.getElementById('activeRequirements').textContent = '0';
+            // Update listings count in stats
+            document.getElementById('totalListings').textContent = '0';
+            document.getElementById('activeListings').textContent = '0';
 
         } catch (error) {
-            console.error('❌ Error loading requirements:', error);
+            console.error('❌ Error loading listings:', error);
         }
     }
 
@@ -534,16 +534,16 @@ class BuyerProfileApp {
 }
 
 // Global function to initialize the app (called from HTML)
-async function initBuyerProfileApp(csrfToken, userDetailsApiUrl, requirementsApiUrl, purchasesApiUrl) {
+async function initSellerProfileApp(csrfToken, userDetailsApiUrl, listingsApiUrl, salesApiUrl) {
     try {
-        new BuyerProfileApp(csrfToken, userDetailsApiUrl, requirementsApiUrl, purchasesApiUrl);
+        new SellerProfileApp(csrfToken, userDetailsApiUrl, listingsApiUrl, salesApiUrl);
     } catch (error) {
-        console.error('❌ Failed to initialize Buyer Profile App:', error);
+        console.error('❌ Failed to initialize Seller Profile App:', error);
     }
 }
 
 // Export for use in modules
-window.initBuyerProfileApp = initBuyerProfileApp;
-window.BuyerProfileApp = BuyerProfileApp;
+window.initSellerProfileApp = initSellerProfileApp;
+window.SellerProfileApp = SellerProfileApp;
 
-console.log('🔐 WasteBazar Buyer Profile System Loaded');
+console.log('🔐 WasteBazar Seller Profile System Loaded');

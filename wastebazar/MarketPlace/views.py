@@ -5,8 +5,8 @@ from rest_framework.decorators import action
 from django.utils import timezone
 from django.db.models import Q
 
-from .models import SellerListing,BuyerRequirement
-from .serializers import SellerListingSerializer, BuyerRequirementSerializer
+from .models import SellerListing, BuyerRequirement, Category, SubCategory
+from .serializers import SellerListingSerializer, BuyerRequirementSerializer, CategorySerializer, SubCategorySerializer
 
 from utils.decorators import handle_exceptions, check_authentication
 
@@ -758,5 +758,53 @@ class AllBuyerRequirementsViewset(viewsets.ViewSet):
             "user_not_logged_in": False,
             "user_unauthorized": False,
             "data": serializer.data,
+            "error": None
+        })
+
+
+class CategoriesViewSet(viewsets.ViewSet):
+    """ViewSet for managing categories and subcategories"""
+    
+    @handle_exceptions
+    def list(self, request):
+        """Get all categories"""
+        categories = Category.objects.filter(is_active=True).order_by('title')
+        serializer = CategorySerializer(categories, many=True)
+        return Response({
+            "success": True,
+            "user_not_logged_in": False,
+            "user_unauthorized": False,
+            "data": serializer.data,
+            "error": None
+        })
+    
+    @handle_exceptions
+    def retrieve(self, request, pk=None):
+        """Get subcategories for a specific category"""
+        try:
+            category = Category.objects.get(category_id=pk, is_active=True)
+        except Category.DoesNotExist:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": "Category not found."
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        subcategories = SubCategory.objects.filter(
+            category_id=category.category_id, 
+            is_active=True
+        ).order_by('title')
+        
+        serializer = SubCategorySerializer(subcategories, many=True)
+        return Response({
+            "success": True,
+            "user_not_logged_in": False,
+            "user_unauthorized": False,
+            "data": {
+                "category": CategorySerializer(category).data,
+                "subcategories": serializer.data
+            },
             "error": None
         })

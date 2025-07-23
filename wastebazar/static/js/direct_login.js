@@ -1,6 +1,6 @@
 /**
- * Direct Login Script for WasteBazar
- * Handles mobile number + OTP login for registered users
+ * Direct Login Handler for WasteBazar
+ * Handles the simplified login flow with OTP verification and role-based redirection
  */
 
 class DirectLoginHandler {
@@ -9,426 +9,377 @@ class DirectLoginHandler {
         this.otpApiUrl = config.otpApiUrl;
         this.dashboardUrl = config.dashboardUrl;
         this.registerUrl = config.registerUrl;
-        this.profileUrl = config.profileUrl || '/profile/'; // Add profile URL
+        this.buyerProfileUrl = config.buyerProfileUrl;
+        this.sellerProfileUrl = config.sellerProfileUrl;
+
         this.currentStep = 1;
-        this.otpId = null;
-        this.resendTimer = null;
+        this.mobileNumber = "";
+        this.otpId = "";
+        this.resendTimer = 30;
+        this.resendInterval = null;
 
         console.log('🚀 Direct Login Handler initialized');
-        console.log('📍 API URLs:', {
-            otp: this.otpApiUrl,
-            dashboard: this.dashboardUrl,
-            register: this.registerUrl,
-            profile: this.profileUrl
-        });
-
         this.init();
     }
 
     init() {
-        this.bindEvents();
+        this.setupMobileInput();
         this.setupOtpInputs();
-        this.focusMobileInput();
+        this.setupSendOtp();
+        this.setupVerifyOtp();
+        this.setupBackButton();
+        this.setupResendOtp();
     }
 
-    bindEvents() {
-        // Mobile number input events
+    setupMobileInput() {
         const mobileInput = document.getElementById('mobileNumber');
-        mobileInput.addEventListener('input', this.validateMobile.bind(this));
-        mobileInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !document.getElementById('sendOtp').disabled) {
-                this.sendOtp();
+        const sendOtpBtn = document.getElementById('sendOtp');
+
+        // Format mobile number input
+        mobileInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 10) {
+                value = value.slice(0, 10);
+            }
+            e.target.value = value;
+
+            // Enable/disable send OTP button
+            if (value.length === 10) {
+                sendOtpBtn.disabled = false;
+            } else {
+                sendOtpBtn.disabled = true;
             }
         });
 
-        // Button events
-        document.getElementById('sendOtp').addEventListener('click', this.sendOtp.bind(this));
-        document.getElementById('verifyOtp').addEventListener('click', this.verifyOtp.bind(this));
-        document.getElementById('backStep1').addEventListener('click', this.goToStep1.bind(this));
-        document.getElementById('resendOtp').addEventListener('click', this.resendOtp.bind(this));
+        // Allow submission on Enter key
+        mobileInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && mobileInput.value.length === 10) {
+                this.sendOtp();
+            }
+        });
     }
 
     setupOtpInputs() {
         const otpInputs = document.querySelectorAll('.otp-input');
 
         otpInputs.forEach((input, index) => {
-            // Auto-advance on input
             input.addEventListener('input', (e) => {
-                const value = e.target.value;
+                const value = e.target.value.replace(/\D/g, '');
+                e.target.value = value;
 
-                // Only allow digits
-                if (!/^\d*$/.test(value)) {
-                    e.target.value = '';
-                    return;
-                }
-
-                if (value.length === 1 && index < otpInputs.length - 1) {
+                // Auto-focus next input
+                if (value && index < otpInputs.length - 1) {
                     otpInputs[index + 1].focus();
                 }
-                this.validateOtp();
+
+                // Check if all inputs are filled
+                this.checkOtpComplete();
             });
 
-            // Handle backspace
             input.addEventListener('keydown', (e) => {
+                // Handle backspace
                 if (e.key === 'Backspace' && !e.target.value && index > 0) {
                     otpInputs[index - 1].focus();
                 }
-                if (e.key === 'Enter' && !document.getElementById('verifyOtp').disabled) {
-                    this.verifyOtp();
+
+                // Handle Enter key when OTP is complete
+                if (e.key === 'Enter') {
+                    this.checkOtpComplete();
+                    const otp = this.getOtpValue();
+                    if (otp.length === 6) {
+                        this.verifyOtp();
+                    }
                 }
             });
 
-            // Handle paste
             input.addEventListener('paste', (e) => {
                 e.preventDefault();
-                const paste = (e.clipboardData || window.clipboardData).getData('text');
-                const digits = paste.replace(/\D/g, '').slice(0, 6);
-
-                digits.split('').forEach((digit, i) => {
-                    if (otpInputs[i]) {
-                        otpInputs[i].value = digit;
-                    }
-                });
-
-                if (digits.length === 6) {
-                    otpInputs[5].focus();
+                const pastedData = e.clipboardData.getData('text').replace(/\D/g, '');
+                if (pastedData.length === 6) {
+                    otpInputs.forEach((inp, idx) => {
+                        inp.value = pastedData[idx] || '';
+                    });
+                    this.checkOtpComplete();
                 }
-                this.validateOtp();
             });
         });
     }
 
-    focusMobileInput() {
-        setTimeout(() => {
-            document.getElementById('mobileNumber').focus();
-        }, 100);
+    setupSendOtp() {
+        const sendOtpBtn = document.getElementById('sendOtp');
+        sendOtpBtn.addEventListener('click', () => this.sendOtp());
     }
 
-    validateMobile() {
-        const mobile = document.getElementById('mobileNumber').value;
-        const sendBtn = document.getElementById('sendOtp');
-
-        // Check if mobile number is valid (10 digits)
-        if (mobile.length === 10 && /^\d+$/.test(mobile)) {
-            sendBtn.disabled = false;
-        } else {
-            sendBtn.disabled = true;
-        }
+    setupVerifyOtp() {
+        const verifyOtpBtn = document.getElementById('verifyOtp');
+        verifyOtpBtn.addEventListener('click', () => this.verifyOtp());
     }
 
-    validateOtp() {
-        const otpInputs = document.querySelectorAll('.otp-input');
-        const otp = Array.from(otpInputs).map(input => input.value).join('');
-        const verifyBtn = document.getElementById('verifyOtp');
-
-        if (otp.length === 6 && /^\d{6}$/.test(otp)) {
-            verifyBtn.disabled = false;
-        } else {
-            verifyBtn.disabled = true;
-        }
+    setupBackButton() {
+        const backBtn = document.getElementById('backStep1');
+        backBtn.addEventListener('click', () => this.goBackToStep1());
     }
 
-    async sendOtp() {
-        const mobile = document.getElementById('mobileNumber').value;
+    setupResendOtp() {
+        const resendLink = document.getElementById('resendOtp');
+        resendLink.addEventListener('click', () => {
+            if (!resendLink.style.display || resendLink.style.display === 'none') return;
+            this.sendOtp(true);
+        });
+    }
 
-        if (!mobile || mobile.length !== 10) {
-            this.showError('Please enter a valid 10-digit mobile number');
-            return;
-        }
-
-        this.showLoading('sendOtp', true);
-        this.clearMessages();
+    async sendOtp(isResend = false) {
+        const mobileInput = document.getElementById('mobileNumber');
+        const sendOtpBtn = document.getElementById('sendOtp');
+        const btnText = sendOtpBtn.querySelector('.btn-text');
+        const originalText = btnText.textContent;
 
         try {
-            const response = await this.makeApiCall(this.otpApiUrl, {
-                method: 'POST',
-                body: JSON.stringify({ mobile: mobile })
-            });
+            this.mobileNumber = mobileInput.value.trim();
 
-            if (response.success) {
-                this.otpId = response.data.otp_id;
-                this.goToStep2();
-                this.startResendTimer();
-                this.showSuccess('OTP sent successfully to your mobile number!');
-                document.getElementById('displayMobile').textContent = this.formatMobile(mobile);
+            if (this.mobileNumber.length !== 10) {
+                this.showError('Please enter a valid 10-digit mobile number');
+                return;
+            }
 
-                // For development - show OTP in console
-                if (response.data.otp) {
-                    console.log('🔐 OTP for testing:', response.data.otp);
+            // Show loading
+            btnText.textContent = isResend ? 'Resending...' : 'Sending...';
+            sendOtpBtn.disabled = true;
+
+            console.log('📱 Sending OTP to:', this.mobileNumber);
+
+            const [success, result] = await callApi("POST", this.otpApiUrl, {
+                mobile: this.mobileNumber
+            }, this.csrfToken);
+
+            if (success && result.success) {
+                this.otpId = result.data.otp_id;
+                console.log('✅ OTP sent successfully, ID:', this.otpId);
+                console.log('Otp for testing:', result.data.otp);
+                if (!isResend) {
+                    this.goToStep2();
                 }
-                console.log('📱 OTP sent to mobile:', mobile);
-                console.log('🆔 OTP ID:', this.otpId);
+
+                this.showSuccess(isResend ? 'OTP resent successfully!' : 'OTP sent successfully!');
+                this.startResendTimer();
             } else {
-                this.showError(response.error || 'Failed to send OTP. Please try again.');
+                this.showError(result.error || 'Failed to send OTP. Please try again.');
             }
         } catch (error) {
-            console.error('Error sending OTP:', error);
-            this.showError('Network error. Please check your connection and try again.');
+            console.error('❌ Error sending OTP:', error);
+            this.showError('Network error. Please check your connection.');
         } finally {
-            this.showLoading('sendOtp', false);
-        }
-    }
-
-    async resendOtp() {
-        const mobile = document.getElementById('mobileNumber').value;
-        this.clearMessages();
-
-        try {
-            const response = await this.makeApiCall(this.otpApiUrl, {
-                method: 'POST',
-                body: JSON.stringify({ mobile: mobile })
-            });
-
-            if (response.success) {
-                this.otpId = response.data.otp_id;
-                this.startResendTimer();
-                this.showSuccess('OTP resent successfully!');
-                this.clearOtpInputs();
-
-                // For development - show OTP in console
-                if (response.data.otp) {
-                    console.log('🔐 Resent OTP for testing:', response.data.otp);
-                }
-                console.log('🔄 OTP resent. New OTP ID:', this.otpId);
-            } else {
-                this.showError(response.error || 'Failed to resend OTP');
+            btnText.textContent = originalText;
+            if (!isResend) {
+                sendOtpBtn.disabled = this.mobileNumber.length !== 10;
             }
-        } catch (error) {
-            console.error('Error resending OTP:', error);
-            this.showError('Failed to resend OTP. Please try again.');
         }
     }
 
     async verifyOtp() {
-        const otpInputs = document.querySelectorAll('.otp-input');
-        const otp = Array.from(otpInputs).map(input => input.value).join('');
-
-        if (otp.length !== 6) {
-            this.showError('Please enter the complete 6-digit OTP');
-            return;
-        }
-
-        this.showLoading('verifyOtp', true);
-        this.clearMessages();
-
-        console.log('🔍 Verifying OTP:', otp);
-        console.log('🆔 Using OTP ID:', this.otpId);
+        const verifyOtpBtn = document.getElementById('verifyOtp');
+        const btnText = verifyOtpBtn.querySelector('.btn-text');
+        const originalText = btnText.textContent;
 
         try {
-            const response = await this.makeApiCall(`${this.otpApiUrl}${this.otpId}/`, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    otp: otp,
-                    user_type: 'buyer_individual' // Default for direct login
-                })
-            });
+            const otp = this.getOtpValue();
 
-            if (response.success && response.data.otp_verified) {
-                console.log('✅ OTP verification successful');
-                console.log('👤 User data:', response.data);
+            if (otp.length !== 6) {
+                this.showError('Please enter the complete 6-digit OTP');
+                return;
+            }
 
-                // Check if user details are completed
-                if (response.data.user_details) {
-                    // User is registered and profile is complete
-                    console.log('✅ User profile is complete - redirecting to dashboard');
-                    this.handleSuccessfulLogin(response.data);
+            // Show loading
+            btnText.textContent = 'Verifying...';
+            verifyOtpBtn.disabled = true;
+
+            console.log('🔐 Verifying OTP:', otp);
+
+            // For direct login, we use a placeholder user_type since the API requires it
+            // The API will find existing user by mobile number and return their actual role
+            const [success, result] = await callApi("PUT", `${this.otpApiUrl}${this.otpId}/`, {
+                otp: otp,
+                user_type: "buyer_individual" // Placeholder, actual role will come from existing user
+            }, this.csrfToken);
+
+            if (success && result.success) {
+                if (result.data.otp_verified) {
+                    const userId = result.data.user_id;
+                    const userRole = result.data.user_role;
+                    const userDetailsExist = result.data.user_details;
+
+                    console.log('✅ OTP verified successfully');
+                    console.log('👤 User ID:', userId);
+                    console.log('🎭 User Role:', userRole);
+                    console.log('📋 User Details Exist:', userDetailsExist);
+
+                    // Store user info in localStorage
+                    localStorage.setItem('user_id', userId);
+                    localStorage.setItem('user_role', userRole);
+                    localStorage.setItem('login_timestamp', new Date().toISOString());
+
+                    if (userDetailsExist) {
+                        // User has completed profile, redirect based on role
+                        this.redirectBasedOnRole(userRole);
+                    } else {
+                        // User needs to complete profile, redirect to registration
+                        this.showSuccess('Login successful! Please complete your profile.');
+                        setTimeout(() => {
+                            window.location.href = this.registerUrl;
+                        }, 1500);
+                    }
                 } else {
-                    // User exists but profile is incomplete
-                    console.log('⚠️ User profile is incomplete - redirecting to registration');
-                    this.handleIncompleteProfile(response.data);
+                    this.showError(result.data.message || 'OTP verification failed');
                 }
             } else {
-                // OTP verification failed
-                console.log('❌ OTP verification failed:', response.data);
-                const message = response.data?.message || 'Invalid OTP. Please try again.';
-                this.showError(message);
-                this.clearOtpInputs();
+                this.showError(result.error || 'Failed to verify OTP. Please try again.');
             }
         } catch (error) {
-            console.error('Error verifying OTP:', error);
-            this.showError('Verification failed. Please try again.');
-            this.clearOtpInputs();
+            console.error('❌ Error verifying OTP:', error);
+            this.showError('Network error. Please check your connection.');
         } finally {
-            this.showLoading('verifyOtp', false);
+            btnText.textContent = originalText;
+            verifyOtpBtn.disabled = false;
         }
     }
 
-    handleSuccessfulLogin(userData) {
-        // Store user information
-        localStorage.setItem('user_id', userData.user_id);
-        localStorage.setItem('login_timestamp', new Date().toISOString());
+    redirectBasedOnRole(userRole) {
+        console.log('🚀 Redirecting user based on role:', userRole);
 
-        console.log('🎉 Login successful for user:', userData.user_id);
-        console.log('💾 Stored user data in localStorage');
-
-        this.showSuccess('Login successful! Redirecting to your profile...');
-
-        // Redirect to buyer profile page after a short delay
-        setTimeout(() => {
-            console.log('🚀 Redirecting to buyer profile:', this.profileUrl);
-            window.location.href = this.profileUrl;
-        }, 1500);
-    }
-
-    handleIncompleteProfile(userData) {
-        console.log('📝 Profile incomplete for user:', userData.user_id);
-
-        this.showError('Please complete your profile registration first.');
-
-        // Store partial user data for registration completion
-        localStorage.setItem('temp_user_id', userData.user_id);
-        console.log('💾 Stored temp user ID for registration completion');
-
-        setTimeout(() => {
-            console.log('🚀 Redirecting to registration:', this.registerUrl);
-            window.location.href = this.registerUrl;
-        }, 2500);
-    }
-
-    async makeApiCall(url, options) {
-        const defaultOptions = {
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': this.csrfToken
-            }
-        };
-
-        const finalOptions = { ...defaultOptions, ...options };
-
-        // Use the global apiCaller if available, otherwise use fetch
-        if (typeof apiCaller === 'function') {
-            return await apiCaller(url, finalOptions);
+        if (userRole.includes('seller')) {
+            // Redirect to seller profile
+            this.showSuccess('Welcome back! Redirecting to your seller profile...');
+            setTimeout(() => {
+                window.location.href = this.sellerProfileUrl;
+            }, 1500);
+        } else if (userRole.includes('buyer')) {
+            // Redirect to buyer profile
+            this.showSuccess('Welcome back! Redirecting to your buyer profile...');
+            setTimeout(() => {
+                window.location.href = this.buyerProfileUrl;
+            }, 1500);
         } else {
-            const response = await fetch(url, finalOptions);
-            return await response.json();
+            // Fallback to dashboard for unknown roles
+            this.showSuccess('Welcome back! Redirecting to dashboard...');
+            setTimeout(() => {
+                window.location.href = this.dashboardUrl;
+            }, 1500);
         }
     }
 
-    formatMobile(mobile) {
-        // Format mobile number for display (e.g., +91 98765 43210)
-        return `+91 ${mobile.slice(0, 5)} ${mobile.slice(5)}`;
+    getOtpValue() {
+        const otpInputs = document.querySelectorAll('.otp-input');
+        return Array.from(otpInputs).map(input => input.value).join('');
     }
 
-    goToStep1() {
-        this.currentStep = 1;
-        document.getElementById('step1').classList.remove('step-hidden');
-        document.getElementById('step2').classList.add('step-hidden');
-        document.getElementById('dot1').classList.add('active');
-        document.getElementById('dot1').classList.remove('completed');
-        document.getElementById('dot2').classList.remove('active');
-        this.clearMessages();
-        this.clearResendTimer();
-        this.focusMobileInput();
+    checkOtpComplete() {
+        const otp = this.getOtpValue();
+        const verifyOtpBtn = document.getElementById('verifyOtp');
+
+        if (otp.length === 6) {
+            verifyOtpBtn.disabled = false;
+        } else {
+            verifyOtpBtn.disabled = true;
+        }
     }
 
     goToStep2() {
-        this.currentStep = 2;
+        // Update progress indicator
+        document.getElementById('dot1').classList.add('completed');
+        document.getElementById('dot1').classList.remove('active');
+        document.getElementById('dot2').classList.add('active');
+
+        // Hide step 1, show step 2
         document.getElementById('step1').classList.add('step-hidden');
         document.getElementById('step2').classList.remove('step-hidden');
-        document.getElementById('dot1').classList.remove('active');
-        document.getElementById('dot1').classList.add('completed');
-        document.getElementById('dot2').classList.add('active');
-        this.clearMessages();
 
-        // Focus first OTP input
-        setTimeout(() => {
-            document.querySelector('.otp-input').focus();
-        }, 100);
+        // Update mobile number display
+        document.getElementById('displayMobile').textContent = `+91 ${this.mobileNumber}`;
+
+        // Focus on first OTP input
+        document.querySelector('.otp-input').focus();
+
+        this.currentStep = 2;
+        console.log('📱 Moved to Step 2: OTP Verification');
+    }
+
+    goBackToStep1() {
+        // Update progress indicator
+        document.getElementById('dot2').classList.remove('active');
+        document.getElementById('dot1').classList.remove('completed');
+        document.getElementById('dot1').classList.add('active');
+
+        // Show step 1, hide step 2
+        document.getElementById('step2').classList.add('step-hidden');
+        document.getElementById('step1').classList.remove('step-hidden');
+
+        // Clear OTP inputs
+        document.querySelectorAll('.otp-input').forEach(input => input.value = '');
+        this.checkOtpComplete();
+
+        // Clear any timer
+        if (this.resendInterval) {
+            clearInterval(this.resendInterval);
+        }
+
+        this.currentStep = 1;
+        console.log('🔙 Back to Step 1: Mobile Number');
     }
 
     startResendTimer() {
-        let seconds = 30;
-        const timerElement = document.getElementById('resendTimer');
+        const resendTimer = document.getElementById('resendTimer');
         const resendLink = document.getElementById('resendOtp');
 
-        timerElement.style.display = 'inline';
+        this.resendTimer = 30;
         resendLink.style.display = 'none';
+        resendTimer.style.display = 'inline';
 
-        this.clearResendTimer(); // Clear any existing timer
+        this.resendInterval = setInterval(() => {
+            this.resendTimer--;
+            resendTimer.textContent = `Resend OTP in ${this.resendTimer}s`;
 
-        this.resendTimer = setInterval(() => {
-            seconds--;
-            timerElement.textContent = `Resend OTP in ${seconds}s`;
-
-            if (seconds <= 0) {
-                this.clearResendTimer();
-                timerElement.style.display = 'none';
+            if (this.resendTimer <= 0) {
+                clearInterval(this.resendInterval);
+                resendTimer.style.display = 'none';
                 resendLink.style.display = 'inline';
             }
         }, 1000);
     }
 
-    clearResendTimer() {
-        if (this.resendTimer) {
-            clearInterval(this.resendTimer);
-            this.resendTimer = null;
-        }
-    }
-
-    clearOtpInputs() {
-        document.querySelectorAll('.otp-input').forEach(input => {
-            input.value = '';
-        });
-        document.querySelector('.otp-input').focus();
-        this.validateOtp();
-    }
-
-    showLoading(buttonId, show) {
-        const button = document.getElementById(buttonId);
-        const textElement = button.querySelector('.btn-text');
-        const icon = button.querySelector('i');
-
-        if (show) {
-            button.disabled = true;
-            textElement.textContent = 'Please wait...';
-            icon.className = 'loading ms-2';
-        } else {
-            button.disabled = false;
-            if (buttonId === 'sendOtp') {
-                textElement.textContent = 'Send OTP';
-                icon.className = 'fas fa-paper-plane ms-2';
-                this.validateMobile();
-            } else if (buttonId === 'verifyOtp') {
-                textElement.textContent = 'Login';
-                icon.className = 'fas fa-sign-in-alt ms-2';
-                this.validateOtp();
-            }
-        }
-    }
-
     showError(message) {
-        const errorDiv = document.getElementById('errorMessage');
-        const successDiv = document.getElementById('successMessage');
+        const errorElement = document.getElementById('errorMessage');
+        const successElement = document.getElementById('successMessage');
 
-        successDiv.style.display = 'none';
-        errorDiv.textContent = message;
-        errorDiv.style.display = 'block';
+        successElement.style.display = 'none';
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
 
-        // Auto-hide after 6 seconds
+        console.error('❌ Error:', message);
+
+        // Auto-hide after 5 seconds
         setTimeout(() => {
-            errorDiv.style.display = 'none';
-        }, 6000);
+            errorElement.style.display = 'none';
+        }, 5000);
     }
 
     showSuccess(message) {
-        const errorDiv = document.getElementById('errorMessage');
-        const successDiv = document.getElementById('successMessage');
+        const errorElement = document.getElementById('errorMessage');
+        const successElement = document.getElementById('successMessage');
 
-        errorDiv.style.display = 'none';
-        successDiv.textContent = message;
-        successDiv.style.display = 'block';
+        errorElement.style.display = 'none';
+        successElement.textContent = message;
+        successElement.style.display = 'block';
 
-        // Auto-hide after 4 seconds
+        console.log('✅ Success:', message);
+
+        // Auto-hide after 3 seconds
         setTimeout(() => {
-            successDiv.style.display = 'none';
-        }, 4000);
-    }
-
-    clearMessages() {
-        document.getElementById('errorMessage').style.display = 'none';
-        document.getElementById('successMessage').style.display = 'none';
+            successElement.style.display = 'none';
+        }, 3000);
     }
 }
 
-// Export for use in HTML
+// Export for global use
 window.DirectLoginHandler = DirectLoginHandler;
+
+console.log('🔐 WasteBazar Direct Login System Loaded');

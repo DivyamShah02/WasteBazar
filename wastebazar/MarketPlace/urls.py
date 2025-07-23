@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import SellerListingViewSet, AdminListingViewSet, AdminListingApprovalViewSet, AdminListingrejectionViewSet, AllListingsViewset,BuyerRequirementsViewset,AdminBuyerRequirementsViewSet,AllBuyerRequirementsViewset
+from .views import SellerListingViewSet, AdminListingViewSet, AdminListingApprovalViewSet, AdminListingrejectionViewSet, AllListingsViewset,BuyerRequirementsViewset,AdminBuyerRequirementsViewSet,AllBuyerRequirementsViewset, CategoriesViewSet
 
 router = DefaultRouter()
 router.register(r'seller-listings', SellerListingViewSet, basename='seller-listings')
@@ -11,6 +11,7 @@ router.register(r'all-listings', AllListingsViewset, basename='all-listings')
 router.register(r'buyer-requirements', BuyerRequirementsViewset, basename='buyer-requirements')
 router.register(r'admin-buyer-requirements', AdminBuyerRequirementsViewSet, basename='admin-buyer-requirements')
 router.register(r'all-buyer-requirements', AllBuyerRequirementsViewset, basename='all-buyer-requirements')
+router.register(r'categories', CategoriesViewSet, basename='categories')
 
 urlpatterns = [
     path('', include(router.urls)),

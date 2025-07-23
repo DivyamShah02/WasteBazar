@@ -46,8 +46,25 @@ class directloginViewSet(viewsets.ViewSet):
         return render(request, "direct_login.html")
 
 
-class ProfileViewSet(viewsets.ViewSet):
+class BuyerProfileViewSet(viewsets.ViewSet):
 
     def list(self, request):
         return render(request, "buyer_profile.html")
     
+
+class SellerProfileViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        return render(request, "seller_profile.html")
+
+class ListingFormViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        return render(request, "listing_form.html")
+    
+    def retrieve(self, request, pk=None):
+        """Render listing form page for a specific listing ID"""
+        context = {
+            'listing_id': pk
+        }
+        return render(request, "listing_form.html", context)
