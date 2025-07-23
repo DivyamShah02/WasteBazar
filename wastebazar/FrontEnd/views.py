@@ -40,6 +40,12 @@ class LoginViewSet(viewsets.ViewSet):
         return render(request, "login.html")
 
 
+class directloginViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        return render(request, "direct_login.html")
+
+
 class ProfileViewSet(viewsets.ViewSet):
 
     def list(self, request):

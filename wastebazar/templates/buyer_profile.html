@@ -734,7 +734,7 @@
     <script>
         // Pass the CSRF token and API endpoints 
         window.onload = async function () {
-            await BuyerProfileApp(
+            await initBuyerProfileApp(
                 "{{ csrf_token }}", 
                 "/user-api/user-details-api/", 
                 "/market-api/buyer-requirements/", 

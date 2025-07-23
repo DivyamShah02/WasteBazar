@@ -497,3 +497,73 @@ class BuyerCreditUpdateViewSet(viewsets.ViewSet):
             "data": response_data,
             "error": None
         }, status=status.HTTP_200_OK)
+
+
+class BuyerDetailViewSet(viewsets.ViewSet):
+    """API to get particular buyer details including corporate details if applicable"""
+    
+    @handle_exceptions
+    # @check_authentication()
+    def retrieve(self, request, pk=None):
+        """
+        API: Get buyer details by user_id
+        If buyer is corporate, also include corporate details
+        """
+        user_id = pk
+        
+        try:
+            # Get the buyer user
+            buyer = User.objects.get(
+                user_id=user_id,
+                role__in=['buyer_individual', 'buyer_corporate'],
+                is_deleted=False
+            )
+        except User.DoesNotExist:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": "Buyer not found with this ID."
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Serialize basic user data
+        user_serializer = UserSerializer(buyer)
+        response_data = {
+            'user_details': user_serializer.data,
+            'corporate_details': None,
+            'wallet_details': None
+        }
+        
+        # If buyer is corporate, get corporate details
+        if buyer.role == 'buyer_corporate':
+            try:
+                corporate_details = CorporateUserDetail.objects.get(
+                    user_id=user_id,
+                    is_deleted=False
+                )
+                corporate_serializer = CorporateUserDetailSerializer(corporate_details)
+                response_data['corporate_details'] = corporate_serializer.data
+            except CorporateUserDetail.DoesNotExist:
+                response_data['corporate_details'] = {
+                    'message': 'Corporate details not found for this buyer'
+                }
+        
+        # Get wallet details if exists
+        try:
+            wallet = Wallet.objects.get(user_id=user_id)
+            wallet_serializer = WalletSerializer(wallet)
+            response_data['wallet_details'] = wallet_serializer.data
+        except Wallet.DoesNotExist:
+            response_data['wallet_details'] = {
+                'message': 'Wallet not found for this buyer'
+            }
+        
+        return Response({
+            "success": True,
+            "user_not_logged_in": False,
+            "user_unauthorized": False,
+            "data": response_data,
+            "error": None
+        }, status=status.HTTP_200_OK)
+    
