@@ -14,6 +14,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/progressive-search.css">
+    
 </head>
 <body>
     <!-- Loader -->
@@ -1485,7 +1486,7 @@
     </section> {% endcomment %}
 
     <!-- WasteBazar Materials Section -->
-    <section class="wastebazar-materials" id="wastebazar-materials">
+    {% comment %} <section class="wastebazar-materials" id="wastebazar-materials">
         <div class="container">
             <div class="section-header" data-aos="fade-up" data-aos-duration="1000">
                 <h2 class="section-title">WasteBazar Materials. <span style="color: #06985c;">Sell your material with us.</span></h2>
@@ -1996,6 +1997,622 @@
                                          alt="EPS-Preview.jpg" class="img-fluid rounded material-image">
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> {% endcomment %}
+
+    <section class="materials-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up" data-aos-duration="1000">
+                <h2 class="section-title">WasteBazar Materials. <span style="color: #06985c;">Sell your material with us.</span></h2>
+                <p class="section-subtitle">Explore our comprehensive range of recyclable materials and their specifications</p>
+            </div>
+            <!-- Detail View -->
+            <div class="detail-view">
+                <!-- Material Selector -->
+                <div class="material-selector">
+                    <h3> Materials</h3>
+                    <div class="selector-grid">
+                        <button class="selector-item active" data-material="pet">
+                            <div class="selector-icon bg-gradient-blue">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                    <polyline points="3.27,6.96 12,12.01 20.73,6.96"></polyline>
+                                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                </svg>
+                            </div>
+                            <span>PET</span>
+                        </button>
+                        <button class="selector-item" data-material="hdpe">
+                            <div class="selector-icon bg-gradient-green">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                            </div>
+                            <span>HDPE</span>
+                        </button>
+                        <button class="selector-item" data-material="pvc">
+                            <div class="selector-icon bg-gradient-purple">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                    <polyline points="2,17 12,22 22,17"></polyline>
+                                    <polyline points="2,12 12,17 22,12"></polyline>
+                                </svg>
+                            </div>
+                            <span>PVC</span>
+                        </button>
+                        <button class="selector-item" data-material="ldpe">
+                            <div class="selector-icon bg-gradient-cyan">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                                </svg>
+                            </div>
+                            <span>LDPE</span>
+                        </button>
+                        <button class="selector-item" data-material="pp">
+                            <div class="selector-icon bg-gradient-orange">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                </svg>
+                            </div>
+                            <span>PP</span>
+                        </button>
+                        <button class="selector-item" data-material="ps">
+                            <div class="selector-icon bg-gradient-pink">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                </svg>
+                            </div>
+                            <span>PS</span>
+                        </button>
+                        <button class="selector-item" data-material="pc">
+                            <div class="selector-icon bg-gradient-indigo">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                            </div>
+                            <span>PC</span>
+                        </button>
+                        <button class="selector-item" data-material="abs">
+                            <div class="selector-icon bg-gradient-red">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                                </svg>
+                            </div>
+                            <span>ABS</span>
+                        </button>
+                        <button class="selector-item" data-material="eps">
+                            <div class="selector-icon bg-gradient-teal">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                </svg>
+                            </div>
+                            <span>EPS</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Material Detail -->
+                <div class="material-detail">
+                    <!-- PET Material -->
+                    <div class="detail-content active" data-material="pet">
+                        <div class="detail-header">
+                            <div class="material-detail-icon bg-gradient-blue">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                    <polyline points="3.27,6.96 12,12.01 20.73,6.96"></polyline>
+                                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="detail-code">Code: 01</div>
+                                <h2 class="detail-title">PET Recycling</h2>
+                                <p class="detail-category">Beverage Containers</p>
+                            </div>
+                        </div>
+
+                        <div class="properties-section">
+                            <h4>Key Properties</h4>
+                            <div class="properties-grid">
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Clear & Transparent</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Lightweight</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Food-safe</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>100% Recyclable</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="description-section">
+                            <h4>Material Description</h4>
+                            <p class="material-description">
+                                <strong>PET (Polyethylene Terephthalate)</strong> - The most widely recycled plastic, primarily used for beverage bottles and food containers. PET is formed when ethylene glycol and terephthalic acid are combined, creating a clear, strong, and lightweight material that's perfect for single-use applications.
+                            </p>
+                        </div>
+
+                        <div class="action-section">
+                            <a href="https://www.wastetrade.com/polyethylene-terephthalate-pet/" target="_blank" rel="noopener noreferrer" class="learn-more-btn bg-gradient-blue">
+                                <span>Learn More About PET</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- HDPE Material -->
+                    <div class="detail-content" data-material="hdpe">
+                        <div class="detail-header">
+                            <div class="material-detail-icon bg-gradient-green">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="detail-code">Code: 02</div>
+                                <h2 class="detail-title">HDPE Recycling</h2>
+                                <p class="detail-category">Milk Jugs & Bottles</p>
+                            </div>
+                        </div>
+
+                        <div class="properties-section">
+                            <h4>Key Properties</h4>
+                            <div class="properties-grid">
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Chemical Resistant</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Durable</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Impact Resistant</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Weather Resistant</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="description-section">
+                            <h4>Material Description</h4>
+                            <p class="material-description">
+                                <strong>HDPE (High-Density Polyethylene)</strong> - A versatile plastic known for its strength and chemical resistance. Commonly used for milk jugs, detergent bottles, and shopping bags. HDPE has excellent impact resistance and can withstand extreme temperatures.
+                            </p>
+                        </div>
+
+                        <div class="action-section">
+                            <a href="https://www.wastetrade.com/high-density-polyethylene-hdpe/" target="_blank" rel="noopener noreferrer" class="learn-more-btn bg-gradient-green">
+                                <span>Learn More About HDPE</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- PVC Material -->
+                    <div class="detail-content" data-material="pvc">
+                        <div class="detail-header">
+                            <div class="material-detail-icon bg-gradient-purple">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                    <polyline points="2,17 12,22 22,17"></polyline>
+                                    <polyline points="2,12 12,17 22,12"></polyline>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="detail-code">Code: 03</div>
+                                <h2 class="detail-title">PVC Recycling</h2>
+                                <p class="detail-category">Pipes & Construction</p>
+                            </div>
+                        </div>
+
+                        <div class="properties-section">
+                            <h4>Key Properties</h4>
+                            <div class="properties-grid">
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Fire Resistant</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Long-lasting</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Flexible</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Cost-effective</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="description-section">
+                            <h4>Material Description</h4>
+                            <p class="material-description">
+                                <strong>PVC (Polyvinyl Chloride)</strong> - A durable plastic widely used in construction and healthcare applications. Known for its versatility, PVC can be rigid or flexible depending on additives. Commonly found in pipes, window frames, and medical devices.
+                            </p>
+                        </div>
+
+                        <div class="action-section">
+                            <a href="https://www.wastetrade.com/polyvinyl-chloride-pvc/" target="_blank" rel="noopener noreferrer" class="learn-more-btn bg-gradient-purple">
+                                <span>Learn More About PVC</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- LDPE Material -->
+                    <div class="detail-content" data-material="ldpe">
+                        <div class="detail-header">
+                            <div class="material-detail-icon bg-gradient-cyan">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="detail-code">Code: 04</div>
+                                <h2 class="detail-title">LDPE Recycling</h2>
+                                <p class="detail-category">Plastic Bags & Films</p>
+                            </div>
+                        </div>
+
+                        <div class="properties-section">
+                            <h4>Key Properties</h4>
+                            <div class="properties-grid">
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Flexible</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Transparent</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Moisture Resistant</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Low Cost</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="description-section">
+                            <h4>Material Description</h4>
+                            <p class="material-description">
+                                <strong>LDPE (Low-Density Polyethylene)</strong> - A flexible plastic commonly used for shopping bags, plastic wraps, and squeezable bottles. LDPE is known for its clarity, flexibility, and resistance to moisture and chemicals.
+                            </p>
+                        </div>
+
+                        <div class="action-section">
+                            <a href="https://www.wastetrade.com/low-density-polyethylene-ldpe/" target="_blank" rel="noopener noreferrer" class="learn-more-btn bg-gradient-cyan">
+                                <span>Learn More About LDPE</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- PP Material -->
+                    <div class="detail-content" data-material="pp">
+                        <div class="detail-header">
+                            <div class="material-detail-icon bg-gradient-orange">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="detail-code">Code: 05</div>
+                                <h2 class="detail-title">PP Recycling</h2>
+                                <p class="detail-category">Food Containers & Caps</p>
+                            </div>
+                        </div>
+
+                        <div class="properties-section">
+                            <h4>Key Properties</h4>
+                            <div class="properties-grid">
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Heat Resistant</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Chemical Resistant</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Lightweight</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Fatigue Resistant</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="description-section">
+                            <h4>Material Description</h4>
+                            <p class="material-description">
+                                <strong>PP (Polypropylene)</strong> - A versatile thermoplastic used in food containers, bottle caps, and automotive parts. PP has excellent chemical resistance and can withstand high temperatures, making it ideal for microwave-safe containers.
+                            </p>
+                        </div>
+
+                        <div class="action-section">
+                            <a href="https://www.wastetrade.com/polypropylene-pp/" target="_blank" rel="noopener noreferrer" class="learn-more-btn bg-gradient-orange">
+                                <span>Learn More About PP</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- PS Material -->
+                    <div class="detail-content" data-material="ps">
+                        <div class="detail-header">
+                            <div class="material-detail-icon bg-gradient-pink">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="detail-code">Code: 06</div>
+                                <h2 class="detail-title">PS Recycling</h2>
+                                <p class="detail-category">Disposable Cups & Foam</p>
+                            </div>
+                        </div>
+
+                        <div class="properties-section">
+                            <h4>Key Properties</h4>
+                            <div class="properties-grid">
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Insulating</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Lightweight</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Rigid</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Clear</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="description-section">
+                            <h4>Material Description</h4>
+                            <p class="material-description">
+                                <strong>PS (Polystyrene)</strong> - A lightweight plastic used in disposable cups, food containers, and packaging foam. PS provides excellent insulation properties and can be clear or foam-like depending on processing.
+                            </p>
+                        </div>
+
+                        <div class="action-section">
+                            <a href="https://www.wastetrade.com/polystyrene-ps/" target="_blank" rel="noopener noreferrer" class="learn-more-btn bg-gradient-pink">
+                                <span>Learn More About PS</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- PC Material -->
+                    <div class="detail-content" data-material="pc">
+                        <div class="detail-header">
+                            <div class="material-detail-icon bg-gradient-indigo">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="detail-code">Code: 07</div>
+                                <h2 class="detail-title">PC Recycling</h2>
+                                <p class="detail-category">Water Bottles & Electronics</p>
+                            </div>
+                        </div>
+
+                        <div class="properties-section">
+                            <h4>Key Properties</h4>
+                            <div class="properties-grid">
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Impact Resistant</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Heat Resistant</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Transparent</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Durable</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="description-section">
+                            <h4>Material Description</h4>
+                            <p class="material-description">
+                                <strong>PC (Polycarbonate)</strong> - A strong, clear plastic used in water bottles, electronic components, and safety equipment. PC offers excellent impact resistance and can withstand high temperatures while maintaining clarity.
+                            </p>
+                        </div>
+
+                        <div class="action-section">
+                            <a href="https://www.wastetrade.com/polycarbonate-pc/" target="_blank" rel="noopener noreferrer" class="learn-more-btn bg-gradient-indigo">
+                                <span>Learn More About PC</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- ABS Material -->
+                    <div class="detail-content" data-material="abs">
+                        <div class="detail-header">
+                            <div class="material-detail-icon bg-gradient-red">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="detail-code">Code: 08</div>
+                                <h2 class="detail-title">ABS Recycling</h2>
+                                <p class="detail-category">Electronics & Automotive</p>
+                            </div>
+                        </div>
+
+                        <div class="properties-section">
+                            <h4>Key Properties</h4>
+                            <div class="properties-grid">
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Tough</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Heat Resistant</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Easy to Process</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Chemical Resistant</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="description-section">
+                            <h4>Material Description</h4>
+                            <p class="material-description">
+                                <strong>ABS (Acrylonitrile Butadiene Styrene)</strong> - A tough thermoplastic used in automotive parts, electronic housings, and toys. ABS combines strength, heat resistance, and ease of processing, making it ideal for durable consumer products.
+                            </p>
+                        </div>
+
+                        <div class="action-section">
+                            <a href="https://www.wastetrade.com/acrylonitrile-butadiene-styreneabs-abs/" target="_blank" rel="noopener noreferrer" class="learn-more-btn bg-gradient-red">
+                                <span>Learn More About ABS</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- EPS Material -->
+                    <div class="detail-content" data-material="eps">
+                        <div class="detail-header">
+                            <div class="material-detail-icon bg-gradient-teal">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="detail-code">Code: 09</div>
+                                <h2 class="detail-title">EPS Recycling</h2>
+                                <p class="detail-category">Packaging & Insulation</p>
+                            </div>
+                        </div>
+
+                        <div class="properties-section">
+                            <h4>Key Properties</h4>
+                            <div class="properties-grid">
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Lightweight</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Insulating</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Shock Absorbing</span>
+                                </div>
+                                <div class="property-item">
+                                    <div class="property-dot"></div>
+                                    <span>Moisture Resistant</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="description-section">
+                            <h4>Material Description</h4>
+                            <p class="material-description">
+                                <strong>EPS (Expanded Polystyrene)</strong> - A lightweight foam plastic used for packaging, insulation, and disposable food containers. EPS provides excellent thermal insulation and shock absorption properties.
+                            </p>
+                        </div>
+
+                        <div class="action-section">
+                            <a href="https://www.wastetrade.com/expanded-polystyrene-eps/" target="_blank" rel="noopener noreferrer" class="learn-more-btn bg-gradient-teal">
+                                <span>Learn More About EPS</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9,18 15,12 9,6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Image Section -->
+                    <div class="detail-image">
+                        <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=600&h=400&fit=crop&auto=format" alt="PET recycling materials" class="material-image" data-material="pet">
+                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/hdpe-piping-1.jpg" alt="HDPE recycling materials" class="material-image" data-material="hdpe" style="display: none;">
+                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PVC-Plastic-scaled-1-1-2.jpg" alt="PVC recycling materials" class="material-image" data-material="pvc" style="display: none;">
+                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/LDPE-on-a-roll-in-a-factory-1.jpg" alt="LDPE recycling materials" class="material-image" data-material="ldpe" style="display: none;">
+                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PP1-1-1-2.jpg" alt="PP recycling materials" class="material-image" data-material="pp" style="display: none;">
+                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="PS recycling materials" class="material-image" data-material="ps" style="display: none;">
+                        <img src="https://images.unsplash.com/photo-1590595906931-81f04f0ccebb?w=600&h=400&fit=crop&auto=format" alt="PC recycling materials" class="material-image" data-material="pc" style="display: none;">
+                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/ABS-Preview.jpg" alt="ABS recycling materials" class="material-image" data-material="abs" style="display: none;">
+                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="EPS recycling materials" class="material-image" data-material="eps" style="display: none;">
+                        
+                        <div class="image-overlay">
+                            <div class="overlay-badge bg-gradient-blue" data-material="pet">PET</div>
+                            <div class="overlay-badge bg-gradient-green" data-material="hdpe" style="display: none;">HDPE</div>
+                            <div class="overlay-badge bg-gradient-purple" data-material="pvc" style="display: none;">PVC</div>
+                            <div class="overlay-badge bg-gradient-cyan" data-material="ldpe" style="display: none;">LDPE</div>
+                            <div class="overlay-badge bg-gradient-orange" data-material="pp" style="display: none;">PP</div>
+                            <div class="overlay-badge bg-gradient-pink" data-material="ps" style="display: none;">PS</div>
+                            <div class="overlay-badge bg-gradient-indigo" data-material="pc" style="display: none;">PC</div>
+                            <div class="overlay-badge bg-gradient-red" data-material="abs" style="display: none;">ABS</div>
+                            <div class="overlay-badge bg-gradient-teal" data-material="eps" style="display: none;">EPS</div>
                         </div>
                     </div>
                 </div>
