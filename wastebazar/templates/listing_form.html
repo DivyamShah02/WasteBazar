@@ -5,16 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Listing - WasteBazar</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/static/css/listing_form.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <style>
+        .form-container::before {
+            display: none !important;
+        }
+    </style>
 </head>
 <body>
-    <div class="form-container">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">WasteBazar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/listings">Marketplace</a>
+                    </li>
+                   
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/seller-profile">Dashboard</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="form-container" style="margin-top: 100px;">
         <div class="container" style="max-width: 900px;">
             <div class="form-card">
                 <!-- Success Message -->
-                <div id="successMessage" class="success-message">
+                <div id="successMessage" class="success-message" style="display: none;">
+                    <i class="fas fa-check-circle"></i>
                     <strong>Success!</strong> Your listing has been created successfully. It will be reviewed and published shortly.
+                    <p class="mt-2">You will be redirected to your dashboard in a few seconds...</p>
                 </div>
 
                 <!-- Form Header -->
@@ -51,7 +87,7 @@
                                 <label for="subcategory" class="form-label">
                                     Subcategory <span class="required">*</span>
                                 </label>
-                                <select id="subcategory" name="subcategory" class="form-select" required disabled>
+                                <select id="subcategory" name="subcategory" class="form-select" required >
                                     <option value="">Select Subcategory</option>
                                 </select>
                                 <div id="subcategoryHelp" class="form-help">Please select a category first</div>
@@ -92,13 +128,41 @@
                     <!-- Description -->
                     <div class="form-group mb-4">
                         <label for="description" class="form-label">
-                            Description <span class="required">*</span>
+                            Description<span class="required">*</span>
                         </label>
                         <textarea id="description" name="description" class="form-control form-textarea" 
                                   placeholder="Provide detailed description of your material including quality, condition, and any special requirements..." 
                                   required></textarea>
                         <div class="form-help">
                             Include details about material quality, condition, packaging, and any special handling requirements
+                        </div>
+                    </div>
+
+                    <!-- Product Photos -->
+                    <div class="form-group mb-4">
+                        <label for="productPhotos" class="form-label">
+                            Product Photos <span class="required">*</span>
+                        </label>
+                        <div class="photo-upload-container">
+                            <div id="dropZone" class="drop-zone">
+                                <input type="file" id="productPhotos" name="productPhotos" class="form-control" 
+                                       accept="image/*" multiple required>
+                                <div class="drop-zone-content">
+                                    <i class="fas fa-cloud-upload-alt drop-icon"></i>
+                                    <p class="drop-text">Drag & drop your photos here or <span class="browse-link">browse</span></p>
+                                    <p class="drop-subtext">Upload up to 5 high-quality photos (JPG, PNG, WEBP - Max 5MB each)</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Photo Preview Container -->
+                            <div id="photoPreviewContainer" class="photo-preview-container mt-3">
+                                <!-- Preview images will be displayed here -->
+                            </div>
+                            
+                            <!-- Upload Status -->
+                            <div id="uploadStatus" class="upload-status mt-2">
+                                <span id="photoCount">0/5 photos selected</span>
+                            </div>
                         </div>
                     </div>
 
@@ -146,14 +210,9 @@
                     </div>
 
                     <!-- Form Buttons -->
-                    <div class="row">
+                    <div class="row justify-content-center">
                         <div class="col-md-6">
-                            <button type="button" id="resetBtn" class="btn-secondary w-100">
-                                Reset Form
-                            </button>
-                        </div>
-                        <div class="col-md-6">
-                            <button type="submit" id="submitBtn" class="btn-primary w-100">
+                            <button type="submit" id="submitBtn" class="btn-primary w-100 text-white">
                                 Create Listing
                             </button>
                         </div>
@@ -164,6 +223,14 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+    <script src="/static/js/api_caller.js"></script>
+    <script src="/static/js/listing_form.js"></script>
+    
+    <script>
+        // Initialize listing form page with API endpoints
+        window.onload = async function () {
+            await ListingsFormApp("{{ csrf_token }}", "/marketplace-api/create-listing/");
+        }
+    </script>
 </body>
 </html>

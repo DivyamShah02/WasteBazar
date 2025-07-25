@@ -456,9 +456,11 @@ function setupEventListeners() {
   // View toggle
   const gridView = document.getElementById("gridView");
   const listView = document.getElementById("listView");
+  const filtersView = document.getElementById("filtersView");
 
   if (gridView) gridView.addEventListener("click", () => setView("grid"));
   if (listView) listView.addEventListener("click", () => setView("list"));
+  if (filtersView) filtersView.addEventListener("click", () => toggleFilters());
 
   // Category dropdown navigation
   document.querySelectorAll("[data-category]").forEach((item) => {
@@ -570,6 +572,25 @@ function setView(viewType) {
     container.classList.add("list-view")
   } else {
     container.classList.remove("list-view")
+  }
+}
+
+
+// Toggle filters visibility
+function toggleFilters() {
+  const filtersContainer = document.querySelector(".filters-container");
+  const filtersBtn = document.getElementById("filtersView");
+
+  if (filtersContainer) {
+    const isActive = filtersContainer.classList.contains("active");
+
+    if (isActive) {
+      filtersContainer.classList.remove("active");
+      filtersBtn.classList.remove("active");
+    } else {
+      filtersContainer.classList.add("active");
+      filtersBtn.classList.add("active");
+    }
   }
 }
 

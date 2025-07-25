@@ -1,509 +1,391 @@
-// Listing Form JavaScript - Create New Listings
+// Listing Form Page JavaScript - API Driven
 
 // Global variables for API endpoints and CSRF token
 let csrf_token = null;
-let seller_listings_api_url = null;
-let categories_api_url = "/marketplace-api/categories/";
+let create_listing_api_url = null;
+
+// Photo upload variables
+let selectedFiles = [];
+const maxFiles = 5;
+const maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
 
 // Initialize app function
-function ListingFormApp(csrf_token_param, seller_listings_api_url_param) {
-    console.log("🚀 Initializing WasteBazar Listing Form");
+async function ListingsFormApp(csrf_token_param, create_listing_api_url_param) {
+    console.log("🚀 Initializing WasteBazar Listing Form Page");
     console.log("🔧 CSRF Token:", csrf_token_param ? "Present" : "Missing");
-    console.log("🔧 API URL:", seller_listings_api_url_param);
+    console.log("🔧 API URL:", create_listing_api_url_param);
 
     csrf_token = csrf_token_param;
-    seller_listings_api_url = seller_listings_api_url_param;
+    create_listing_api_url = create_listing_api_url_param;
 
-    if (!csrf_token || !seller_listings_api_url) {
-        console.error("❌ Missing required parameters for ListingFormApp");
-        showAlert("error", "Configuration error. Please refresh the page.");
+    if (!csrf_token) {
+        console.error("❌ Missing CSRF Token for ListingsFormApp");
         return;
     }
 
-    initializeFormApp();
+    initializeForm();
 }
 
-// Initialize the form application
-function initializeFormApp() {
-    console.log("🔧 Initializing form functionality...");
-
-    // Load categories from API
-    loadCategories();
-
-    // Setup form validation and submission
-    setupFormValidation();
-    setupFormSubmission();
-    setupFormEnhancements();
-
-    console.log("✅ Listing form initialized successfully");
+function getCsrfToken() {
+    return csrf_token;
 }
 
-// Setup form validation
-function setupFormValidation() {
-    const form = document.getElementById('listingForm');
+// Initialize form functionality
+function initializeForm() {
+    console.log("🔧 Initializing form components...");
 
-    // Bootstrap form validation
-    form.addEventListener('submit', function (event) {
-        event.preventDefault();
-        event.stopPropagation();
+    initializePhotoUpload();
+    initializeFormSubmission();
+    initializeCategorySubcategory();
+    initializeStateDropdown();
 
-        if (form.checkValidity()) {
-            submitListingForm();
-        } else {
-            showAlert("error", "Please fill in all required fields correctly.");
-        }
+    console.log("✅ Form initialization complete");
+}
 
-        form.classList.add('was-validated');
+// Initialize photo upload functionality
+function initializePhotoUpload() {
+    const photoInput = document.getElementById('productPhotos');
+    const previewContainer = document.getElementById('photoPreviewContainer');
+    const photoCount = document.getElementById('photoCount');
+    const uploadStatus = document.getElementById('uploadStatus');
+    const dropZone = document.getElementById('dropZone');
+
+    if (!photoInput || !previewContainer || !photoCount || !uploadStatus || !dropZone) {
+        console.error("❌ Photo upload elements not found");
+        return;
+    }
+
+    // File input change event
+    photoInput.addEventListener('change', function (e) {
+        const files = Array.from(e.target.files);
+        handleFileSelection(files);
     });
 
-    // Custom validation for pincode
-    const pincodeInput = document.getElementById('pincode_location');
-    pincodeInput.addEventListener('input', function () {
-        const value = this.value;
-        const isValid = /^[0-9]{6}$/.test(value);
-
-        if (value.length > 0 && !isValid) {
-            this.setCustomValidity('Please enter a valid 6-digit pincode');
-        } else {
-            this.setCustomValidity('');
+    // Drag and drop events
+    dropZone.addEventListener('click', function (e) {
+        if (e.target !== photoInput) {
+            photoInput.click();
         }
     });
 
-    // Quantity validation
-    const quantityInput = document.getElementById('quantity');
-    quantityInput.addEventListener('input', function () {
-        const value = parseFloat(this.value);
+    dropZone.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.add('drag-over');
+    });
 
-        if (value <= 0) {
-            this.setCustomValidity('Quantity must be greater than 0');
-        } else {
-            this.setCustomValidity('');
+    dropZone.addEventListener('dragleave', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!dropZone.contains(e.relatedTarget)) {
+            dropZone.classList.remove('drag-over');
         }
+    });
+
+    dropZone.addEventListener('drop', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.remove('drag-over');
+
+        const files = Array.from(e.dataTransfer.files);
+        handleFileSelection(files);
+    });
+
+    // Prevent default drag behaviors on document
+    document.addEventListener('dragover', function (e) {
+        e.preventDefault();
+    });
+
+    document.addEventListener('drop', function (e) {
+        e.preventDefault();
     });
 }
 
-// Setup form submission
-function setupFormSubmission() {
-    console.log("🔧 Setting up form submission handler");
-}
+// Handle file selection
+function handleFileSelection(files) {
+    if (selectedFiles.length + files.length > maxFiles) {
+        showError(`You can only upload a maximum of ${maxFiles} photos.`);
+        return;
+    }
 
-// Submit listing form
-async function submitListingForm() {
-    console.log("📝 Submitting listing form...");
-
-    try {
-        // Show loading state
-        showLoadingOverlay(true);
-
-        // Get form data
-        const formData = getFormData();
-
-        // Validate form data
-        if (!validateFormData(formData)) {
-            showLoadingOverlay(false);
+    for (let file of files) {
+        if (!validateFile(file)) {
             return;
         }
-
-        console.log("📋 Form Data:", formData);
-
-        // Call API to create listing
-        const [success, result] = await callApi("POST", seller_listings_api_url, formData, csrf_token);
-
-        console.log("🔄 API Response:", { success, result });
-
-        if (success && result.success) {
-            console.log("✅ Listing created successfully:", result.data);
-
-            // Show success message
-            showAlert("success", "Listing created successfully! Your listing is now pending approval.");
-
-            // Reset form
-            resetForm();
-
-            // Redirect after a delay
-            setTimeout(() => {
-                window.location.href = "/seller_profile.html";
-            }, 2000);
-
-        } else {
-            console.error("❌ Failed to create listing:", result);
-            const errorMessage = result.error || "Failed to create listing. Please try again.";
-            showAlert("error", errorMessage);
-        }
-
-    } catch (error) {
-        console.error("❌ Error submitting form:", error);
-        showAlert("error", "Network error. Please check your connection and try again.");
-    } finally {
-        showLoadingOverlay(false);
+        selectedFiles.push(file);
     }
+
+    updatePhotoPreview();
+    updatePhotoCount();
+    clearError();
 }
 
-// Get form data
-function getFormData() {
-    const form = document.getElementById('listingForm');
-    const formData = new FormData(form);
-
-    // Convert FormData to regular object
-    const data = {};
-    for (let [key, value] of formData.entries()) {
-        data[key] = value.trim();
-    }
-
-    // Convert category_id to category title
-    const categorySelect = document.getElementById('category');
-    if (categorySelect.value) {
-        const selectedOption = categorySelect.options[categorySelect.selectedIndex];
-        data.category = selectedOption.textContent; // Use the text content as category name
-    }
-
-    // Convert quantity to number
-    if (data.quantity) {
-        data.quantity = parseFloat(data.quantity);
-    }
-
-    return data;
-}
-
-// Validate form data
-function validateFormData(data) {
-    const requiredFields = [
-        'category', 'subcategory', 'quantity', 'unit', 'description',
-        'city_location', 'state_location', 'pincode_location', 'address'
-    ];
-
-    // Check required fields
-    for (let field of requiredFields) {
-        if (!data[field] || data[field] === '') {
-            showAlert("error", `Please fill in the ${field.replace('_', ' ')} field.`);
-            return false;
-        }
-    }
-
-    // Validate quantity
-    if (data.quantity <= 0) {
-        showAlert("error", "Quantity must be greater than 0.");
+// Validate individual file
+function validateFile(file) {
+    if (!file.type.startsWith('image/')) {
+        showError('Please select only image files.');
         return false;
     }
 
-    // Validate pincode
-    if (!/^[0-9]{6}$/.test(data.pincode_location)) {
-        showAlert("error", "Please enter a valid 6-digit pincode.");
-        return false;
-    }
-
-    // Validate description length
-    if (data.description.length < 10) {
-        showAlert("error", "Description must be at least 10 characters long.");
+    if (file.size > maxFileSize) {
+        showError('Each file must be smaller than 5MB.');
         return false;
     }
 
     return true;
 }
 
-// Setup form enhancements
-function setupFormEnhancements() {
-    // Category change handler
-    const categorySelect = document.getElementById('category');
-    categorySelect.addEventListener('change', function () {
-        const categoryId = this.value;
-        loadSubcategories(categoryId);
-    });
+// Update photo preview
+function updatePhotoPreview() {
+    const previewContainer = document.getElementById('photoPreviewContainer');
+    previewContainer.innerHTML = '';
 
-    // Auto-capitalize first letter of text inputs
-    const textInputs = document.querySelectorAll('input[type="text"], textarea');
-    textInputs.forEach(input => {
-        if (input.id !== 'pincode_location') { // Skip pincode
-            input.addEventListener('blur', function () {
-                if (this.value) {
-                    this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);
-                }
-            });
-        }
-    });
-
-    // Pincode formatting
-    const pincodeInput = document.getElementById('pincode_location');
-    pincodeInput.addEventListener('input', function () {
-        // Only allow numbers
-        this.value = this.value.replace(/[^0-9]/g, '');
-
-        // Limit to 6 digits
-        if (this.value.length > 6) {
-            this.value = this.value.slice(0, 6);
-        }
-    });
-
-    // Character counter for description
-    const descriptionTextarea = document.getElementById('description');
-    const descriptionGroup = descriptionTextarea.closest('.form-group');
-
-    // Create character counter
-    const charCounter = document.createElement('div');
-    charCounter.className = 'form-text text-end';
-    charCounter.id = 'descriptionCounter';
-    descriptionGroup.appendChild(charCounter);
-
-    function updateCharCounter() {
-        const current = descriptionTextarea.value.length;
-        const max = 1000;
-        charCounter.textContent = `${current}/${max} characters`;
-
-        if (current > max * 0.9) {
-            charCounter.classList.add('text-warning');
-        } else {
-            charCounter.classList.remove('text-warning');
-        }
-    }
-
-    descriptionTextarea.addEventListener('input', updateCharCounter);
-    updateCharCounter(); // Initial count
-
-    // Quantity formatting
-    const quantityInput = document.getElementById('quantity');
-    quantityInput.addEventListener('input', function () {
-        // Allow only numbers and decimal point
-        this.value = this.value.replace(/[^0-9.]/g, '');
-
-        // Prevent multiple decimal points
-        const parts = this.value.split('.');
-        if (parts.length > 2) {
-            this.value = parts[0] + '.' + parts.slice(1).join('');
-        }
+    selectedFiles.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'photo-preview-item';
+            previewItem.innerHTML = `
+        <img src="${e.target.result}" alt="Photo ${index + 1}">
+        <button type="button" class="photo-remove-btn" onclick="removePhoto(${index})" title="Remove photo">
+          ×
+        </button>
+      `;
+            previewContainer.appendChild(previewItem);
+        };
+        reader.readAsDataURL(file);
     });
 }
 
-// Load categories from API
-async function loadCategories() {
-    try {
-        console.log("🔄 Loading categories from API...");
-
-        const [success, result] = await callApi("GET", categories_api_url, null, csrf_token);
-
-        if (success && result.success) {
-            const categories = result.data || [];
-            console.log("✅ Loaded", categories.length, "categories");
-
-            populateCategoryDropdown(categories);
-        } else {
-            console.error("❌ Failed to load categories:", result);
-            showAlert("warning", "Failed to load categories. Using default options.");
-        }
-
-    } catch (error) {
-        console.error("❌ Error loading categories:", error);
-        showAlert("warning", "Failed to load categories. Using default options.");
-    }
+// Update photo count
+function updatePhotoCount() {
+    const photoCount = document.getElementById('photoCount');
+    photoCount.textContent = `${selectedFiles.length}/${maxFiles} photos selected`;
 }
 
-// Populate category dropdown
-function populateCategoryDropdown(categories) {
-    const categorySelect = document.getElementById('category');
+// Remove photo function (global)
+window.removePhoto = function (index) {
+    selectedFiles.splice(index, 1);
+    updatePhotoPreview();
+    updatePhotoCount();
 
-    // Update the first option text
-    categorySelect.firstElementChild.textContent = 'Select Category';
+    // Update the file input
+    const dt = new DataTransfer();
+    selectedFiles.forEach(file => dt.items.add(file));
+    document.getElementById('productPhotos').files = dt.files;
 
-    // Clear existing options except the first one
-    while (categorySelect.children.length > 1) {
-        categorySelect.removeChild(categorySelect.lastChild);
+    if (selectedFiles.length === 0) {
+        clearError();
     }
+};
 
-    // Add categories from API
-    categories.forEach(category => {
-        const option = document.createElement('option');
-        option.value = category.category_id;
-        option.textContent = category.title;
-        categorySelect.appendChild(option);
-    });
-}
+// Initialize form submission
+function initializeFormSubmission() {
+    const form = document.getElementById('listingForm');
 
-// Load subcategories for selected category
-async function loadSubcategories(categoryId) {
-    const subcategoryInput = document.getElementById('subcategory');
-
-    if (!categoryId) {
-        // Reset subcategory to text input
-        subcategoryInput.placeholder = "e.g., PET Bottles, Steel Scrap, etc.";
-        subcategoryInput.disabled = false;
+    if (!form) {
+        console.error("❌ Form element not found");
         return;
     }
 
-    try {
-        console.log("🔄 Loading subcategories for category:", categoryId);
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
 
-        const apiUrl = `${categories_api_url}${categoryId}/`;
-        const [success, result] = await callApi("GET", apiUrl, null, csrf_token);
-
-        if (success && result.success) {
-            const subcategories = result.data.subcategories || [];
-            console.log("✅ Loaded", subcategories.length, "subcategories");
-
-            if (subcategories.length > 0) {
-                populateSubcategoryDropdown(subcategories);
-            } else {
-                // No subcategories found, keep as text input
-                subcategoryInput.placeholder = "Enter subcategory for this category";
-            }
-        } else {
-            console.error("❌ Failed to load subcategories:", result);
-            subcategoryInput.placeholder = "Enter subcategory for this category";
-        }
-
-    } catch (error) {
-        console.error("❌ Error loading subcategories:", error);
-        subcategoryInput.placeholder = "Enter subcategory for this category";
-    }
-}
-
-// Populate subcategory dropdown
-function populateSubcategoryDropdown(subcategories) {
-    const subcategoryInput = document.getElementById('subcategory');
-    const subcategoryGroup = subcategoryInput.closest('.form-group');
-
-    // Create a select element
-    const select = document.createElement('select');
-    select.className = 'form-select';
-    select.id = 'subcategory';
-    select.name = 'subcategory';
-    select.required = true;
-
-    // Add default option
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = 'Select Subcategory';
-    select.appendChild(defaultOption);
-
-    // Add subcategories
-    subcategories.forEach(subcategory => {
-        const option = document.createElement('option');
-        option.value = subcategory.title;
-        option.textContent = subcategory.title;
-        select.appendChild(option);
-    });
-
-    // Add "Other" option
-    const otherOption = document.createElement('option');
-    otherOption.value = 'other';
-    otherOption.textContent = 'Other (specify in description)';
-    select.appendChild(otherOption);
-
-    // Replace input with select
-    subcategoryGroup.replaceChild(select, subcategoryInput);
-}
-
-// Reset form
-function resetForm() {
-    const form = document.getElementById('listingForm');
-    form.reset();
-    form.classList.remove('was-validated');
-
-    // Reset character counter
-    const charCounter = document.getElementById('descriptionCounter');
-    if (charCounter) {
-        charCounter.textContent = '0/1000 characters';
-        charCounter.classList.remove('text-warning');
-    }
-
-    console.log("🔄 Form reset successfully");
-}
-
-// Show/hide loading overlay
-function showLoadingOverlay(show) {
-    const overlay = document.getElementById('loadingOverlay');
-    if (show) {
-        overlay.style.display = 'flex';
-    } else {
-        overlay.style.display = 'none';
-    }
-}
-
-// Show alert message
-function showAlert(type, message) {
-    const alertContainer = document.getElementById('alertContainer');
-
-    // Remove existing alerts
-    alertContainer.innerHTML = '';
-
-    const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
-    const iconClass = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
-
-    const alertHtml = `
-        <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
-            <i class="${iconClass} me-2"></i>
-            ${message}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    `;
-
-    alertContainer.innerHTML = alertHtml;
-
-    // Auto-hide success messages after 5 seconds
-    if (type === 'success') {
-        setTimeout(() => {
-            const alert = alertContainer.querySelector('.alert');
-            if (alert) {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            }
-        }, 5000);
-    }
-
-    // Scroll to alert
-    alertContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-// Get CSRF token
-function getCsrfToken() {
-    return csrf_token;
-}
-
-// Utility function to check if user is logged in (from localStorage)
-function checkUserAuthentication() {
-    const userInfo = localStorage.getItem('userInfo');
-    if (!userInfo) {
-        showAlert("error", "Please log in to create listings.");
-        setTimeout(() => {
-            window.location.href = "/login.html";
-        }, 2000);
-        return false;
-    }
-
-    try {
-        const user = JSON.parse(userInfo);
-        const userRole = user.role || '';
-
-        // Check if user is a seller
-        if (!userRole.includes('seller')) {
-            showAlert("error", "Only sellers can create listings.");
-            setTimeout(() => {
-                window.location.href = "/index.html";
-            }, 2000);
+        if (selectedFiles.length === 0) {
+            showError('Please upload at least one photo of your product.');
             return false;
         }
 
-        return true;
-    } catch (error) {
-        console.error("❌ Error parsing user info:", error);
-        showAlert("error", "Authentication error. Please log in again.");
-        setTimeout(() => {
-            window.location.href = "/login.html";
-        }, 2000);
-        return false;
-    }
+        handleFormSubmission();
+    });
 }
 
-// Initialize authentication check when DOM is loaded
-document.addEventListener('DOMContentLoaded', function () {
-    console.log("📄 DOM Content Loaded - Checking authentication");
+// Handle form submission
+async function handleFormSubmission() {
+    const submitBtn = document.getElementById('submitBtn');
+    const successMessage = document.getElementById('successMessage');
+    const form = document.getElementById('listingForm');
 
-    // Check if user is authenticated and authorized
-    if (!checkUserAuthentication()) {
+    clearError();
+
+    if (!validateFormFields()) {
         return;
     }
 
-    console.log("✅ User authentication verified");
-});
+    try {
+        // Show loading state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Listing...';
 
-// Export functions for external use
-window.ListingFormApp = ListingFormApp;
-window.getCsrfToken = getCsrfToken;
+        // Create FormData object
+        const formData = new FormData();
+
+        // Add form fields
+        formData.append('category', document.getElementById('category').value);
+        formData.append('subcategory', document.getElementById('subcategory').value);
+        formData.append('quantity', document.getElementById('quantity').value);
+        formData.append('unit', document.getElementById('unit').value);
+        formData.append('description', document.getElementById('description').value);
+        formData.append('city_location', document.getElementById('city_location').value);
+        formData.append('state_location', document.getElementById('state_location').value);
+        formData.append('pincode_location', document.getElementById('pincode_location').value);
+        formData.append('address', document.getElementById('address').value);
+
+        // Add photos
+        selectedFiles.forEach((file, index) => {
+            formData.append('photos', file);
+        });
+
+        // Make API call using the centralized API caller
+        const [success, result] = await callApi(
+            'POST',
+            '/marketplace-api/create-listing/',
+            formData,
+            getCsrfToken(),
+            true // media_upload = true
+        );
+
+        if (success && result.success !== false) {
+            // Success - show success message
+            successMessage.style.display = 'block';
+            form.style.display = 'none';
+
+            // Scroll to top to show success message
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Redirect after delay
+            setTimeout(() => {
+                window.location.href = '/seller-profile';
+            }, 3000);
+
+        } else {
+            throw new Error(result.message || 'Failed to create listing');
+        }
+
+    } catch (error) {
+        console.error('Error creating listing:', error);
+        showError('Failed to create listing: ' + error.message);
+
+    } finally {
+        // Re-enable submit button
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Create Listing';
+    }
+}
+
+// Validate form fields
+function validateFormFields() {
+    const requiredFields = [
+        { id: 'category', name: 'Category' },
+        { id: 'subcategory', name: 'Subcategory' },
+        { id: 'quantity', name: 'Quantity' },
+        { id: 'unit', name: 'Unit' },
+        { id: 'description', name: 'Description' },
+        { id: 'city_location', name: 'City' },
+        { id: 'state_location', name: 'State' },
+        { id: 'pincode_location', name: 'Pincode' },
+        { id: 'address', name: 'Address' }
+    ];
+
+    for (let field of requiredFields) {
+        const element = document.getElementById(field.id);
+        if (!element.value.trim()) {
+            showError(`Please fill in the ${field.name} field.`);
+            element.focus();
+            return false;
+        }
+    }
+
+    // Validate pincode format
+    const pincode = document.getElementById('pincode_location').value;
+    if (!/^\d{6}$/.test(pincode)) {
+        showError('Please enter a valid 6-digit pincode.');
+        document.getElementById('pincode_location').focus();
+        return false;
+    }
+
+    // Validate quantity
+    const quantity = parseFloat(document.getElementById('quantity').value);
+    if (quantity <= 0) {
+        showError('Quantity must be greater than 0.');
+        document.getElementById('quantity').focus();
+        return false;
+    }
+
+    return true;
+}
+
+// Initialize category-subcategory functionality
+function initializeCategorySubcategory() {
+    const categorySelect = document.getElementById('category');
+    const subcategorySelect = document.getElementById('subcategory');
+
+    if (!categorySelect || !subcategorySelect) {
+        console.error("❌ Category/Subcategory elements not found");
+        return;
+    }
+
+    // Subcategory data
+    const subcategoryData = {
+        plastic: ['PET Bottles', 'HDPE Containers', 'PVC Pipes', 'Polystyrene', 'Mixed Plastic'],
+        metal: ['Aluminum Cans', 'Copper Wire', 'Steel Scrap', 'Iron Scraps', 'Brass Items'],
+        paper: ['Newspaper', 'Cardboard', 'Office Paper', 'Books/Magazines', 'Mixed Paper'],
+        electronic: ['Mobile Phones', 'Computers', 'TVs/Monitors', 'Circuit Boards', 'Cables'],
+        textile: ['Cotton Fabric', 'Synthetic Fabric', 'Used Clothing', 'Yarn Waste', 'Mixed Textiles'],
+        glass: ['Clear Glass', 'Colored Glass', 'Bottles', 'Window Glass', 'Mixed Glass']
+    };
+
+    categorySelect.addEventListener('change', function () {
+        const selectedCategory = this.value;
+        subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+
+        if (selectedCategory && subcategoryData[selectedCategory]) {
+            subcategoryData[selectedCategory].forEach(subcategory => {
+                const option = document.createElement('option');
+                option.value = subcategory.toLowerCase().replace(/\s+/g, '_');
+                option.textContent = subcategory;
+                subcategorySelect.appendChild(option);
+            });
+        }
+    });
+}
+
+// Initialize state dropdown
+function initializeStateDropdown() {
+    const stateSelect = document.getElementById('state_location');
+
+    if (!stateSelect) {
+        console.error("❌ State select element not found");
+        return;
+    }
+
+    const indianStates = [
+        'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
+        'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka',
+        'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram',
+        'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu',
+        'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal',
+        'Delhi', 'Jammu and Kashmir', 'Ladakh', 'Puducherry'
+    ];
+
+    indianStates.forEach(state => {
+        const option = document.createElement('option');
+        option.value = state;
+        option.textContent = state;
+        stateSelect.appendChild(option);
+    });
+}
+
+// Error handling functions
+function showError(message) {
+    const uploadStatus = document.getElementById('uploadStatus');
+    uploadStatus.className = 'upload-status error mt-2';
+    uploadStatus.innerHTML = `<span>${message}</span>`;
+}
+
+function clearError() {
+    const uploadStatus = document.getElementById('uploadStatus');
+    uploadStatus.className = 'upload-status mt-2';
+    const photoCount = document.getElementById('photoCount');
+    uploadStatus.innerHTML = `<span id="photoCount">${selectedFiles.length}/${maxFiles} photos selected</span>`;
+}

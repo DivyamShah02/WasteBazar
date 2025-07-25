@@ -40,47 +40,42 @@
                             <li><a class="dropdown-item" href="#" data-category="textile">Textile Waste</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item">
+                    {% comment %} <li class="nav-item">
                         <a class="nav-link active" href="listings.html">Browse Listings</a>
-                    </li>
+                    </li> {% endcomment %}
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#market-insights">Market Insights</a>
+                        <a class="nav-link" href="index.html#market-insights">Marketplace</a>
                     </li>
-                    <li class="nav-item">
+                    {% comment %} <li class="nav-item">
                         <a class="nav-link" href="index.html#how-it-works">How It Works</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="index.html#about">About</a>
-                    </li>
+                    </li> {% endcomment %}
                 </ul>
                 
                 <div class="d-flex gap-2">
-                    <button class="btn btn-outline-primary">Login</button>
-                    <button class="btn btn-primary">Post Listing</button>
+                    <button class="btn btn-outline-primary">Logout</button>
+                    <button class="btn btn-primary">Dashboard</button>
                 </div>
             </div>
         </div>
     </nav>
-
     <!-- Top Advertisement Banner (Desktop Only) -->
     <div class="top-ad-banner d-none d-lg-block" id="topAd">
         <div class="container">
             <div class="ad-container">
-                <div class="ad-label">Advertisement</div>
-                <div class="ad-content">
-                    <img src="https://www.dynamiclabz.net/static/assets/images/resource/livechat%20(1).png" alt="Advertisement" class="ad-image">
-                    <div class="ad-text">
-                        <h5>Premium Scrap Processing Equipment</h5>
-                        <p>Increase your efficiency with our industrial-grade machinery</p>
-                    </div>
-                </div>
+                <img src="https://www.bruker.com/en/applications/industrial/metals/_jcr_content/root/overviewstage/desktopImage.coreimg.82.1920.jpeg/1733859095146/metal-tubes.jpeg" alt="Advertisement" class="ad-image">
                 <button class="ad-close" onclick="closeAd('topAd')">&times;</button>
             </div>
         </div>
     </div>
 
+    
+
     <!-- Page Header -->
     <section class="page-header">
+        
         <div class="container">
             <div class="header-content">
                 <h1 class="page-title">Browse Listings</h1>
@@ -124,11 +119,30 @@
         <!-- Center Content -->
         <div class="center-content">
             <div class="container">
+                
                 <!-- Search and Filters -->
-                <div class="search-filters-section">
+                    <div class="search-filters-section">
+                        <div class="results-header">
+                        <div class="results-info">
+                            <h4 id="resultsCount">Showing 1-20 of 1,247 listings</h4>
+                            <p id="resultsDescription">Premium scrap materials from verified sellers</p>
+                        </div>
+                        <div class="view-toggle">
+                            <button class="view-btn active" data-view="grid" id="gridView">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                            <button class="view-btn" data-view="list" id="listView">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <button class="view-btn" data-view="filtersview" id="filtersView">
+                                <i class="fas fa-tools"></i>
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="search-bar-container">
                         <div class="search-input-group">
-                            <input type="text" class="form-control search-input" placeholder="Search listings..." id="searchInput">
+                            <input type="text" class=" search-input" placeholder="Search listings..." id="searchInput">
                             <button class="search-btn" id="searchBtn">
                                 <i class="fas fa-search"></i>
                             </button>
@@ -143,19 +157,6 @@
                         
                         <div class="filters-grid">
                             <div class="filter-group">
-                                <label>Category</label>
-                                <select class="form-select" id="categoryFilter">
-                                    <option value="">All Categories</option>
-                                    <option value="plastic">Plastic Waste</option>
-                                    <option value="metal">Metal Scrap</option>
-                                    <option value="paper">Paper Waste</option>
-                                    <option value="electronic">Electronic Waste</option>
-                                    <option value="textile">Textile Waste</option>
-                                    <option value="glass">Glass Waste</option>
-                                </select>
-                            </div>
-                            
-                            <div class="filter-group">
                                 <label>Location</label>
                                 <select class="form-select" id="locationFilter">
                                     <option value="">All Locations</option>
@@ -167,7 +168,35 @@
                                     <option value="hyderabad">Hyderabad, TS</option>
                                 </select>
                             </div>
+
+                            <div class="filter-group">
+                                <label>Category</label>
+                                <select class="form-select" id="categoryFilter">
+                                    <option value="">All Categories</option>
+                                    <option value="plastic">Plastic Waste</option>
+                                    <option value="metal">Metal Scrap</option>
+                                    <option value="paper">Paper Waste</option>
+                                    <option value="electronic">Electronic Waste</option>
+                                    <option value="textile">Textile Waste</option>
+                                    <option value="glass">Glass Waste</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <label>Subcategory</label>
+                                <select class="form-select" id="categoryFilter">
+                                    <option value="">All Categories</option>
+                                    <option value="plastic">Plastic Waste</option>
+                                    <option value="metal">Metal Scrap</option>
+                                    <option value="paper">Paper Waste</option>
+                                    <option value="electronic">Electronic Waste</option>
+                                    <option value="textile">Textile Waste</option>
+                                    <option value="glass">Glass Waste</option>
+                                </select>
+                            </div>
                             
+                            
+{% comment %}                             
                             <div class="filter-group">
                                 <label>Price Range (₹/Ton)</label>
                                 <select class="form-select" id="priceFilter">
@@ -186,7 +215,7 @@
                                     <span>to</span>
                                     <input type="number" class="form-control" placeholder="Max" id="maxQuantity">
                                 </div>
-                            </div>
+                            </div> {% endcomment %}
                             
                             <div class="filter-group">
                                 <label>Sort By</label>
@@ -204,20 +233,7 @@
                 </div>
 
                 <!-- Results Header -->
-                <div class="results-header">
-                    <div class="results-info">
-                        <h4 id="resultsCount">Showing 1-20 of 1,247 listings</h4>
-                        <p id="resultsDescription">Premium scrap materials from verified sellers</p>
-                    </div>
-                    <div class="view-toggle">
-                        <button class="view-btn active" data-view="grid" id="gridView">
-                            <i class="fas fa-th-large"></i>
-                        </button>
-                        <button class="view-btn" data-view="list" id="listView">
-                            <i class="fas fa-list"></i>
-                        </button>
-                    </div>
-                </div>
+                
 
                 <!-- Listings Grid -->
                 <div class="listings-container" id="listingsContainer">
@@ -331,7 +347,7 @@
     <script>
         // Initialize listings page with API endpoints
         window.onload = async function () {
-            await ListingsApp("{{ csrf_token }}", "/marketplace-api/all-listings/");
+            await ListingsFormApp("{{ csrf_token }}", "/");
         }
     </script>
 </body>

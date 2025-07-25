@@ -13,19 +13,26 @@ let resendInterval
 let csrf_token = null;
 let otp_api_url = null;
 let user_details_api_url = null;
-let dashboard_url = null;
-let home_url = null;
+let buyer_detail_api_url = null;
+let seller_detail_api_url = null;
 
-async function LoginApp(csrf_token_param, otp_api_url_param, user_details_api_url_param, dashboard_url_param, home_url_param) {
+async function LoginApp(csrf_token_param, otp_api_url_param, user_details_api_url_param, buyer_detail_api_url_param, seller_detail_api_url_param) {
     csrf_token = csrf_token_param;
     otp_api_url = otp_api_url_param;
     user_details_api_url = user_details_api_url_param;
-    dashboard_url = dashboard_url_param;
-    home_url = home_url_param;
+    buyer_detail_api_url = buyer_detail_api_url_param;
+    seller_detail_api_url = seller_detail_api_url_param;
 
     console.log("🚀 Initializing WasteBazar Login Flow")
+    console.log("🔧 CSRF Token:", csrf_token_param ? "Present" : "Missing");
+    console.log("🔧 OTP API URL:", otp_api_url_param);
+    console.log("🔧 User Details API URL:", user_details_api_url_param);
+    console.log("🔧 Buyer Detail API URL:", buyer_detail_api_url_param);
+    console.log("🔧 Seller Detail API URL:", seller_detail_api_url_param);
+
     initializeLoginFlow()
 }
+
 
 function initializeLoginFlow() {
     // Step 1: Role selection
@@ -49,6 +56,22 @@ function initializeLoginFlow() {
 
 function getCsrfToken() {
     return csrf_token;
+}
+
+// Get appropriate redirect URL based on user role
+function getRedirectUrl(userRole) {
+    console.log("🔄 Determining redirect URL for role:", userRole);
+
+    if (userRole === "seller" || userRole === "seller_individual" || userRole === "seller_corporate") {
+        console.log("➡️ Redirecting to seller profile");
+        return "/seller-profile";
+    } else if (userRole === "buyer" || userRole === "buyer_individual" || userRole === "buyer_corporate") {
+        console.log("➡️ Redirecting to buyer profile");
+        return "/buyer-profile";
+    } else {
+        console.log("⚠️ Unknown role, redirecting to home");
+        return "/";
+    }
 }
 
 // Step 1: Role Selection (Buyer/Seller)
@@ -354,10 +377,19 @@ async function verifyOtp(otp) {
                 userId = result.data.user_id
 
                 if (result.data.user_details) {
-                    // User details already filled, redirect to dashboard
+                    // User details already filled, redirect to appropriate profile
+                    const userRole = result.data.user_details.role || selectedRole;
+                    const redirectUrl = getRedirectUrl(userRole);
+
                     showSuccess("Login successful! Redirecting...")
+
+                    // Store user info in localStorage for profile pages
+                    localStorage.setItem('user_id', userId);
+                    localStorage.setItem('user_role', userRole);
+                    localStorage.setItem('login_timestamp', new Date().toISOString());
+
                     setTimeout(() => {
-                        window.location.href = dashboard_url
+                        window.location.href = redirectUrl
                     }, 1500)
                 } else {
                     // Need to fill user details
@@ -425,9 +457,16 @@ async function submitUserDetails() {
                     window.location.href = home_url
                 }, 2000)
             } else {
-                // Redirect to dashboard
+                // Redirect to appropriate profile based on role
+                const redirectUrl = getRedirectUrl(selectedRole);
+
+                // Store user info in localStorage for profile pages
+                localStorage.setItem('user_id', userId);
+                localStorage.setItem('user_role', selectedRole);
+                localStorage.setItem('login_timestamp', new Date().toISOString());
+
                 setTimeout(() => {
-                    window.location.href = dashboard_url
+                    window.location.href = redirectUrl
                 }, 1500)
             }
 

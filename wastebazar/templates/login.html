@@ -206,7 +206,7 @@
     <script>
         // Pass the CSRF token and API endpoints 
         window.onload = async function () {
-            await LoginApp("{{ csrf_token }}", "/user-api/otp-api/", "/user-api/user-details-api/", "/dashboard/", "/");
+            await LoginApp("{{ csrf_token }}", "/user-api/otp-api/", "/user-api/user-details-api/", "/user-api/buyer-detail-api/", "user-api/seller-detail-api/");
         }
     </script>
 </body>

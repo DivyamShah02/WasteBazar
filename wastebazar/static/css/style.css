@@ -593,7 +593,7 @@ body {
     border: none;
     color: white;
     font-weight: 700;
-    padding: 1.2rem 2rem;
+    padding: 1rem 2rem;
     border-radius: 16px;
     transition: all 0.3s ease;
     width: 100%;
@@ -618,7 +618,7 @@ body {
 }
 
 .search-btn:hover {
-    transform: translateY(-3px);
+    /* transform: translateY(-3px); */
     box-shadow: var(--shadow-xl);
 }
 
