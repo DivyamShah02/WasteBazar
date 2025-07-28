@@ -239,7 +239,7 @@ async function handleFormSubmission() {
         // Make API call using the centralized API caller
         const [success, result] = await callApi(
             'POST',
-            '/marketplace-api/create-listing/',
+            create_listing_api_url,
             formData,
             getCsrfToken(),
             true // media_upload = true

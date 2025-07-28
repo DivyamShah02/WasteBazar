@@ -244,6 +244,30 @@ body {
     overflow: hidden;
 }
 
+.btn-outline-danger {
+    border: 2px solid red;
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-outline-danger:hover {
+    color: #0000;
+    border: 2px solid red;
+    font-weight: 600;
+    padding: 0.75rem 2rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+
 .btn-outline-primary::before {
     content: '';
     position: absolute;
@@ -3673,9 +3697,9 @@ body {
 }
 
 .card-title {
-    font-family: 'Space Grotesk', sans-serif;
+    /* font-family: 'Space Grotesk', sans-serif; */
     font-weight: 700;
-    font-size: 1.8rem;
+    /* font-size: 1.8rem; */
     color: var(--text-dark);
     margin-bottom: 1.5rem;
     position: relative;

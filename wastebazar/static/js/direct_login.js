@@ -156,6 +156,20 @@ class DirectLoginHandler {
                 this.otpId = result.data.otp_id;
                 console.log('✅ OTP sent successfully, ID:', this.otpId);
                 console.log('Otp for testing:', result.data.otp);
+
+                // Check if user already exists and has completed profile
+                if (result.data.user_exists && result.data.user_details_exist) {
+                    const userRole = result.data.user_role;
+                    console.log('🔄 Existing user found with role:', userRole);
+
+                    // Show success message and redirect based on role
+                    this.showSuccess('Welcome back! Redirecting to your profile...');
+                    setTimeout(() => {
+                        this.redirectBasedOnRole(userRole);
+                    }, 1000);
+                    return;
+                }
+
                 if (!isResend) {
                     this.goToStep2();
                 }

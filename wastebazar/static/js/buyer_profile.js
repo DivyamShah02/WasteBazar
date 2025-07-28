@@ -58,8 +58,8 @@ async function loadBuyerProfile() {
             renderWalletInfo();
             await loadRequirements();
         } else {
-            console.error('❌ Failed to load buyer profile:', response.error);
-            showError(response.error || 'Failed to load profile');
+            // console.error('❌ Failed to load buyer profile:', response.error);
+            // showError(response.error || 'Failed to load profile');
         }
     } catch (error) {
         console.error('❌ Error loading buyer profile:', error);
@@ -323,24 +323,6 @@ function setupTabs() {
         return;
     }
 
-    // Create and insert tabs container
-    const tabsContainer = document.createElement('div');
-    tabsContainer.className = 'content-tabs mb-4';
-
-    tabsContainer.innerHTML = `
-        <button class="tab-button active" data-tab="requirements">
-            <i class="fas fa-list me-2"></i>My Requirements
-        </button>
-        <button class="tab-button" data-tab="history">
-            <i class="fas fa-history me-2"></i>Enquiry History
-        </button>
-        <button class="tab-button" data-tab="settings">
-            <i class="fas fa-cog me-2"></i>Settings
-        </button>
-    `;
-
-    // Insert tabs at the beginning of main content
-    mainContent.insertBefore(tabsContainer, mainContent.firstChild);
 
     // Setup tab click handlers
     const tabButtons = document.querySelectorAll('.tab-button');

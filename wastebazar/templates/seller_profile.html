@@ -50,8 +50,36 @@
             <div class="profile-header">
                 <div class="profile-info">
                     <div class="profile-avatar">
+                        <i class="fas fa-store"></i>
                     </div>
                     <div class="profile-details">
+                        <h1 id="sellerName">Name</h1>
+                        <p class="mb-2 text-white-50" id="companyName">Company Name</p>
+                        <div class="profile-badges">
+                            <span class="profile-badge" id="sellerType">
+                                <i class="fas fa-building me-1"></i>Seller Type
+                            </span>
+                            <span class="profile-badge" id="verificationBadge">
+                                <i class="fas fa-check-circle me-1"></i>Verified
+                            </span>
+                            <span class="profile-badge">
+                                <i class="fas fa-calendar me-1"></i>Member since 2024
+                            </span>
+                        </div>
+                        <div class="profile-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-envelope me-1"></i>
+                                <span id="sellerEmail">Seller Email</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-phone me-1"></i>
+                                <span id="sellerPhone">Seller Phone</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-map-marker-alt me-1"></i>
+                                <span id="sellerAddress">Seller Address</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,29 +90,29 @@
                     <div class="stat-icon">
                         <i class="fas fa-boxes"></i>
                     </div>
-                    <div class="stat-value" id="totalListings">12</div>
+                    <div class="stat-value" id="totalListings">0</div>
                     <div class="stat-label">Total Listings</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-eye"></i>
                     </div>
-                    <div class="stat-value" id="activeListings">5</div>
+                    <div class="stat-value" id="activeListings">0</div>
                     <div class="stat-label">Active Listings</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-handshake"></i>
                     </div>
-                    <div class="stat-value" id="soldItems">7</div>
+                    <div class="stat-value" id="soldItems">0</div>
                     <div class="stat-label">Items Sold</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
-                    <div class="stat-value" id="totalEarnings">₹45.2K</div>
-                    <div class="stat-label">Total Earnings</div>
+                    <div class="stat-value" id="totalCredits">0</div>
+                    <div class="stat-label">Total Credits</div>
                 </div>
             </div>
 
@@ -92,10 +120,310 @@
             <div class="content-grid">
                 <!-- Main Content -->
                 <div class="main-content">
+                    <div class="content-tabs mb-4">
+                        <button class="tab-button active" data-tab="listings">
+                            <i class="fas fa-boxes me-2"></i>My Listings
+                        </button>
+                        <button class="tab-button" data-tab="sales">
+                            <i class="fas fa-chart-line me-2"></i>Sales History
+                        </button>
+                        <button class="tab-button" data-tab="settings">
+                            <i class="fas fa-cog me-2"></i>Settings
+                        </button>
+                    </div>
+
+                    <!-- Listings Tab -->
+                    <div class="tab-content active" id="listings-tab">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h3>My Listings</h3>
+                            <a href="/listing-form/" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>New Listing
+                            </a>
+                        </div>
+                        <div id="listings-container">
+                            <!-- Sample Listings -->
+                            {% comment %} <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h5 class="card-title mb-1">Plastic Waste - PET Bottles</h5>
+                                            <small class="text-muted">#LST001</small>
+                                        </div>
+                                        <span class="badge bg-success">Active</span>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-md-3">
+                                            <i class="fas fa-weight-hanging me-2 text-primary"></i>
+                                            <strong>500 kg</strong>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <i class="fas fa-rupee-sign me-2 text-primary"></i>
+                                            <strong>₹15/kg</strong>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <i class="fas fa-eye me-2 text-primary"></i>
+                                            <strong>24 views</strong>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <i class="fas fa-map-marker-alt me-2 text-primary"></i>
+                                            Mumbai
+                                        </div>
+                                    </div>
+                                    
+                                    <p class="card-text">Clean PET bottles in excellent condition. Sorted and washed. Ready for pickup.</p>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar me-1"></i>Listed: Jan 15, 2024 | 
+                                                <i class="fas fa-clock me-1"></i>Expires: Feb 15, 2024
+                                            </small>
+                                        </div>
+                                        <div class="listing-actions">
+                                            <button class="btn-action btn-edit">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
+                                            <button class="btn-action btn-pause">
+                                                <i class="fas fa-pause"></i> Pause
+                                            </button>
+                                            <button class="btn-action btn-details">
+                                                <i class="fas fa-eye"></i> Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> {% endcomment %}
+
+                             <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h5 class="card-title mb-1">Plastic Waste - PET Bottles</h5>
+                                            <small class="text-muted">#1234567890</small>
+                                        </div>
+                                        <span class="badge bg-success">Active</span>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <i class="fas fa-weight-hanging me-2 text-primary"></i>
+                                            <strong>500 kg</strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <i class="fas fa-map-marker-alt me-2 text-primary"></i>
+                                            Andheri East, Mumbai
+                                        </div>
+                                    </div>
+                                    
+                                    <p class="card-text">Looking for clean PET bottles in good condition for recycling. Should be sorted and washed.</p>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <small class="text-muted">
+                                                <i class="fas fa-calendar me-1"></i>Created: Jan 15, 2024 | 
+                                                <i class="fas fa-clock me-1"></i>Valid until: Feb 15, 2024
+                                            </small>
+                                        </div>
+                                        <div class="requirement-actions">
+                                            <button class="btn-action btn-edit" onclick="editRequirement('1234567890')">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </button>
+                                            <button class="btn-action btn-pause" onclick="pauseRequirement('1234567890')">
+                                                <i class="fas fa-pause"></i> Pause
+                                            </button>
+                                            <button class="btn-action btn-details" onclick="viewRequirementDetails('1234567890')">
+                                                <i class="fas fa-eye"></i> Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sales Tab -->
+                    <div class="tab-content" id="sales-tab">
+                        <h3 class="mb-4">Sales History</h3>
+                        <div id="sales-container">
+                            <!-- Sample Sales -->
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h5 class="card-title mb-1">Metal Scrap - Aluminum</h5>
+                                            <small class="text-muted">Sale ID: #SAL001</small>
+                                        </div>
+                                        <span class="badge bg-success">Completed</span>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-md-3">
+                                            <strong>Buyer:</strong><br>
+                                            <span class="text-muted">EcoMetal Solutions</span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <strong>Quantity:</strong><br>
+                                            <span class="text-muted">200 kg</span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <strong>Price:</strong><br>
+                                            <span class="text-muted">₹80/kg</span>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <strong>Total:</strong><br>
+                                            <span class="text-success fw-bold">₹16,000</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class="fas fa-calendar me-2 text-primary"></i>
+                                            <span class="text-muted">Jan 20, 2024</span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="rating">
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                                <i class="fas fa-star text-warning"></i>
+                                            </div>
+                                            <button class="btn-action btn-details">
+                                                <i class="fas fa-eye"></i> Details
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                           
+                        </div>
+                    </div>
+
+                    <!-- Settings Tab -->
+                    <div class="tab-content" id="settings-tab">
+                        <h3 class="mb-4">Account Settings</h3>
+                        <div id="settings-container">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">
+                                        <i class="fas fa-user me-2"></i>Profile Information
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" value="Ramesh Kumar" readonly>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" class="form-control" value="ramesh@recycling.com" readonly>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Phone</label>
+                                            <input type="tel" class="form-control" value="+91 98765 43210" readonly>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Account Type</label>
+                                            <input type="text" class="form-control" value="Corporate Seller" readonly>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary">
+                                        <i class="fas fa-edit me-2"></i>Edit Profile
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Sidebar -->
                 <div class="sidebar">
+                    <!-- Wallet Details -->
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-title">
+                            <i class="fas fa-wallet"></i>
+                            Wallet Details
+                        </h3>   
+                        <div class="wallet-details">
+                            <div class="wallet-item mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted">Free Credits</span>
+                                    <span class="fw-bold text-success" id="freeCredits">0</span>
+                                </div>
+                            </div>
+                            <div class="wallet-item mb-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted">Paid Credits</span>
+                                    <span class="fw-bold text-primary" id="paidCredits">0</span>
+                                </div>
+                            </div>
+                            <div class="wallet-item mb-3">
+                                <div class="d-flex justify-content-between align-items-center border-top pt-2">
+                                    <span class="fw-bold">Total Credits</span>
+                                    <span class="fw-bold text-dark" id="totalCreditswallet">0</span>
+                                </div>
+                            </div>
+                            <div class="wallet-item">
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>
+                                    <span id="creditResetDate">Credits reset on:</span>
+                                </small>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary-custom mt-3">
+                            <i class="fas fa-plus me-2"></i>
+                            Buy Credits
+                        </button>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-title">
+                            <i class="fas fa-address-book"></i>
+                            Contact Information
+                        </h3>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-building"></i>
+                            </div>
+                            <div class="contact-info">
+                                <div class="contact-label">Company</div>
+                                <div class="contact-value" id="sidebarCompanyName">Company name</div>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-info">
+                                <div class="contact-label">Email</div>
+                                <div class="contact-value" id="sidebarEmail">Email</div>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-info">
+                                <div class="contact-label">Phone</div>
+                                <div class="contact-value" id="sidebarPhone">Phone</div>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-info">
+                                <div class="contact-label">Address</div>
+                                <div class="contact-value" id="sidebarAddress">Address</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
                 </div>
             </div>
         </div>
@@ -107,13 +435,15 @@
     <script src="/static/js/sellerprofile.js"></script>
     
     <script>
+        
+
         // Pass the CSRF token and API endpoints 
         window.onload = async function () {
-            await initSellerProfileApp(
+            await SellerProfileApp(
                 "{{ csrf_token }}", 
                 "/user-api/user-details-api/", 
                 "/marketplace-api/seller-listings/", 
-                "/market-api/sales/"
+                
             );
         }
     </script>

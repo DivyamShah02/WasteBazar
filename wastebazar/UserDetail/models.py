@@ -103,8 +103,8 @@ class Wallet(models.Model):
         ('admin', 'Admin'),
         ('buyer_individual', 'Buyer - Individual'),
         ('buyer_corporate', 'Buyer - Corporate'),
-        # ('seller_individual', 'Seller - Individual'),
-        # ('seller_corporate', 'Seller - Corporate'),
+        ('seller_individual', 'Seller - Individual'),
+        ('seller_corporate', 'Seller - Corporate'),
     ]
     user_id = models.CharField(max_length=20, unique=True)
     role = models.CharField(max_length=20, choices=USER_ROLES)

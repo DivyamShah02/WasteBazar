@@ -1,6 +1,9 @@
 
 // How It Works Section - Tab functionality
 document.addEventListener('DOMContentLoaded', function () {
+    // Check for existing user login and redirect if authenticated
+    checkUserAuthentication();
+
     // Tab switching functionality
     const tabButtons = document.querySelectorAll('.tab-button');
     const tabPanels = document.querySelectorAll('.tab-panel');
@@ -138,26 +141,23 @@ document.querySelectorAll('.btn-hero, .btn-hero-outline').forEach(btn => {
         console.log('Hero CTA clicked:', action);
 
         if (action.includes('Browse') || action.includes('Listings')) {
-            window.location.href = 'listings.html';
+            window.location.href = '/listings/';
         } else if (action.includes('Post')) {
-            // Show post listing modal or redirect
-            alert('Post listing functionality would be implemented here');
+            // Check authentication for posting
+            showPostListingModal();
+        } else if (action.includes('Login') || action.includes('Sign In')) {
+            // Handle login button
+            showLoginModal();
+        } else if (action.includes('Register') || action.includes('Sign Up')) {
+            // Redirect to registration
+            window.location.href = '/register/';
         }
     });
 });
 
-// Navbar CTA buttons
-document.querySelector('.navbar .btn-outline-primary').addEventListener('click', function () {
-    console.log('Login clicked');
-    // Show login modal
-    showLoginModal();
-});
 
-document.querySelector('.navbar .btn-primary').addEventListener('click', function () {
-    console.log('Post Listing clicked');
-    // Show post listing modal
-    showPostListingModal();
-});
+
+x
 
 // View details buttons
 document.querySelectorAll('.btn-view-details').forEach(btn => {
@@ -299,14 +299,45 @@ document.addEventListener('click', function (e) {
     }
 });
 
-// Modal functions (placeholders)
-function showLoginModal() {
-    alert('Login modal would be implemented here with proper authentication system');
-}
+// // Modal functions (placeholders)
+// function showLoginModal() {
+//     // Check if user is already logged in
+//     const userId = localStorage.getItem('user_id');
+//     const userRole = localStorage.getItem('user_role');
 
-function showPostListingModal() {
-    alert('Post listing modal would be implemented here with form to create new listings');
-}
+//     if (userId && userRole) {
+//         // User is already logged in, redirect to their dashboard
+//         console.log('🔄 User already logged in, redirecting to dashboard');
+//         redirectBasedOnRole(userRole);
+//     } else {
+//         // Redirect to direct login page
+//         console.log('🚪 Redirecting to login page');
+//         window.location.href = '/directlogin/';
+//     }
+// }
+
+// function showPostListingModal() {
+//     // Check if user is logged in
+//     const userId = localStorage.getItem('user_id');
+//     const userRole = localStorage.getItem('user_role');
+
+//     if (userId && userRole) {
+//         // User is logged in, redirect to listing form
+//         if (userRole.includes('seller')) {
+//             console.log('🏪 Seller authenticated, redirecting to listing form');
+//             window.location.href = '/listing-form/';
+//         } else {
+//             // Buyer trying to post - suggest seller registration
+//             alert('To post listings, you need a seller account. Would you like to register as a seller?');
+//             // You can redirect to seller registration here
+//         }
+//     } else {
+//         // User not logged in, redirect to login first
+//         console.log('🔒 User not authenticated, redirecting to login');
+//         alert('Please log in to post a listing');
+//         window.location.href = '/directlogin/';
+//     }
+// }
 
 // Parallax effect for floating shapes
 window.addEventListener('scroll', function () {
