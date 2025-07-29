@@ -107,13 +107,13 @@
                     <div class="stat-value" id="soldItems">0</div>
                     <div class="stat-label">Items Sold</div>
                 </div>
-                <div class="stat-card">
+                {% comment %} <div class="stat-card">
                     <div class="stat-icon">
                         <i class="fas fa-chart-line"></i>
                     </div>
                     <div class="stat-value" id="totalCredits">0</div>
                     <div class="stat-label">Total Credits</div>
-                </div>
+                </div> {% endcomment %}
             </div>
 
             <!-- Main Content Grid -->
@@ -121,11 +121,11 @@
                 <!-- Main Content -->
                 <div class="main-content">
                     <div class="content-tabs mb-4">
-                        <button class="tab-button active" data-tab="listings">
-                            <i class="fas fa-boxes me-2"></i>My Listings
+                        <button class="tab-button active" data-tab="approvedlistings">
+                            <i class="fas fa-boxes me-2"></i>Approved Listings
                         </button>
-                        <button class="tab-button" data-tab="sales">
-                            <i class="fas fa-chart-line me-2"></i>Sales History
+                        <button class="tab-button" data-tab="unapprovedlistings">
+                            <i class="fas fa-chart-line me-2"></i>Unapproved Listings
                         </button>
                         <button class="tab-button" data-tab="settings">
                             <i class="fas fa-cog me-2"></i>Settings
@@ -135,7 +135,7 @@
                     <!-- Listings Tab -->
                     <div class="tab-content active" id="listings-tab">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h3>My Listings</h3>
+                            <h3>Approved Listings</h3>
                             <a href="/listing-form/" class="btn btn-primary">
                                 <i class="fas fa-plus me-2"></i>New Listing
                             </a>
@@ -243,61 +243,17 @@
                     </div>
 
                     <!-- Sales Tab -->
-                    <div class="tab-content" id="sales-tab">
-                        <h3 class="mb-4">Sales History</h3>
-                        <div id="sales-container">
-                            <!-- Sample Sales -->
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between align-items-start mb-3">
-                                        <div>
-                                            <h5 class="card-title mb-1">Metal Scrap - Aluminum</h5>
-                                            <small class="text-muted">Sale ID: #SAL001</small>
-                                        </div>
-                                        <span class="badge bg-success">Completed</span>
-                                    </div>
-                                    
-                                    <div class="row mb-3">
-                                        <div class="col-md-3">
-                                            <strong>Buyer:</strong><br>
-                                            <span class="text-muted">EcoMetal Solutions</span>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <strong>Quantity:</strong><br>
-                                            <span class="text-muted">200 kg</span>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <strong>Price:</strong><br>
-                                            <span class="text-muted">₹80/kg</span>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <strong>Total:</strong><br>
-                                            <span class="text-success fw-bold">₹16,000</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <i class="fas fa-calendar me-2 text-primary"></i>
-                                            <span class="text-muted">Jan 20, 2024</span>
-                                        </div>
-                                        <div class="d-flex align-items-center gap-2">
-                                            <div class="rating">
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                                <i class="fas fa-star text-warning"></i>
-                                            </div>
-                                            <button class="btn-action btn-details">
-                                                <i class="fas fa-eye"></i> Details
-                                            </button>
-                                        </div>
-                                    </div>
+                    <div class="tab-content" id="unapprovedlistings-tab">
+                        <h3 class="mb-4">Unapproved Listings</h3>
+                        <div id="unapproved-listings-container">
+                            <!-- Unapproved listings will be populated here -->
+                            <div class="empty-state text-center py-5" id="no-unapproved-listings" style="display: none;">
+                                <div class="empty-icon mb-3">
+                                    <i class="fas fa-clock fa-3x text-muted"></i>
                                 </div>
+                                <h4>No Unapproved Listings</h4>
+                                <p class="text-muted">All your listings are approved or you haven't created any listings yet.</p>
                             </div>
-
-                           
                         </div>
                     </div>
 
@@ -305,6 +261,7 @@
                     <div class="tab-content" id="settings-tab">
                         <h3 class="mb-4">Account Settings</h3>
                         <div id="settings-container">
+                            <!-- Profile Information Card -->
                             <div class="card mb-4">
                                 <div class="card-header">
                                     <h5 class="card-title mb-0">
@@ -315,23 +272,72 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Full Name</label>
-                                            <input type="text" class="form-control" value="Ramesh Kumar" readonly>
+                                            <input type="text" class="form-control" id="settingsName" readonly>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Email</label>
-                                            <input type="email" class="form-control" value="ramesh@recycling.com" readonly>
+                                            <input type="email" class="form-control" id="settingsEmail" readonly>
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label">Phone</label>
-                                            <input type="tel" class="form-control" value="+91 98765 43210" readonly>
+                                            <label class="form-label">
+                                                <i class="fas fa-lock text-muted me-1" title="Phone number cannot be changed"></i>
+                                                Phone
+                                            </label>
+                                            <input type="tel" class="form-control" id="settingsPhone" readonly>
                                         </div>
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label">Account Type</label>
-                                            <input type="text" class="form-control" value="Corporate Seller" readonly>
+                                            <input type="text" class="form-control" id="settingsAccountType" readonly>
                                         </div>
                                     </div>
-                                    <button class="btn btn-primary">
+                                    <button class="btn btn-primary" onclick="editProfile()">
                                         <i class="fas fa-edit me-2"></i>Edit Profile
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Company Information Card (shown only for corporate sellers) -->
+                            <div class="card mb-4" id="companyInfoCard" style="display: none;">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">
+                                        <i class="fas fa-building me-2"></i>Company Information
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Company Name</label>
+                                            <input type="text" class="form-control" id="settingsCompanyName" readonly>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">PAN Number</label>
+                                            <input type="text" class="form-control" id="settingsPanNumber" readonly>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">GST Number</label>
+                                            <input type="text" class="form-control" id="settingsGstNumber" readonly>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Verification Status</label>
+                                            <div class="d-flex align-items-center">
+                                                <span id="settingsVerificationStatus" class="badge bg-success">
+                                                    <i class="fas fa-check-circle me-1"></i>Verified
+                                                </span>
+                                                <small class="text-muted ms-2" id="settingsVerificationDate">
+                                                    Verified on: Not available
+                                                </small>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">Company Address</label>
+                                            <textarea class="form-control" id="settingsCompanyAddress" rows="3" readonly></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary me-2" onclick="editCompanyInfo()">
+                                        <i class="fas fa-edit me-2"></i>Edit Company Info
+                                    </button>
+                                    <button class="btn btn-outline-primary" id="downloadCertificateBtn" style="display: none;">
+                                        <i class="fas fa-download me-2"></i>Download Certificate
                                     </button>
                                 </div>
                             </div>
@@ -342,7 +348,7 @@
                 <!-- Sidebar -->
                 <div class="sidebar">
                     <!-- Wallet Details -->
-                    <div class="sidebar-card">
+                    {% comment %} <div class="sidebar-card">
                         <h3 class="sidebar-title">
                             <i class="fas fa-wallet"></i>
                             Wallet Details
@@ -377,13 +383,13 @@
                             <i class="fas fa-plus me-2"></i>
                             Buy Credits
                         </button>
-                    </div>
+                    </div> {% endcomment %}
 
                     <!-- Contact Information -->
                     <div class="sidebar-card">
                         <h3 class="sidebar-title">
                             <i class="fas fa-address-book"></i>
-                            Contact Information
+                            Company Information
                         </h3>
                         <div class="contact-item">
                             <div class="contact-icon">

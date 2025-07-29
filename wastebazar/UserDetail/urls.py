@@ -5,6 +5,7 @@ from .views import *
 router = DefaultRouter()
 router.register(r'otp-api', OtpAuthViewSet, basename='otp-api')
 router.register(r'user-details-api', UserDetailViewSet, basename='user-details-api')
+router.register(r'update-user-details-api', UpdateUserDetailsViewSet, basename='update-user-details-api')
 
 router.register(r'corporate-buyer-api', CorporateBuyerViewSet, basename='corporate-buyer-api')
 

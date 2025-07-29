@@ -68,3 +68,15 @@ class ListingFormViewSet(viewsets.ViewSet):
             'listing_id': pk
         }
         return render(request, "listing_form.html", context)
+    
+class RequirementFormViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        return render(request, "requirement_form.html")
+    
+    def retrieve(self, request, pk=None):
+        """Render requirement form page for a specific requirement ID"""
+        context = {
+            'requirement_id': pk
+        }
+        return render(request, "requirement_form.html", context)

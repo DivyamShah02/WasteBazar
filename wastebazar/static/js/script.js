@@ -2,7 +2,7 @@
 // How It Works Section - Tab functionality
 document.addEventListener('DOMContentLoaded', function () {
     // Check for existing user login and redirect if authenticated
-    checkUserAuthentication();
+    // checkUserAuthentication();
 
     // Tab switching functionality
     const tabButtons = document.querySelectorAll('.tab-button');
@@ -155,9 +155,6 @@ document.querySelectorAll('.btn-hero, .btn-hero-outline').forEach(btn => {
     });
 });
 
-
-
-x
 
 // View details buttons
 document.querySelectorAll('.btn-view-details').forEach(btn => {

@@ -11,6 +11,7 @@ router.register(r'buyer-profile', BuyerProfileViewSet, basename='buyer_profile')
 router.register(r'seller-profile', SellerProfileViewSet, basename='seller_profile')
 router.register(r'directlogin', directloginViewSet, basename='directlogin')
 router.register(r'listing-form', ListingFormViewSet, basename='listing_form')
+router.register(r'requirement-form', RequirementFormViewSet, basename='requirement_form')
 
 urlpatterns = [
     path('', include(router.urls)),

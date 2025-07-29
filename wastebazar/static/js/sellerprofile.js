@@ -125,15 +125,26 @@ async function loadSellerListings() {
             const listings = response.data || [];
             console.log('✅ Listings loaded:', listings);
 
-            renderListings(listings);
+            // Separate approved and unapproved listings
+            const approvedListings = listings.filter(listing =>
+                listing.status === 'active' || listing.status === 'approved'
+            );
+            const unapprovedListings = listings.filter(listing =>
+                listing.status === 'pending' || listing.status === 'under_review' || listing.status === 'rejected'
+            );
+
+            renderListings(approvedListings);
+            renderUnapprovedListings(unapprovedListings);
             updateListingsStats(listings);
         } else {
             console.error('❌ Failed to load listings:', response.error);
             renderListings([]);
+            renderUnapprovedListings([]);
         }
     } catch (error) {
         console.error('❌ Error loading listings:', error);
         renderListings([]);
+        renderUnapprovedListings([]);
     }
 }
 
@@ -145,7 +156,7 @@ function renderProfileData() {
 
     const userDetails = seller_data.user_details;
     const corporateDetails = seller_data.corporate_details;
-    const walletDetails = seller_data.wallet_details;
+    // const walletDetails = seller_data.wallet_details;
 
     // Update profile header
     updateProfileHeader(userDetails, corporateDetails);
@@ -153,8 +164,11 @@ function renderProfileData() {
     // Update contact information
     updateContactInfo(userDetails, corporateDetails);
 
+    // Update settings information
+    updateSettingsInfo(userDetails, corporateDetails);
+
     // Update wallet information
-    updateWalletInfo(walletDetails);
+    // updateWalletInfo(walletDetails);
 }
 
 /**
@@ -243,40 +257,92 @@ function updateContactInfo(userDetails, corporateDetails) {
 }
 
 /**
- * Update wallet information
+ * Update settings information
  */
-function updateWalletInfo(walletDetails) {
-    const freeCreditsEl = document.getElementById('freeCredits');
-    const paidCreditsEl = document.getElementById('paidCredits');
-    const totalCreditsEl = document.getElementById('totalCredits');
-    const creditResetDateEl = document.getElementById('creditResetDate');
+function updateSettingsInfo(userDetails, corporateDetails) {
+    // Update profile information fields
+    const settingsNameEl = document.getElementById('settingsName');
+    const settingsEmailEl = document.getElementById('settingsEmail');
+    const settingsPhoneEl = document.getElementById('settingsPhone');
+    const settingsAccountTypeEl = document.getElementById('settingsAccountType');
 
+    if (settingsNameEl) settingsNameEl.value = userDetails.name || '';
+    if (settingsEmailEl) settingsEmailEl.value = userDetails.email || '';
+    if (settingsPhoneEl) settingsPhoneEl.value = userDetails.contact_number || '';
+    if (settingsAccountTypeEl) {
+        const isIndividual = userDetails.role === 'seller_individual';
+        settingsAccountTypeEl.value = isIndividual ? 'Individual Seller' : 'Corporate Seller';
+    }
 
-    if (walletDetails && !walletDetails.message) {
-        const freeCredits = walletDetails.free_credits;
-        const paidCredits = walletDetails.paid_credits;
-        const totalCredits = freeCredits + paidCredits;
-        console.log(totalCredits)
+    // Show/hide and populate company information card
+    const companyInfoCard = document.getElementById('companyInfoCard');
+    const isCorporate = userDetails.role === 'seller_corporate';
 
-        if (freeCreditsEl) freeCreditsEl.textContent = freeCredits;
-        if (paidCreditsEl) paidCreditsEl.textContent = paidCredits;
-        totalCreditsEl.textContent = totalCredits;
-
-
-        // // Update stats card total credits
-        const statsTotalCreditsEl = document.getElementById('totalCreditswallet');
-        if (statsTotalCreditsEl) statsTotalCreditsEl.textContent = totalCredits;
-
-        if (creditResetDateEl && walletDetails.free_credit_reset_date) {
-            creditResetDateEl.textContent = `Credits reset on: ${formatDate(walletDetails.free_credit_reset_date)}`;
+    if (companyInfoCard) {
+        if (isCorporate && corporateDetails) {
+            companyInfoCard.style.display = 'block';
+            updateCompanySettings(corporateDetails);
+        } else {
+            companyInfoCard.style.display = 'none';
         }
-    } else {
-        console.log('⚠️ No wallet found for user');
-        // if (freeCreditsEl) freeCreditsEl.textContent = '0';
-        // if (paidCreditsEl) paidCreditsEl.textContent = '0';
-        // if (totalCreditsEl) totalCreditsEl.textContent = '0';
     }
 }
+
+/**
+ * Update company settings information
+ */
+function updateCompanySettings(corporateDetails) {
+    const settingsCompanyNameEl = document.getElementById('settingsCompanyName');
+    const settingsPanNumberEl = document.getElementById('settingsPanNumber');
+    const settingsGstNumberEl = document.getElementById('settingsGstNumber');
+    const settingsCompanyAddressEl = document.getElementById('settingsCompanyAddress');
+    const settingsVerificationStatusEl = document.getElementById('settingsVerificationStatus');
+    const settingsVerificationDateEl = document.getElementById('settingsVerificationDate');
+    const downloadCertificateBtn = document.getElementById('downloadCertificateBtn');
+
+    if (settingsCompanyNameEl) settingsCompanyNameEl.value = corporateDetails.company_name || '';
+    if (settingsPanNumberEl) settingsPanNumberEl.value = corporateDetails.pan_number || '';
+    if (settingsGstNumberEl) settingsGstNumberEl.value = corporateDetails.gst_number || '';
+    if (settingsCompanyAddressEl) settingsCompanyAddressEl.value = corporateDetails.address || '';
+
+    // Update verification status
+    if (settingsVerificationStatusEl) {
+        if (corporateDetails.is_approved) {
+            settingsVerificationStatusEl.innerHTML = '<i class="fas fa-check-circle me-1"></i>Verified';
+            settingsVerificationStatusEl.className = 'badge bg-success';
+        } else if (corporateDetails.is_rejected) {
+            settingsVerificationStatusEl.innerHTML = '<i class="fas fa-times-circle me-1"></i>Rejected';
+            settingsVerificationStatusEl.className = 'badge bg-danger';
+        } else {
+            settingsVerificationStatusEl.innerHTML = '<i class="fas fa-clock me-1"></i>Pending';
+            settingsVerificationStatusEl.className = 'badge bg-warning';
+        }
+    }
+
+    // Update verification date
+    if (settingsVerificationDateEl) {
+        if (corporateDetails.approved_at) {
+            settingsVerificationDateEl.textContent = `Verified on: ${formatDate(corporateDetails.approved_at)}`;
+        } else if (corporateDetails.rejected_at) {
+            settingsVerificationDateEl.textContent = `Rejected on: ${formatDate(corporateDetails.rejected_at)}`;
+        } else {
+            settingsVerificationDateEl.textContent = `Requested on: ${formatDate(corporateDetails.requested_at)}`;
+        }
+    }
+
+    // Show/hide download certificate button
+    if (downloadCertificateBtn) {
+        if (corporateDetails.certificate_url) {
+            downloadCertificateBtn.style.display = 'inline-block';
+            downloadCertificateBtn.onclick = function () {
+                window.open(corporateDetails.certificate_url, '_blank');
+            };
+        } else {
+            downloadCertificateBtn.style.display = 'none';
+        }
+    }
+}
+
 
 /**
  * Render listings in the listings tab
@@ -293,7 +359,7 @@ function renderListings(listings) {
                 </div>
                 <h4>No Listings Yet</h4>
                 <p class="text-muted">Start selling by creating your first listing!</p>
-                <button class="btn btn-primary" onclick="checkCreditsAndRedirect('/listing-form/')">
+                <button class="btn btn-primary" onclick="/listing-form">
                     <i class="fas fa-plus me-2"></i>Create First Listing
                 </button>
             </div>
@@ -350,6 +416,88 @@ function renderListings(listings) {
 }
 
 /**
+ * Render unapproved listings in the unapproved listings tab
+ */
+function renderUnapprovedListings(unapprovedListings) {
+    const container = document.getElementById('unapproved-listings-container');
+    if (!container) return;
+
+    if (!unapprovedListings || unapprovedListings.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state text-center py-5">
+                <div class="empty-icon mb-3">
+                    <i class="fas fa-clock fa-3x text-muted"></i>
+                </div>
+                <h4>No Unapproved Listings</h4>
+                <p class="text-muted">All your listings are approved or you haven't created any listings yet.</p>
+                <a href="/listing-form/" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Create New Listing
+                </a>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = unapprovedListings.map(listing => `
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div>
+                        <h5 class="card-title mb-1">${listing.title || listing.category || 'Listing'}</h5>
+                        <small class="text-muted">#${listing.listing_id}</small>
+                    </div>
+                    <span class="badge bg-${getStatusBadgeColor(listing.status)}">${getStatusLabel(listing.status)}</span>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <i class="fas fa-weight-hanging me-2 text-primary"></i>
+                        <strong>${listing.quantity} ${listing.unit || 'kg'}</strong>
+                    </div>
+                    <div class="col-md-6">
+                        <i class="fas fa-map-marker-alt me-2 text-primary"></i>
+                        ${listing.city_location || 'Not specified'}${listing.state_location ? ', ' + listing.state_location : ''}
+                    </div>
+                </div>
+                
+                <p class="card-text">${listing.description || 'No description available'}</p>
+                
+                ${listing.rejection_reason ? `
+                    <div class="alert alert-warning mb-3">
+                        <strong><i class="fas fa-exclamation-triangle me-2"></i>Rejection Reason:</strong>
+                        ${listing.rejection_reason}
+                    </div>
+                ` : ''}
+                
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>Submitted: ${formatDate(listing.created_at)}
+                            ${listing.status === 'pending' ? ' | <i class="fas fa-clock me-1"></i>Waiting for review' : ''}
+                        </small>
+                    </div>
+                    <div class="requirement-actions">
+                        ${listing.status === 'rejected' ? `
+                            <button class="btn-action btn-edit" onclick="editListing('${listing.listing_id}')">
+                                <i class="fas fa-edit"></i> Edit & Resubmit
+                            </button>
+                        ` : ''}
+                        <button class="btn-action btn-details" onclick="viewListingDetails('${listing.listing_id}')">
+                            <i class="fas fa-eye"></i> Details
+                        </button>
+                        ${listing.status === 'pending' ? `
+                            <button class="btn-action btn-cancel" onclick="cancelListing('${listing.listing_id}')">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+/**
  * Update listings statistics
  */
 function updateListingsStats(listings) {
@@ -367,99 +515,36 @@ function updateListingsStats(listings) {
 }
 
 /**
- * Render sales history
- */
-function renderSalesHistory(sales) {
-    const container = document.getElementById('sales-container');
-    if (!container) return;
-
-    if (!sales || sales.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state text-center py-5">
-                <div class="empty-icon mb-3">
-                    <i class="fas fa-chart-line fa-3x text-muted"></i>
-                </div>
-                <h4>No Sales Yet</h4>
-                <p class="text-muted">Your sales history will appear here once you start selling.</p>
-            </div>
-        `;
-        return;
-    }
-
-    container.innerHTML = sales.map(sale => `
-        <div class="card mb-3">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div>
-                        <h5 class="card-title mb-1">${sale.item_name || 'Sale Item'}</h5>
-                        <small class="text-muted">Sale ID: #${sale.sale_id}</small>
-                    </div>
-                    <span class="badge bg-${getSaleBadgeColor(sale.status)}">${getSaleStatusLabel(sale.status)}</span>
-                </div>
-                
-                <div class="row mb-3">
-                    <div class="col-md-3">
-                        <strong>Buyer:</strong><br>
-                        <span class="text-muted">${sale.buyer_name || 'Not available'}</span>
-                    </div>
-                    <div class="col-md-3">
-                        <strong>Quantity:</strong><br>
-                        <span class="text-muted">${sale.quantity} ${sale.unit || 'kg'}</span>
-                    </div>
-                    <div class="col-md-3">
-                        <strong>Price:</strong><br>
-                        <span class="text-muted">₹${sale.price}/${sale.unit || 'kg'}</span>
-                    </div>
-                    <div class="col-md-3">
-                        <strong>Total:</strong><br>
-                        <span class="text-success fw-bold">₹${sale.total_amount || (sale.quantity * sale.price)}</span>
-                    </div>
-                </div>
-                
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <i class="fas fa-calendar me-2 text-primary"></i>
-                        <span class="text-muted">${formatDate(sale.sale_date || sale.created_at)}</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2">
-                        ${sale.rating ? `
-                            <div class="rating">
-                                ${renderStars(sale.rating)}
-                            </div>
-                        ` : ''}
-                        <button class="btn btn-sm btn-outline-info" onclick="viewSaleDetails('${sale.sale_id}')">
-                            <i class="fas fa-eye"></i> Details
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-/**
  * Set up tab functionality
  */
 function setupTabFunctionality() {
-    document.addEventListener('DOMContentLoaded', function () {
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const tabContents = document.querySelectorAll('.tab-content');
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
 
-        tabButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                const targetTab = this.dataset.tab;
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const targetTab = this.dataset.tab;
 
-                // Remove active class from all tabs and contents
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                tabContents.forEach(content => content.classList.remove('active'));
+            // Remove active class from all tabs and contents
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
 
-                // Add active class to clicked tab and corresponding content
-                this.classList.add('active');
-                const targetContent = document.getElementById(targetTab + '-tab');
-                if (targetContent) {
-                    targetContent.classList.add('active');
-                }
-            });
+            // Add active class to clicked tab and corresponding content
+            this.classList.add('active');
+
+            // Handle different tab targets
+            let targetContent;
+            if (targetTab === 'approvedlistings') {
+                targetContent = document.getElementById('listings-tab');
+            } else if (targetTab === 'unapprovedlistings') {
+                targetContent = document.getElementById('unapprovedlistings-tab');
+            } else {
+                targetContent = document.getElementById(targetTab + '-tab');
+            }
+
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
         });
     });
 }
@@ -472,6 +557,8 @@ function getStatusBadgeColor(status) {
         'active': 'success',
         'approved': 'success',
         'pending': 'warning',
+        'under_review': 'info',
+        'rejected': 'danger',
         'inactive': 'secondary',
         'deleted': 'danger',
         'sold': 'info'
@@ -484,29 +571,11 @@ function getStatusLabel(status) {
         'active': 'Active',
         'approved': 'Approved',
         'pending': 'Pending Review',
+        'under_review': 'Under Review',
+        'rejected': 'Rejected',
         'inactive': 'Inactive',
         'deleted': 'Deleted',
         'sold': 'Sold'
-    };
-    return labels[status] || status;
-}
-
-function getSaleBadgeColor(status) {
-    const colors = {
-        'completed': 'success',
-        'pending': 'warning',
-        'cancelled': 'danger',
-        'in_progress': 'info'
-    };
-    return colors[status] || 'secondary';
-}
-
-function getSaleStatusLabel(status) {
-    const labels = {
-        'completed': 'Completed',
-        'pending': 'Pending',
-        'cancelled': 'Cancelled',
-        'in_progress': 'In Progress'
     };
     return labels[status] || status;
 }
@@ -583,34 +652,157 @@ window.viewListingDetails = function (listingId) {
     window.location.href = `/listing-detail/?id=${listingId}`;
 };
 
-window.viewSaleDetails = function (saleId) {
-    console.log('View sale details:', saleId);
-    // This would need implementation based on requirements
+window.cancelListing = function (listingId) {
+    console.log('Cancel listing:', listingId);
+    if (confirm('Are you sure you want to cancel this listing?')) {
+        // This would need API implementation to cancel the listing
+        console.log('Canceling listing:', listingId);
+    }
 };
 
 /**
- * Check wallet credits before creating new listing
+ * Profile editing functions
  */
-function checkCreditsAndRedirect(url) {
-    if (!seller_data || !seller_data.wallet_details || seller_data.wallet_details.message) {
-        showError('No wallet found. Please contact support.');
-        return false;
+window.editProfile = function () {
+    toggleProfileEdit(true);
+};
+
+window.editCompanyInfo = function () {
+    toggleCompanyEdit(true);
+};
+
+function toggleProfileEdit(enable) {
+    const profileFields = ['settingsName', 'settingsEmail']; // Removed settingsPhone to make it non-editable
+    const editBtn = document.querySelector('#settings-tab .btn-primary');
+
+    profileFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.readOnly = !enable;
+            if (enable) {
+                field.classList.add('editable');
+            } else {
+                field.classList.remove('editable');
+            }
+        }
+    });
+
+    if (enable) {
+        editBtn.innerHTML = '<i class="fas fa-save me-2"></i>Save Profile';
+        editBtn.onclick = saveProfile;
+    } else {
+        editBtn.innerHTML = '<i class="fas fa-edit me-2"></i>Edit Profile';
+        editBtn.onclick = editProfile;
     }
-
-    const walletDetails = seller_data.wallet_details;
-    const freeCredits = walletDetails.free_credits || 0;
-    const paidCredits = walletDetails.paid_credits || 0;
-    const totalCredits = freeCredits + paidCredits;
-
-    if (totalCredits < 1) {
-        showError('Insufficient credits to create a new listing. Please purchase credits to continue.');
-        return false;
-    }
-
-    // If credits are sufficient, redirect to listing form
-    window.location.href = url;
-    return true;
 }
+
+function toggleCompanyEdit(enable) {
+    const companyFields = ['settingsCompanyName', 'settingsPanNumber', 'settingsGstNumber', 'settingsCompanyAddress'];
+    const editBtn = document.querySelector('#companyInfoCard .btn-primary');
+
+    companyFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.readOnly = !enable;
+            if (enable) {
+                field.classList.add('editable');
+            } else {
+                field.classList.remove('editable');
+            }
+        }
+    });
+
+    if (enable) {
+        editBtn.innerHTML = '<i class="fas fa-save me-2"></i>Save Company Info';
+        editBtn.onclick = saveCompanyInfo;
+    } else {
+        editBtn.innerHTML = '<i class="fas fa-edit me-2"></i>Edit Company Info';
+        editBtn.onclick = editCompanyInfo;
+    }
+}
+
+async function saveProfile() {
+    try {
+        const formData = {
+            name: document.getElementById('settingsName').value,
+            email: document.getElementById('settingsEmail').value
+            // Removed contact_number to make phone non-editable
+        };
+
+        const [success, response] = await callApi(
+            'PUT',
+            `/user-api/update-user-details-api/${current_user_id}/`,
+            formData,
+            csrf_token
+        );
+
+        if (success && response.success) {
+            showSuccess('Profile updated successfully!');
+            toggleProfileEdit(false);
+
+            // Refresh profile data
+            await loadSellerProfile();
+        } else {
+            throw new Error(response.error || 'Failed to update profile');
+        }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        showError('Failed to update profile: ' + error.message);
+    }
+}
+
+async function saveCompanyInfo() {
+    try {
+        const formData = {
+            company_name: document.getElementById('settingsCompanyName').value,
+            pan_number: document.getElementById('settingsPanNumber').value,
+            gst_number: document.getElementById('settingsGstNumber').value,
+            address: document.getElementById('settingsCompanyAddress').value
+        };
+
+        const [success, response] = await callApi(
+            'PUT',
+            `/user-api/update-user-details-api/${current_user_id}/`,
+            formData,
+            csrf_token
+        );
+
+        if (success && response.success) {
+            showSuccess('Company information updated successfully!');
+            toggleCompanyEdit(false);
+
+            // Refresh profile data
+            await loadSellerProfile();
+        } else {
+            throw new Error(response.error || 'Failed to update company information');
+        }
+    } catch (error) {
+        console.error('Error updating company info:', error);
+        showError('Failed to update company information: ' + error.message);
+    }
+}
+
+function showSuccess(message) {
+    // Create success alert
+    const successDiv = document.createElement('div');
+    successDiv.className = 'alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3';
+    successDiv.style.zIndex = '9999';
+    successDiv.innerHTML = `
+        <i class="fas fa-check-circle me-2"></i>${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+    document.body.appendChild(successDiv);
+
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        if (successDiv && successDiv.parentNode) {
+            successDiv.remove();
+        }
+    }, 3000);
+}
+
+
 
 // Override the new listing button clicks
 document.addEventListener('DOMContentLoaded', function () {
@@ -620,9 +812,11 @@ document.addEventListener('DOMContentLoaded', function () {
     newListingButtons.forEach(button => {
         button.addEventListener('click', function (e) {
             e.preventDefault(); // Prevent default navigation
-            checkCreditsAndRedirect('/listing-form/');
+            window.location.href = '/listing-form/';
         });
     });
 });
 
 console.log('🔐 WasteBazar Seller Profile System Loaded');
+
+

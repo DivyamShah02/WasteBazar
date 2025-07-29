@@ -564,3 +564,153 @@
         flex-direction: column;
     }
 }
+
+/* Company Information Styles */
+#companyInfoCard {
+    border: 2px solid #e9ecef;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+}
+
+#companyInfoCard:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+#companyInfoCard .card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 2px solid #e9ecef;
+    border-radius: 14px 14px 0 0;
+}
+
+#companyInfoCard .card-header .card-title {
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+#companyInfoCard .card-header .card-title i {
+    color: var(--primary-color);
+}
+
+#companyInfoCard .form-label {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+#companyInfoCard .form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 0.875rem;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+}
+
+#companyInfoCard .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(6, 152, 92, 0.25);
+    background-color: white;
+}
+
+#settingsVerificationStatus {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+#settingsVerificationStatus i {
+    margin-right: 0.25rem;
+}
+
+#settingsVerificationDate {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+#downloadCertificateBtn {
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    font-weight: 600;
+    padding: 0.625rem 1.25rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+#downloadCertificateBtn:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(6, 152, 92, 0.3);
+}
+
+/* Settings tab specific styles */
+#settings-tab .card {
+    border-radius: 16px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+#settings-tab .card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+#settings-tab .card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 2px solid #e9ecef;
+    border-radius: 14px 14px 0 0;
+}
+
+#settings-tab .card-header .card-title i {
+    color: var(--primary-color);
+}
+
+#settings-tab .form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 0.875rem;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+#settings-tab .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(6, 152, 92, 0.25);
+    background-color: white;
+}
+
+#settings-tab .btn-primary {
+    background: var(--gradient-primary);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+#settings-tab .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(6, 152, 92, 0.3);
+}
+
+/* Editable field styling */
+.form-control.editable {
+    background-color: white !important;
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.1rem rgba(6, 152, 92, 0.2) !important;
+}
+
+.form-control.editable:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(6, 152, 92, 0.25) !important;
+}
+
+/* Non-editable phone field styling */
+#settings-tab #settingsPhone {
+    background-color: #f8f9fa !important;
+    border-color: #e9ecef !important;
+    color: #6c757d !important;
+    cursor: not-allowed !important;
+}

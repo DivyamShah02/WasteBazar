@@ -636,3 +636,136 @@ class SellerDetailviewSet(viewsets.ViewSet):
             "data": response_data,
             "error": None
         }, status=status.HTTP_200_OK)
+
+
+class UpdateUserDetailsViewSet(viewsets.ViewSet):
+    """Dedicated ViewSet for updating user profile details"""
+    
+    @handle_exceptions
+    @check_authentication()
+    def update(self, request, pk):
+        """
+        API: Update User Profile Details
+        Supports updating both basic user info and corporate details
+        Used primarily for profile settings updates
+        """
+        user_id = pk
+        
+        # Verify user exists and belongs to current authenticated user (if needed)
+        try:
+            user = User.objects.get(user_id=user_id, is_deleted=False)
+        except User.DoesNotExist:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": "User not found."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        updated_fields = []
+        
+        # Update basic user details
+        user_fields_to_update = {}
+        basic_user_fields = ['name', 'email']  # Removed contact_number to make phone non-editable
+        
+        for field in basic_user_fields:
+            if field in request.data and request.data[field] is not None:
+                user_fields_to_update[field] = request.data[field]
+                updated_fields.append(field)
+
+        # Contact number is now non-editable through this API
+        # Removed the contact number validation and update logic
+
+        # Update user basic details if any changes
+        if user_fields_to_update:
+            user_serializer = UserSerializer(user, data=user_fields_to_update, partial=True)
+            if user_serializer.is_valid():
+                user_serializer.save()
+            else:
+                return Response({
+                    "success": False,
+                    "user_not_logged_in": False,
+                    "user_unauthorized": False,
+                    "data": None,
+                    "error": user_serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+        # Update corporate details if user is corporate
+        corporate_updated = False
+        if user.role in ['buyer_corporate', 'seller_corporate']:
+            corporate_fields = ['company_name', 'pan_number', 'gst_number', 'address', 'certificate_url']
+            corporate_updates = {}
+            
+            for field in corporate_fields:
+                if field in request.data and request.data[field] is not None:
+                    corporate_updates[field] = request.data[field]
+                    updated_fields.append(f'corporate_{field}')
+            
+            if corporate_updates:
+                try:
+                    corporate_details = CorporateUserDetail.objects.get(
+                        user_id=user_id,
+                        is_deleted=False
+                    )
+                    
+                    # Update corporate fields
+                    for field, value in corporate_updates.items():
+                        setattr(corporate_details, field, value)
+                    
+                    # Sync basic details in corporate table with user table
+                    corporate_details.name = user.name
+                    corporate_details.email = user.email
+                    corporate_details.contact_number = user.contact_number
+                    
+                    corporate_details.save()
+                    corporate_updated = True
+                    
+                except CorporateUserDetail.DoesNotExist:
+                    return Response({
+                        "success": False,
+                        "user_not_logged_in": False,
+                        "user_unauthorized": False,
+                        "data": None,
+                        "error": "Corporate details not found for this user."
+                    }, status=status.HTTP_404_NOT_FOUND)
+
+        # Prepare comprehensive response
+        response_data = {
+            'user_details': UserSerializer(user).data,
+            'corporate_details': None,
+            'update_summary': {
+                'fields_updated': updated_fields,
+                'user_data_updated': bool(user_fields_to_update),
+                'corporate_data_updated': corporate_updated,
+                'total_updates': len(updated_fields)
+            }
+        }
+
+        # Include corporate details in response if user is corporate
+        if user.role in ['buyer_corporate', 'seller_corporate']:
+            try:
+                corporate_details = CorporateUserDetail.objects.get(
+                    user_id=user_id,
+                    is_deleted=False
+                )
+                response_data['corporate_details'] = CorporateUserDetailSerializer(corporate_details).data
+            except CorporateUserDetail.DoesNotExist:
+                response_data['corporate_details'] = {'message': 'Corporate details not found'}
+
+        return Response({
+            "success": True,
+            "user_not_logged_in": False,
+            "user_unauthorized": False,
+            "data": response_data,
+            "error": None
+        }, status=status.HTTP_200_OK)
+
+    @handle_exceptions
+    @check_authentication()
+    def partial_update(self, request, pk):
+        """
+        API: Partial Update User Profile Details
+        Same as update but explicitly supports partial updates
+        """
+        return self.update(request, pk)
