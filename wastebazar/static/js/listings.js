@@ -24,6 +24,9 @@ async function ListingsApp(csrf_token_param, all_listings_api_url_param) {
     return;
   }
 
+  console.log("✅ ListingsApp initialized successfully");
+  console.log("📡 About to load listings from API on initialization...");
+
   initializePage();
 }
 
@@ -59,58 +62,7 @@ const sampleListings = [
     postedDate: "1 day ago",
     icon: "fas fa-cog",
   },
-  {
-    id: 3,
-    title: "E-Waste Components",
-    category: "electronic",
-    location: "bangalore",
-    price: 85000,
-    quantity: 10,
-    grade: "Mixed Components",
-    availability: "Recyclable",
-    badge: "Hot Deal",
-    postedDate: "3 hours ago",
-    icon: "fas fa-laptop",
-  },
-  {
-    id: 4,
-    title: "Aluminum Scrap Sheets",
-    category: "metal",
-    location: "chennai",
-    price: 125000,
-    quantity: 30,
-    grade: "Commercial Grade",
-    availability: "Transport Available",
-    badge: "Premium",
-    postedDate: "5 hours ago",
-    icon: "fas fa-coins",
-  },
-  {
-    id: 5,
-    title: "Mixed Paper Waste",
-    category: "paper",
-    location: "pune",
-    price: 18000,
-    quantity: 200,
-    grade: "Office Paper",
-    availability: "Bulk Available",
-    badge: "Verified",
-    postedDate: "1 day ago",
-    icon: "fas fa-newspaper",
-  },
-  {
-    id: 6,
-    title: "Copper Wire Scrap",
-    category: "metal",
-    location: "hyderabad",
-    price: 650000,
-    quantity: 5,
-    grade: "99% Pure",
-    availability: "Immediate",
-    badge: "Premium",
-    postedDate: "4 hours ago",
-    icon: "fas fa-bolt",
-  },
+
 ]
 
 // Advertisement data
@@ -161,10 +113,14 @@ let currentView = "grid"
 let filters = {
   search: "",
   category: "",
+  subcategory: "",
   location: "",
+  city_location: "",
+  state_location: "",
   priceRange: "",
   minQuantity: "",
   maxQuantity: "",
+  unit: "",
   sort: "newest",
 }
 
@@ -197,31 +153,64 @@ function initializePage() {
     }
   })
 
-  // Parse URL parameters
-  const urlParams = new URLSearchParams(window.location.search)
-  if (urlParams.get("category")) {
-    filters.category = urlParams.get("category")
-    const categoryFilter = document.getElementById("categoryFilter")
-    if (categoryFilter) {
-      categoryFilter.value = filters.category
+  // Parse URL parameters and set filters
+  const urlParams = new URLSearchParams(window.location.search);
+
+  // Map URL parameters to filters
+  const urlParamMapping = {
+    'category': 'category',
+    'subcategory': 'subcategory',
+    'search': 'search',
+    'location': 'location',
+    'city_location': 'city_location',
+    'state_location': 'state_location',
+    'min_quantity': 'minQuantity',
+    'max_quantity': 'maxQuantity',
+    'unit': 'unit',
+    'sort': 'sort'
+  };
+
+  // Update filters from URL parameters
+  Object.entries(urlParamMapping).forEach(([urlParam, filterKey]) => {
+    const value = urlParams.get(urlParam);
+    if (value) {
+      filters[filterKey] = value;
+
+      // Update corresponding form elements
+      const elementId = getFilterElementId(filterKey);
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.value = value;
+      }
     }
-  }
-  if (urlParams.get("search")) {
-    filters.search = urlParams.get("search")
-    const searchInput = document.getElementById("searchInput")
-    if (searchInput) {
-      searchInput.value = filters.search
-    }
-  }
+  });
 
   // Load listings from API
   loadListingsFromAPI()
+}
+
+// Helper function to map filter keys to element IDs
+function getFilterElementId(filterKey) {
+  const mapping = {
+    'search': 'searchInput',
+    'category': 'categoryFilter',
+    'subcategory': 'subcategoryFilter',
+    'location': 'locationFilter',
+    'city_location': 'cityLocationFilter',
+    'state_location': 'stateLocationFilter',
+    'minQuantity': 'minQuantity',
+    'maxQuantity': 'maxQuantity',
+    'unit': 'unitFilter',
+    'sort': 'sortFilter'
+  };
+  return mapping[filterKey] || filterKey;
 }
 
 // API Functions
 async function loadListingsFromAPI() {
   try {
     console.log("🔄 Loading listings from API...");
+    console.log("🔍 Current filters:", filters);
 
     // Check if API URL is available
     if (!all_listings_api_url) {
@@ -238,24 +227,53 @@ async function loadListingsFromAPI() {
     // Build query parameters based on current filters
     let queryParams = {};
 
-    // Only add parameters if they have actual values
+    // Category filter
     if (filters.category && filters.category.trim() !== '') {
       queryParams.category = filters.category;
     }
+
+    // Subcategory filter
+    if (filters.subcategory && filters.subcategory.trim() !== '') {
+      queryParams.subcategory = filters.subcategory;
+    }
+
+    // Location filters
+    if (filters.city_location && filters.city_location.trim() !== '') {
+      queryParams.city_location = filters.city_location;
+    }
+
+    if (filters.state_location && filters.state_location.trim() !== '') {
+      queryParams.state_location = filters.state_location;
+    }
+
+    // Legacy location filter - map to city_location if no specific city is set
+    if (filters.location && filters.location.trim() !== '' && !filters.city_location) {
+      queryParams.city_location = filters.location;
+    }
+
+    // Search filter
     if (filters.search && filters.search.trim() !== '') {
       queryParams.search = filters.search;
     }
+
+    // Quantity range filtering
     if (filters.minQuantity && filters.minQuantity.trim() !== '') {
       queryParams.min_quantity = filters.minQuantity;
     }
+
     if (filters.maxQuantity && filters.maxQuantity.trim() !== '') {
       queryParams.max_quantity = filters.maxQuantity;
     }
 
-    // Add sorting only if it's not the default
+    // Unit filter
+    if (filters.unit && filters.unit.trim() !== '') {
+      queryParams.unit = filters.unit;
+    }
+
+    // Sorting parameters
     if (filters.sort && filters.sort !== 'newest') {
       if (filters.sort === 'oldest') {
-        queryParams.sort_by = 'created_at';
+        queryParams.sort_by = 'approved_at';
         queryParams.sort_order = 'asc';
       } else if (filters.sort === 'quantity-low') {
         queryParams.sort_by = 'quantity';
@@ -263,6 +281,9 @@ async function loadListingsFromAPI() {
       } else if (filters.sort === 'quantity-high') {
         queryParams.sort_by = 'quantity';
         queryParams.sort_order = 'desc';
+      } else if (filters.sort === 'location') {
+        queryParams.sort_by = 'city_location';
+        queryParams.sort_order = 'asc';
       }
     }
 
@@ -434,17 +455,35 @@ function setupEventListeners() {
 
   // Filter changes
   const categoryFilter = document.getElementById("categoryFilter");
+  const subcategoryFilter = document.getElementById("subcategoryFilter");
   const locationFilter = document.getElementById("locationFilter");
+  const cityLocationFilter = document.getElementById("cityLocationFilter");
+  const stateLocationFilter = document.getElementById("stateLocationFilter");
   const priceFilter = document.getElementById("priceFilter");
   const minQuantity = document.getElementById("minQuantity");
   const maxQuantity = document.getElementById("maxQuantity");
+  const unitFilter = document.getElementById("unitFilter");
   const sortFilter = document.getElementById("sortFilter");
 
-  if (categoryFilter) categoryFilter.addEventListener("change", updateFilters);
+  if (categoryFilter) {
+    categoryFilter.addEventListener("change", (e) => {
+      // When category changes, clear subcategory and update filters
+      const subcategoryFilter = document.getElementById("subcategoryFilter");
+      if (subcategoryFilter) {
+        subcategoryFilter.value = "";
+      }
+      updateFilters();
+    });
+  }
+
+  if (subcategoryFilter) subcategoryFilter.addEventListener("change", updateFilters);
   if (locationFilter) locationFilter.addEventListener("change", updateFilters);
+  if (cityLocationFilter) cityLocationFilter.addEventListener("change", updateFilters);
+  if (stateLocationFilter) stateLocationFilter.addEventListener("change", updateFilters);
   if (priceFilter) priceFilter.addEventListener("change", updateFilters);
-  if (minQuantity) minQuantity.addEventListener("input", updateFilters);
-  if (maxQuantity) maxQuantity.addEventListener("input", updateFilters);
+  if (minQuantity) minQuantity.addEventListener("input", debounce(updateFilters, 500));
+  if (maxQuantity) maxQuantity.addEventListener("input", debounce(updateFilters, 500));
+  if (unitFilter) unitFilter.addEventListener("change", updateFilters);
   if (sortFilter) sortFilter.addEventListener("change", updateFilters);
 
   // Clear filters
@@ -467,10 +506,19 @@ function setupEventListeners() {
     item.addEventListener("click", function (e) {
       e.preventDefault();
       const category = this.dataset.category;
+      const subcategory = this.dataset.subcategory || "";
+
       filters.category = category;
+      filters.subcategory = subcategory;
+
       if (categoryFilter) {
         categoryFilter.value = category;
       }
+
+      if (subcategoryFilter) {
+        subcategoryFilter.value = subcategory;
+      }
+
       updateFilters();
     });
   });
@@ -484,76 +532,91 @@ function performSearch() {
 
 function updateFilters() {
   // Update filter object
-  filters.search = document.getElementById("searchInput").value.trim()
-  filters.category = document.getElementById("categoryFilter").value
-  filters.location = document.getElementById("locationFilter").value
-  filters.priceRange = document.getElementById("priceFilter").value
-  filters.minQuantity = document.getElementById("minQuantity").value
-  filters.maxQuantity = document.getElementById("maxQuantity").value
-  filters.sort = document.getElementById("sortFilter").value
+  filters.search = document.getElementById("searchInput")?.value.trim() || "";
+  filters.category = document.getElementById("categoryFilter")?.value || "";
+  filters.subcategory = document.getElementById("subcategoryFilter")?.value || "";
+  filters.location = document.getElementById("locationFilter")?.value || "";
+  filters.city_location = document.getElementById("cityLocationFilter")?.value || "";
+  filters.state_location = document.getElementById("stateLocationFilter")?.value || "";
+  filters.priceRange = document.getElementById("priceFilter")?.value || "";
+  filters.minQuantity = document.getElementById("minQuantity")?.value || "";
+  filters.maxQuantity = document.getElementById("maxQuantity")?.value || "";
+  filters.unit = document.getElementById("unitFilter")?.value || "";
+  filters.sort = document.getElementById("sortFilter")?.value || "newest";
 
   // Reload listings from API with new filters
   loadListingsFromAPI()
 }
 
 function applyFilters() {
-  let filteredListings = [...currentListings]
+  // Since we're using API-based filtering, we mostly just pass through the data
+  // Only apply client-side filters that the API doesn't support
+  let filteredListings = [...currentListings];
 
-  // Location filter (since API doesn't support location filtering)
-  if (filters.location) {
+  // Legacy location filter (if needed for backward compatibility)
+  if (filters.location && !filters.city_location && !filters.state_location) {
     filteredListings = filteredListings.filter((listing) =>
       listing.location.toLowerCase().includes(filters.location.toLowerCase()) ||
       listing.city.toLowerCase().includes(filters.location.toLowerCase())
-    )
+    );
   }
 
-  // Price range filter (if needed for client-side filtering)
+  // Price range filter (if API doesn't support this)
   if (filters.priceRange) {
-    const [min, max] = filters.priceRange.split("-").map(Number)
+    const [min, max] = filters.priceRange.split("-").map(Number);
     filteredListings = filteredListings.filter((listing) => {
       if (max) {
-        return listing.price >= min && listing.price <= max
+        return listing.price >= min && listing.price <= max;
       } else {
-        return listing.price >= min
+        return listing.price >= min;
       }
-    })
+    });
   }
 
-  // Additional client-side sorting for price-based sorts
+  // Additional client-side sorting for price-based sorts (if API doesn't handle these)
   if (filters.sort === "price-low" || filters.sort === "price-high") {
     filteredListings.sort((a, b) => {
       if (filters.sort === "price-low") {
-        return a.price - b.price
+        return a.price - b.price;
       } else {
-        return b.price - a.price
+        return b.price - a.price;
       }
-    })
+    });
   }
 
-  currentListings = filteredListings
-  currentPage = 1
+  currentListings = filteredListings;
+  currentPage = 1;
 }
 
 function clearAllFilters() {
   // Reset all filter inputs
-  document.getElementById("searchInput").value = ""
-  document.getElementById("categoryFilter").value = ""
-  document.getElementById("locationFilter").value = ""
-  document.getElementById("priceFilter").value = ""
-  document.getElementById("minQuantity").value = ""
-  document.getElementById("maxQuantity").value = ""
-  document.getElementById("sortFilter").value = "newest"
+  const inputElements = [
+    "searchInput", "categoryFilter", "subcategoryFilter", "locationFilter",
+    "cityLocationFilter", "stateLocationFilter", "priceFilter",
+    "minQuantity", "maxQuantity", "unitFilter", "sortFilter"
+  ];
+
+  inputElements.forEach(elementId => {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.value = elementId === "sortFilter" ? "newest" : "";
+    }
+  });
 
   // Reset filter object
   filters = {
     search: "",
     category: "",
+    subcategory: "",
     location: "",
+    city_location: "",
+    state_location: "",
     priceRange: "",
     minQuantity: "",
     maxQuantity: "",
+    unit: "",
     sort: "newest",
-  }
+  };
 
   // Reload listings from API
   loadListingsFromAPI()

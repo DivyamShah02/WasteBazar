@@ -54,14 +54,6 @@ async function initializeApp() {
 function getCurrentUserId() {
     currentUserId = localStorage.getItem('user_id');
 
-    if (!currentUserId) {
-        console.error('❌ No user ID found in localStorage');
-        showError('User not logged in. Please login again.');
-        setTimeout(() => {
-            window.location.href = '/login/';
-        }, 3000);
-        return;
-    }
 
     console.log('👤 Current user ID:', currentUserId);
 }
@@ -278,7 +270,7 @@ async function loadRequirements() {
             return;
         }
 
-        const [success, response] = await callApi('GET', `${requirementsApiUrl}?user_id=${currentUserId}`, null, csrf_token);
+        const [success, response] = await callApi('GET', `${requirementsApiUrl}${currentUserId}/`, null, csrf_token);
 
         if (success && response.success) {
             const requirements = response.data || [];
@@ -575,13 +567,13 @@ function showSuccess(message) {
 // Global action functions for requirement and purchase actions
 function postNewRequirement() {
     console.log('📝 Post new requirement clicked');
-    
+
     // Check if user has sufficient credits
     if (buyerData && buyerData.wallet_details && !buyerData.wallet_details.message) {
         const freeCredits = buyerData.wallet_details.free_credits || 0;
         const paidCredits = buyerData.wallet_details.paid_credits || 0;
         const totalCredits = freeCredits + paidCredits;
-        
+
         if (totalCredits < 1) {
             showError('Insufficient credits to post a new requirement. Please purchase credits to continue.');
             return;
@@ -590,7 +582,7 @@ function postNewRequirement() {
         showError('Unable to check credit balance. Please try again.');
         return;
     }
-    
+
     // If credits are sufficient, redirect to requirement form
     window.location.href = '/requirement-form/';
 }

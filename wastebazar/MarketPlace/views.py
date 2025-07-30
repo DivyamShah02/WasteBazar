@@ -19,8 +19,8 @@ class SellerListingViewSet(viewsets.ViewSet):
     def list(self, request):
         """Get all listings for the authenticated seller"""
         listings = SellerListing.objects.filter(
-            # seller_user_id=request.user.user_id
-            seller_user_id="SC5294468983"
+            seller_user_id=request.user.user_id
+            # seller_user_id="SC5294468983"
         ).order_by('-created_at')
         
         serializer = SellerListingSerializer(listings, many=True)
@@ -50,8 +50,8 @@ class SellerListingViewSet(viewsets.ViewSet):
                 }, status=status.HTTP_400_BAD_REQUEST)
 
         listing = SellerListing.objects.create(
-            # seller_user_id=request.user.user_id,
-            seller_user_id="SC5294468983",
+            seller_user_id=request.user.user_id,
+            # seller_user_id="SC5294468983",
             category=data['category'],
             subcategory=data['subcategory'],
             quantity=data['quantity'],
@@ -92,8 +92,8 @@ class SellerListingViewSet(viewsets.ViewSet):
             }, status=status.HTTP_404_NOT_FOUND)
         
         # Step 2: Check if current user owns this listing
-        # if listing_exists.seller_user_id != request.user.user_id:
-        if listing_exists.seller_user_id != "SC5294468983":
+        if listing_exists.seller_user_id != request.user.user_id:
+        # if listing_exists.seller_user_id != "SC5294468983":
             
             return Response({
                 "success": False,
@@ -176,8 +176,8 @@ class SellerListingViewSet(viewsets.ViewSet):
         try:
             listing = SellerListing.objects.get(
                 listing_id=pk, 
-                # seller_user_id=request.user.user_id,
-                seller_user_id="SC5294468983",
+                seller_user_id=request.user.user_id,
+                # seller_user_id="SC5294468983",
                 status='approved'
             )
         except SellerListing.DoesNotExist:
@@ -438,12 +438,12 @@ class AllListingsViewset(viewsets.ViewSet):
 class BuyerRequirementsViewset(viewsets.ViewSet):
 
     @handle_exceptions
-    # @check_authentication(required_role='buyer_corporate') 
+    @check_authentication(required_role='buyer_corporate') 
     def list(self, request):
         """Get all listings for the authenticated buyer"""
         requirements = BuyerRequirement.objects.filter(
-            # buyer_user_id=request.user.user_id
-            buyer_user_id="BI8952706973"  # Replace with actual buyer ID
+            buyer_user_id=request.user.user_id
+            # buyer_user_id="BI8952706973"  # Replace with actual buyer ID
         ).exclude(status='deleted').order_by('-created_at')
         
         serializer = BuyerRequirementSerializer(requirements, many=True)
@@ -454,12 +454,94 @@ class BuyerRequirementsViewset(viewsets.ViewSet):
             "data": serializer.data,
             "error": None
         })
+
+    @handle_exceptions
+    def retrieve(self, request, pk=None):
+        """Get all requirements for a specific buyer user_id"""
+        user_id = pk
+        
+        if not user_id:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": "User ID is required."
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Validate user_id exists and is a buyer
+        try:
+            from UserDetail.models import User
+            buyer = User.objects.get(
+                user_id=user_id,
+                role__in=['buyer_individual', 'buyer_corporate'],
+                is_deleted=False
+            )
+        except User.DoesNotExist:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": f"Buyer not found with ID: {user_id}"
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Get all requirements for this buyer
+        requirements = BuyerRequirement.objects.filter(
+            buyer_user_id=user_id
+        ).exclude(status='deleted').order_by('-created_at')
+        
+        serializer = BuyerRequirementSerializer(requirements, many=True)
+        
+        return Response({
+            "success": True,
+            "user_not_logged_in": False,
+            "user_unauthorized": False,
+            "data": serializer.data,
+            "error": None,
+            "meta": {
+                "buyer_id": user_id,
+                "buyer_role": buyer.role,
+                "total_requirements": requirements.count(),
+                "active_requirements": requirements.filter(status='active').count(),
+                "inactive_requirements": requirements.filter(status='inactive').count(),
+                "fulfilled_requirements": requirements.filter(status='requirementfulfilled').count()
+            }
+        })
     
     @handle_exceptions
     # @check_authentication(required_role='buyer_corporate')
     def create(self, request):
-        """Create a new buyer requirement listing"""
+        """Create a new buyer requirement listing with user_id from request data"""
         data = request.data
+
+        # Get user_id from request data
+        user_id = data.get('user_id')
+        if not user_id:
+            return Response({
+                "success": False,
+                "user_not_logged_in": True,
+                "user_unauthorized": False,
+                "data": None,
+                "error": "User ID is required in request data."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # Validate user_id exists and is a buyer
+        try:
+            from UserDetail.models import User
+            buyer = User.objects.get(
+                user_id=user_id,
+                role__in=['buyer_individual', 'buyer_corporate'],
+                is_deleted=False
+            )
+        except User.DoesNotExist:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": f"Buyer not found with ID: {user_id}"
+            }, status=status.HTTP_404_NOT_FOUND)
 
         required_fields = ['category', 'subcategory', 'quantity', 'unit', 'city_location', 'state_location', 'pincode_location', 'address']
         for field in required_fields:
@@ -473,8 +555,7 @@ class BuyerRequirementsViewset(viewsets.ViewSet):
                 }, status=status.HTTP_400_BAD_REQUEST)
 
         requirement = BuyerRequirement.objects.create(
-            # buyer_user_id=request.user.user_id,
-            buyer_user_id="BI8952706973",
+            buyer_user_id=user_id,
             category=data['category'],
             subcategory=data['subcategory'],
             quantity=data['quantity'],
@@ -498,7 +579,14 @@ class BuyerRequirementsViewset(viewsets.ViewSet):
             "user_not_logged_in": False,
             "user_unauthorized": False,
             "data": serializer.data,
-            "error": None
+            "error": None,
+            "meta": {
+                "buyer_id": user_id,
+                "buyer_role": buyer.role,
+                "requirement_id": requirement.requirement_id,
+                "status": requirement.status,
+                "valid_until": requirement.valid_until
+            }
         }, status=status.HTTP_201_CREATED)
 
     @handle_exceptions

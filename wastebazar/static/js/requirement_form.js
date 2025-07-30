@@ -68,8 +68,17 @@ async function handleFormSubmission() {
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting Requirement...';
 
-        // Create form data object
+        // Get current user ID from localStorage
+        const currentUserId = localStorage.getItem('user_id');
+        console.log("🔧 Current User ID:", currentUserId);
+        if (!currentUserId) {
+            showError('User not logged in. Please login first.');
+            return;
+        }
+
+        // Create form data object with user_id included
         const formData = {
+            user_id: currentUserId,
             category: document.getElementById('category').value,
             subcategory: document.getElementById('subcategory').value,
             quantity: document.getElementById('quantity').value,
@@ -80,6 +89,8 @@ async function handleFormSubmission() {
             pincode_location: document.getElementById('pincode_location').value,
             address: document.getElementById('address').value
         };
+
+        console.log('🔧 Creating requirement with data:', formData);
 
         // Make API call using the centralized API caller
         const [success, result] = await callApi(

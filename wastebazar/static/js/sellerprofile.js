@@ -403,7 +403,7 @@ function renderListings(listings) {
                             <i class="fas fa-edit"></i> Edit
                         </button>
                         <button class="btn-action btn-pause" onclick="pauseListing('${listing.listing_id}')">
-                            <i class="fas fa-pause"></i> Pause
+                            <i class="fas fa-pause"></i> Mark Sold
                         </button>
                         <button class="btn-action btn-details" onclick="viewListingDetails('${listing.listing_id}')">
                             <i class="fas fa-eye"></i> Details
