@@ -642,7 +642,7 @@ class UpdateUserDetailsViewSet(viewsets.ViewSet):
     """Dedicated ViewSet for updating user profile details"""
     
     @handle_exceptions
-    @check_authentication()
+    # @check_authentication(required_role='seller_corporate')
     def update(self, request, pk):
         """
         API: Update User Profile Details
@@ -762,7 +762,7 @@ class UpdateUserDetailsViewSet(viewsets.ViewSet):
         }, status=status.HTTP_200_OK)
 
     @handle_exceptions
-    @check_authentication()
+    # @check_authentication()
     def partial_update(self, request, pk):
         """
         API: Partial Update User Profile Details

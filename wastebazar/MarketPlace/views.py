@@ -73,6 +73,62 @@ class SellerListingViewSet(viewsets.ViewSet):
             "error": None
         }, status=status.HTTP_201_CREATED)
     
+    @handle_exceptions
+    # @check_authentication(required_role='seller_corporate')
+    def retrieve(self, request, pk=None):
+        """Get all listings for a specific seller user_id"""
+        user_id = pk
+        
+        if not user_id:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": "User ID is required."
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Validate user_id exists and is a seller
+        try:
+            from UserDetail.models import User
+            seller = User.objects.get(
+                user_id=user_id,
+                role__in=['seller_individual', 'seller_corporate'],
+                is_deleted=False
+            )
+        except User.DoesNotExist:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": f"Seller not found with ID: {user_id}"
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Get all listings for this seller
+        listings = SellerListing.objects.filter(
+            seller_user_id=user_id
+        ).order_by('-created_at')
+        
+        serializer = SellerListingSerializer(listings, many=True)
+        
+        return Response({
+            "success": True,
+            "user_not_logged_in": False,
+            "user_unauthorized": False,
+            "data": serializer.data,
+            "error": None,
+            "meta": {
+                "seller_id": user_id,
+                "seller_role": seller.role,
+                "total_listings": listings.count(),
+                "pending_listings": listings.filter(status='pending').count(),
+                "approved_listings": listings.filter(status='approved').count(),
+                "rejected_listings": listings.filter(status='rejected').count(),
+                "sold_listings": listings.filter(status='sold').count()
+            }
+        })
+    
 # ///sldfsfds;fdsf
     @handle_exceptions
     # @check_authentication(required_role='seller_corporate')
@@ -456,6 +512,7 @@ class BuyerRequirementsViewset(viewsets.ViewSet):
         })
 
     @handle_exceptions
+    # @check_authentication(required_role='buyer_corporate')
     def retrieve(self, request, pk=None):
         """Get all requirements for a specific buyer user_id"""
         user_id = pk
@@ -499,14 +556,7 @@ class BuyerRequirementsViewset(viewsets.ViewSet):
             "user_unauthorized": False,
             "data": serializer.data,
             "error": None,
-            "meta": {
-                "buyer_id": user_id,
-                "buyer_role": buyer.role,
-                "total_requirements": requirements.count(),
-                "active_requirements": requirements.filter(status='active').count(),
-                "inactive_requirements": requirements.filter(status='inactive').count(),
-                "fulfilled_requirements": requirements.filter(status='requirementfulfilled').count()
-            }
+            
         })
     
     @handle_exceptions
@@ -528,7 +578,7 @@ class BuyerRequirementsViewset(viewsets.ViewSet):
 
         # Validate user_id exists and is a buyer
         try:
-            from UserDetail.models import User
+            from UserDetail.models import User, Wallet
             buyer = User.objects.get(
                 user_id=user_id,
                 role__in=['buyer_individual', 'buyer_corporate'],
@@ -541,6 +591,41 @@ class BuyerRequirementsViewset(viewsets.ViewSet):
                 "user_unauthorized": False,
                 "data": None,
                 "error": f"Buyer not found with ID: {user_id}"
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        # Check and deduct credits from wallet
+        try:
+            wallet = Wallet.objects.get(user_id=user_id)
+            
+            # Reset free credits if due
+            wallet.reset_free_credits_if_due()
+            
+            # Check if user has sufficient credits (more than 1)
+            total_credits = wallet.free_credits + wallet.paid_credits
+            if total_credits <= 1:
+                return Response({
+                    "success": False,
+                    "user_not_logged_in": False,
+                    "user_unauthorized": False,
+                    "data": None,
+                    "error": f"Insufficient credits. You need more than 1 credit to post a requirement. Current credits: {total_credits}"
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Deduct 1 credit (prioritize free credits first)
+            if wallet.free_credits > 0:
+                wallet.free_credits -= 1
+            else:
+                wallet.paid_credits -= 1
+            
+            wallet.save()
+            
+        except Wallet.DoesNotExist:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": "Wallet not found for this user. Please contact support."
             }, status=status.HTTP_404_NOT_FOUND)
 
         required_fields = ['category', 'subcategory', 'quantity', 'unit', 'city_location', 'state_location', 'pincode_location', 'address']
@@ -574,6 +659,10 @@ class BuyerRequirementsViewset(viewsets.ViewSet):
         requirement.save()
 
         serializer = BuyerRequirementSerializer(requirement)
+        
+        # Get updated wallet info for response
+        wallet.refresh_from_db()
+        
         return Response({
             "success": True,
             "user_not_logged_in": False,
@@ -585,7 +674,13 @@ class BuyerRequirementsViewset(viewsets.ViewSet):
                 "buyer_role": buyer.role,
                 "requirement_id": requirement.requirement_id,
                 "status": requirement.status,
-                "valid_until": requirement.valid_until
+                "valid_until": requirement.valid_until,
+                "credits_deducted": 1,
+                "remaining_credits": {
+                    "free_credits": wallet.free_credits,
+                    "paid_credits": wallet.paid_credits,
+                    "total_credits": wallet.free_credits + wallet.paid_credits
+                }
             }
         }, status=status.HTTP_201_CREATED)
 

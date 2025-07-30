@@ -47,7 +47,9 @@
                 </ul>
                 
                 <div class="d-flex gap-2">
-                    <button class="btn btn-outline-danger text-danger">Logout</button>
+                    <button class="btn btn-outline-danger text-danger">
+                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                    </button>
                     <button class="btn btn-primary">Post Requirement</button>
                 </div>
             </div>
@@ -285,21 +287,24 @@
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="fullName" class="form-label">Full Name</label>
-                                                    <input type="text" class="form-control" id="fullName" value="Rajesh Kumar" required>
+                                                    <input type="text" class="form-control" id="fullName" value="Rajesh Kumar" readonly required>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="email" class="form-label">Email Address</label>
-                                                    <input type="email" class="form-control" id="email" value="rajesh@company.com" required>
+                                                    <input type="email" class="form-control" id="email" value="rajesh@company.com" readonly required>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
-                                                    <label for="phone" class="form-label">Phone Number</label>
-                                                    <input type="tel" class="form-control" id="phone" value="+91 9876543210" required>
+                                                    <label for="phone" class="form-label">
+                                                        <i class="fas fa-lock text-muted me-1" title="Phone number cannot be changed"></i>
+                                                        Phone Number
+                                                    </label>
+                                                    <input type="tel" class="form-control" id="phone" value="+91 9876543210" readonly required>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="userType" class="form-label">Account Type</label>
-                                                    <select class="form-select" id="userType">
+                                                    <select class="form-select" id="userType" readonly disabled>
                                                         <option value="buyer_individual">Individual Buyer</option>
                                                         <option value="buyer_corporate" selected>Corporate Buyer</option>
                                                     </select>
@@ -307,9 +312,15 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label for="address" class="form-label">Address</label>
-                                                <textarea class="form-control" id="address" rows="3" placeholder="Enter your complete address">Andheri East, Mumbai, Maharashtra, India</textarea>
+                                                <textarea class="form-control" id="address" rows="3" readonly placeholder="Enter your complete address">Andheri East, Mumbai, Maharashtra, India</textarea>
                                             </div>
                                         </form>
+                                    </div>
+                                    <!-- Profile Action Button -->
+                                    <div class="card-footer">
+                                        <button type="button" class="btn btn-primary" onclick="editProfile()">
+                                            <i class="fas fa-edit me-2"></i>Edit Profile
+                                        </button>
                                     </div>
                                 </div>
 
@@ -325,11 +336,11 @@
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="companyName" class="form-label">Company Name</label>
-                                                    <input type="text" class="form-control" id="companyName" value="XYZ Pvt Ltd" required>
+                                                    <input type="text" class="form-control" id="companyName" value="XYZ Pvt Ltd" readonly required>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="industry" class="form-label">Industry</label>
-                                                    <select class="form-select" id="industry">
+                                                    <select class="form-select" id="industry" readonly disabled>
                                                         <option value="">Select Industry</option>
                                                         <option value="manufacturing" selected>Manufacturing</option>
                                                         <option value="recycling">Recycling</option>
@@ -345,19 +356,20 @@
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="gstNumber" class="form-label">GST Number</label>
-                                                    <input type="text" class="form-control" id="gstNumber" value="27AABCU9603R1ZX" placeholder="Enter GST Number">
+                                                    <input type="text" class="form-control" id="gstNumber" value="27AABCU9603R1ZX" readonly placeholder="Enter GST Number">
                                                 </div>
                                                 <div class="col-md-6 mb-3">
                                                     <label for="panNumber" class="form-label">PAN Number</label>
-                                                    <input type="text" class="form-control" id="panNumber" value="AABCU9603R" placeholder="Enter PAN Number">
+                                                    <input type="text" class="form-control" id="panNumber" value="AABCU9603R" readonly placeholder="Enter PAN Number">
                                                 </div>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="companyAddress" class="form-label">Company Address</label>
-                                                <textarea class="form-control" id="companyAddress" rows="3" placeholder="Enter company address">456 Business Park, Andheri East, Mumbai, Maharashtra 400069</textarea>
+                                                <textarea class="form-control" id="companyAddress" rows="3" readonly placeholder="Enter company address">456 Business Park, Andheri East, Mumbai, Maharashtra 400069</textarea>
                                             </div>
                                         </form>
                                     </div>
+                                    
                                 </div>
 
                                 <!-- Preferences -->
@@ -410,7 +422,7 @@
                                 <!-- Action Buttons -->
                                 <div class="d-flex gap-3 mb-4">
                                     <button type="button" class="btn btn-primary-custom" onclick="saveProfileSettings()">
-                                        <i class="fas fa-save me-2"></i>Save Changes
+                                        <i class="fas fa-edit me-2"></i>Edit Profile
                                     </button>
                                   
                                     <button type="button" class="btn btn-outline-danger" style="border-radius: 12px;" onclick="deactivateAccount()">

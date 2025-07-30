@@ -119,11 +119,14 @@ async function loadSellerListings() {
     try {
         console.log('📦 Loading seller listings...');
 
-        const [success, response] = await callApi('GET', `${seller_listings_api_url}?user_id=${current_user_id}`, null, csrf_token);
+        // Use the new retrieve endpoint with user_id as path parameter
+        const [success, response] = await callApi('GET', `${seller_listings_api_url}${current_user_id}/`, null, csrf_token);
 
         if (success && response.success) {
             const listings = response.data || [];
+            const meta = response.meta || {};
             console.log('✅ Listings loaded:', listings);
+            console.log('📊 Listings metadata:', meta);
 
             // Separate approved and unapproved listings
             const approvedListings = listings.filter(listing =>
@@ -135,16 +138,18 @@ async function loadSellerListings() {
 
             renderListings(approvedListings);
             renderUnapprovedListings(unapprovedListings);
-            updateListingsStats(listings);
+            updateListingsStats(listings, meta);
         } else {
             console.error('❌ Failed to load listings:', response.error);
             renderListings([]);
             renderUnapprovedListings([]);
+            updateListingsStats([], {});
         }
     } catch (error) {
         console.error('❌ Error loading listings:', error);
         renderListings([]);
         renderUnapprovedListings([]);
+        updateListingsStats([], {});
     }
 }
 
@@ -500,18 +505,30 @@ function renderUnapprovedListings(unapprovedListings) {
 /**
  * Update listings statistics
  */
-function updateListingsStats(listings) {
+function updateListingsStats(listings, meta = {}) {
     const totalListingsEl = document.getElementById('totalListings');
     const activeListingsEl = document.getElementById('activeListings');
     const soldItemsEl = document.getElementById('soldItems');
 
-    const totalListings = listings.length;
-    const activeListings = listings.filter(l => l.status === 'active' || l.status === 'approved').length;
-    const soldItems = listings.filter(l => l.status === 'sold').length;
+    // Use metadata if available, otherwise calculate from listings array
+    const totalListings = meta.total_listings !== undefined ? meta.total_listings : listings.length;
+    const activeListings = meta.approved_listings !== undefined ? meta.approved_listings :
+        listings.filter(l => l.status === 'active' || l.status === 'approved').length;
+    const soldItems = meta.sold_listings !== undefined ? meta.sold_listings :
+        listings.filter(l => l.status === 'sold').length;
 
     if (totalListingsEl) totalListingsEl.textContent = totalListings;
     if (activeListingsEl) activeListingsEl.textContent = activeListings;
     if (soldItemsEl) soldItemsEl.textContent = soldItems;
+
+    // Log statistics for debugging
+    console.log('📊 Updated listings stats:', {
+        total: totalListings,
+        active: activeListings,
+        sold: soldItems,
+        pending: meta.pending_listings || 0,
+        rejected: meta.rejected_listings || 0
+    });
 }
 
 /**

@@ -10,6 +10,7 @@ let requirementsApiUrl = null;
 let buyerDetailApiUrl = "/user-api/buyer-detail-api/";
 let currentUserId = null;
 let buyerData = null;
+let isLoggingOut = false; // Flag to prevent multiple logout calls
 
 /**
  * Main function to initialize buyer profile app
@@ -42,6 +43,9 @@ async function initializeApp() {
         // Set up tab functionality
         setupTabs();
 
+        // Initialize logout button
+        initializeLogoutButton();
+
         // Load all data
         await loadAllData();
 
@@ -54,6 +58,15 @@ async function initializeApp() {
 function getCurrentUserId() {
     currentUserId = localStorage.getItem('user_id');
 
+    // Check if user is logged in
+    if (!currentUserId) {
+        console.log('❌ No user ID found in localStorage');
+        showError('Please login to access your profile.');
+        setTimeout(() => {
+            window.location.href = '/login/';
+        }, 2000);
+        return;
+    }
 
     console.log('👤 Current user ID:', currentUserId);
 }
@@ -114,6 +127,9 @@ function renderProfileData() {
 
     // Update contact information
     updateContactInfo(userDetails, corporateDetails);
+
+    // Update settings information
+    updateSettingsInfo(userDetails, corporateDetails);
 
     // Update wallet information
     updateWalletInfo(walletDetails);
@@ -216,6 +232,60 @@ function updateContactInfo(userDetails, corporateDetails) {
 }
 
 /**
+ * Update settings information
+ */
+function updateSettingsInfo(userDetails, corporateDetails) {
+    // Update profile information fields
+    const fullNameEl = document.getElementById('fullName');
+    const emailEl = document.getElementById('email');
+    const phoneEl = document.getElementById('phone');
+    const userTypeEl = document.getElementById('userType');
+    const addressEl = document.getElementById('address');
+
+    if (fullNameEl) fullNameEl.value = userDetails.name || '';
+    if (emailEl) emailEl.value = userDetails.email || '';
+    if (phoneEl) phoneEl.value = userDetails.contact_number || '';
+    if (userTypeEl) {
+        userTypeEl.value = userDetails.role || 'buyer_individual';
+    }
+
+    // Show/hide and populate company information card
+    const companyInfoCard = document.getElementById('companyInfoCard');
+    const isCorporate = userDetails.role === 'buyer_corporate';
+
+    if (companyInfoCard) {
+        if (isCorporate && corporateDetails && !corporateDetails.message) {
+            companyInfoCard.style.display = 'block';
+            updateCompanySettings(corporateDetails);
+        } else {
+            companyInfoCard.style.display = 'none';
+        }
+    }
+
+    // Set address from corporate details if available
+    if (addressEl && corporateDetails && corporateDetails.address) {
+        addressEl.value = corporateDetails.address;
+    }
+}
+
+/**
+ * Update company settings information
+ */
+function updateCompanySettings(corporateDetails) {
+    const companyNameEl = document.getElementById('companyName');
+    const industryEl = document.getElementById('industry');
+    const gstNumberEl = document.getElementById('gstNumber');
+    const panNumberEl = document.getElementById('panNumber');
+    const companyAddressEl = document.getElementById('companyAddress');
+
+    if (companyNameEl) companyNameEl.value = corporateDetails.company_name || '';
+    if (industryEl) industryEl.value = corporateDetails.industry || '';
+    if (gstNumberEl) gstNumberEl.value = corporateDetails.gst_number || '';
+    if (panNumberEl) panNumberEl.value = corporateDetails.pan_number || '';
+    if (companyAddressEl) companyAddressEl.value = corporateDetails.address || '';
+}
+
+/**
  * Update wallet information
  */
 function updateWalletInfo(walletDetails) {
@@ -245,6 +315,12 @@ function updateWalletInfo(walletDetails) {
         const totalSpentEl = document.getElementById('totalSpent');
         if (totalSpentEl) totalSpentEl.textContent = totalCredits;
 
+        // Add low credit warning if needed
+        addCreditWarning(totalCredits);
+
+        // Update post requirement button state
+        updatePostRequirementButton(totalCredits);
+
     } else {
         console.log('⚠️ No wallet found for user');
         // Set default values using IDs
@@ -257,6 +333,65 @@ function updateWalletInfo(walletDetails) {
         if (paidCreditsEl) paidCreditsEl.textContent = '0';
         if (totalCreditsEl) totalCreditsEl.textContent = '0';
         if (totalSpentEl) totalSpentEl.textContent = '0';
+
+        // Add low credit warning for zero credits
+        addCreditWarning(0);
+
+        // Update post requirement button state for zero credits
+        updatePostRequirementButton(0);
+    }
+}
+
+/**
+ * Add credit warning to wallet section if credits are low
+ */
+function addCreditWarning(totalCredits) {
+    // Remove existing warning first
+    const existingWarning = document.querySelector('.credit-warning');
+    if (existingWarning) {
+        existingWarning.remove();
+    }
+
+    if (totalCredits <= 1) {
+        const walletDetails = document.querySelector('.wallet-details');
+        if (walletDetails) {
+            const warningDiv = document.createElement('div');
+            warningDiv.className = 'credit-warning alert alert-warning mt-2 mb-0 p-2';
+            warningDiv.style.fontSize = '0.85rem';
+            warningDiv.innerHTML = `
+                <i class="fas fa-exclamation-triangle me-1"></i>
+                <strong>Low Credits!</strong><br>
+                You need more than 1 credit to post requirements.
+            `;
+            walletDetails.appendChild(warningDiv);
+        }
+    }
+}
+
+/**
+ * Update the "Post New Requirement" button state based on available credits
+ */
+function updatePostRequirementButton(totalCredits) {
+    const postRequirementBtn = document.querySelector('button[onclick="postNewRequirement()"]');
+
+    if (postRequirementBtn) {
+        if (totalCredits <= 1) {
+            // Disable button and update styling
+            postRequirementBtn.disabled = true;
+            postRequirementBtn.classList.add('disabled');
+            postRequirementBtn.innerHTML = '<i class="fas fa-plus me-2"></i>Insufficient Credits';
+            postRequirementBtn.title = 'You need more than 1 credit to post a requirement';
+            postRequirementBtn.style.opacity = '0.6';
+            postRequirementBtn.style.cursor = 'not-allowed';
+        } else {
+            // Enable button and restore styling
+            postRequirementBtn.disabled = false;
+            postRequirementBtn.classList.remove('disabled');
+            postRequirementBtn.innerHTML = '<i class="fas fa-plus me-2"></i>Post New Requirement';
+            postRequirementBtn.title = '';
+            postRequirementBtn.style.opacity = '1';
+            postRequirementBtn.style.cursor = 'pointer';
+        }
     }
 }
 
@@ -296,16 +431,52 @@ function renderRequirements(requirements) {
     if (!container) return;
 
     if (!requirements || requirements.length === 0) {
+        // Check credit status for empty state
+        let buttonHtml = '';
+        let messageHtml = '<p class="text-muted">Start by posting your first requirement!</p>';
+
+        if (buyerData && buyerData.wallet_details && !buyerData.wallet_details.message) {
+            const freeCredits = buyerData.wallet_details.free_credits || 0;
+            const paidCredits = buyerData.wallet_details.paid_credits || 0;
+            const totalCredits = freeCredits + paidCredits;
+
+            if (totalCredits <= 1) {
+                messageHtml = `
+                    <p class="text-muted">You need more than 1 credit to post requirements.</p>
+                    <p class="text-info">Current credits: ${totalCredits}</p>
+                `;
+                buttonHtml = `
+                    <button class="btn btn-secondary" disabled title="Insufficient credits">
+                        <i class="fas fa-plus me-2"></i>Need More Credits
+                    </button>
+                    <br><br>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-wallet me-2"></i>Buy Credits
+                    </button>
+                `;
+            } else {
+                buttonHtml = `
+                    <button class="btn btn-primary" onclick="postNewRequirement()">
+                        <i class="fas fa-plus me-2"></i>Post First Requirement
+                    </button>
+                `;
+            }
+        } else {
+            buttonHtml = `
+                <button class="btn btn-primary" onclick="postNewRequirement()">
+                    <i class="fas fa-plus me-2"></i>Post First Requirement
+                </button>
+            `;
+        }
+
         container.innerHTML = `
             <div class="empty-state text-center py-5">
                 <div class="empty-icon mb-3">
                     <i class="fas fa-list-alt fa-3x text-muted"></i>
                 </div>
                 <h4>No Requirements Yet</h4>
-                <p class="text-muted">Start by posting your first requirement!</p>
-                <button class="btn btn-primary" onclick="postNewRequirement()">
-                    <i class="fas fa-plus me-2"></i>Post First Requirement
-                </button>
+                ${messageHtml}
+                ${buttonHtml}
             </div>
         `;
         return;
@@ -347,7 +518,7 @@ function renderRequirements(requirements) {
                             <i class="fas fa-edit"></i> Edit
                         </button>
                         <button class="btn-action btn-pause" onclick="pauseRequirement('${requirement.requirement_id}')">
-                            <i class="fas fa-pause"></i> Pause
+                            <i class="fas fa-pause"></i> Mark Fulfilled
                         </button>
                         <button class="btn-action btn-details" onclick="viewRequirementDetails('${requirement.requirement_id}')">
                             <i class="fas fa-eye"></i> Details
@@ -574,8 +745,8 @@ function postNewRequirement() {
         const paidCredits = buyerData.wallet_details.paid_credits || 0;
         const totalCredits = freeCredits + paidCredits;
 
-        if (totalCredits < 1) {
-            showError('Insufficient credits to post a new requirement. Please purchase credits to continue.');
+        if (totalCredits <= 1) {
+            showError('You need more than 1 credit to post a new requirement. Please purchase credits to continue.');
             return;
         }
     } else {
@@ -620,9 +791,297 @@ function editProfile() {
 }
 
 // Settings form functions
+function editProfile() {
+    console.log('✏️ Edit profile clicked');
+    toggleProfileEdit(true);
+}
+
+function editCompanyInfo() {
+    console.log('🏢 Edit company info clicked');
+    toggleCompanyEdit(true);
+}
+
+function toggleProfileEdit(enable) {
+    const profileFields = ['fullName', 'email', 'address']; // Removed phone to make it non-editable
+    const editBtn = document.querySelector('#profileForm').closest('.card').querySelector('.btn');
+
+    profileFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.readOnly = !enable;
+            if (enable) {
+                field.classList.add('editable');
+            } else {
+                field.classList.remove('editable');
+            }
+        }
+    });
+
+    if (enable) {
+        editBtn.innerHTML = '<i class="fas fa-save me-2"></i>Save Profile';
+        editBtn.onclick = saveProfile;
+    } else {
+        editBtn.innerHTML = '<i class="fas fa-edit me-2"></i>Edit Profile';
+        editBtn.onclick = editProfile;
+    }
+}
+
+function toggleCompanyEdit(enable) {
+    const companyTextFields = ['companyName', 'gstNumber', 'panNumber', 'companyAddress'];
+    const companySelectFields = ['industry'];
+    const editBtn = document.querySelector('#companyInfoCard .btn');
+
+    // Handle text fields
+    companyTextFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.readOnly = !enable;
+            if (enable) {
+                field.classList.add('editable');
+            } else {
+                field.classList.remove('editable');
+            }
+        }
+    });
+
+    // Handle select fields
+    companySelectFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.disabled = !enable;
+            if (enable) {
+                field.classList.add('editable');
+            } else {
+                field.classList.remove('editable');
+            }
+        }
+    });
+
+    if (enable) {
+        editBtn.innerHTML = '<i class="fas fa-save me-2"></i>Save Company Info';
+        editBtn.onclick = saveCompanyInfo;
+    } else {
+        editBtn.innerHTML = '<i class="fas fa-edit me-2"></i>Edit Company Info';
+        editBtn.onclick = editCompanyInfo;
+    }
+}
+
+async function saveProfile() {
+    try {
+        console.log('💾 Saving profile changes...');
+
+        // Prepare basic profile data
+        const profileData = {
+            name: document.getElementById('fullName').value,
+            email: document.getElementById('email').value
+            // Phone is now non-editable
+        };
+
+        // For individual users, use the address field
+        const addressEl = document.getElementById('address');
+        if (addressEl && addressEl.value) {
+            profileData.address = addressEl.value;
+        }
+
+        // Call the update API
+        const [success, response] = await callApi(
+            'PUT',
+            `/user-api/update-user-details-api/${currentUserId}/`,
+            profileData,
+            csrf_token
+        );
+
+        if (success && response.success) {
+            showSuccess('Profile updated successfully!');
+            toggleProfileEdit(false);
+
+            // Refresh profile data
+            await loadBuyerProfile();
+        } else {
+            throw new Error(response.error || 'Failed to update profile');
+        }
+    } catch (error) {
+        console.error('❌ Error updating profile:', error);
+        showError('Failed to update profile: ' + error.message);
+    }
+}
+
+async function saveCompanyInfo() {
+    try {
+        console.log('🏢 Saving company information...');
+
+        const companyData = {
+            company_name: document.getElementById('companyName').value,
+            industry: document.getElementById('industry').value,
+            gst_number: document.getElementById('gstNumber').value,
+            pan_number: document.getElementById('panNumber').value,
+            address: document.getElementById('companyAddress').value
+        };
+
+        // Call the update API
+        const [success, response] = await callApi(
+            'PUT',
+            `/user-api/update-user-details-api/${currentUserId}/`,
+            companyData,
+            csrf_token
+        );
+
+        if (success && response.success) {
+            showSuccess('Company information updated successfully!');
+            toggleCompanyEdit(false);
+
+            // Refresh profile data
+            await loadBuyerProfile();
+        } else {
+            throw new Error(response.error || 'Failed to update company information');
+        }
+    } catch (error) {
+        console.error('❌ Error updating company info:', error);
+        showError('Failed to update company information: ' + error.message);
+    }
+}
+
 function saveProfileSettings() {
     console.log('💾 Saving profile settings...');
-    showSuccess('Profile settings saved successfully!');
+
+    // Check if we're in edit mode
+    const saveBtn = document.querySelector('.btn-primary-custom');
+    if (saveBtn && saveBtn.innerHTML.includes('Save Changes')) {
+        // We're in save mode, so save the data
+        saveProfile();
+    } else {
+        // We're in view mode, so enable edit mode
+        enableEditMode();
+    }
+}
+
+/**
+ * Enable edit mode for profile forms
+ */
+function enableEditMode() {
+    console.log('✏️ Enabling edit mode...');
+
+    // Enable profile fields (excluding phone which should remain readonly)
+    const profileFields = ['fullName', 'email', 'address'];
+
+    profileFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.readOnly = false;
+            field.classList.add('editable');
+        }
+    });
+
+    // Enable company fields if corporate user
+    const companyInfoCard = document.getElementById('companyInfoCard');
+    if (companyInfoCard && companyInfoCard.style.display !== 'none') {
+        const companyTextFields = ['companyName', 'gstNumber', 'panNumber', 'companyAddress'];
+        const companySelectFields = ['industry'];
+
+        // Handle text fields
+        companyTextFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.readOnly = false;
+                field.classList.add('editable');
+            }
+        });
+
+        // Handle select fields
+        companySelectFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.disabled = false;
+                field.classList.add('editable');
+            }
+        });
+    }
+
+    // Update button text and functionality
+    const saveBtn = document.querySelector('.btn-primary-custom');
+    if (saveBtn) {
+        saveBtn.innerHTML = '<i class="fas fa-save me-2"></i>Save Changes';
+    }
+}
+
+/**
+ * Disable edit mode and return to view mode (legacy function - kept for backward compatibility)
+ */
+function disableEditMode() {
+    console.log('👁️ Disabling edit mode...');
+
+    // Disable text fields
+    const textFields = ['fullName', 'email', 'address', 'companyName', 'gstNumber', 'panNumber', 'companyAddress'];
+    const selectFields = ['industry'];
+
+    textFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.readOnly = true;
+            field.classList.remove('editable');
+        }
+    });
+
+    // Disable select fields
+    selectFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.disabled = true;
+            field.classList.remove('editable');
+        }
+    });
+
+    // Update button text and functionality
+    const saveBtn = document.querySelector('.btn-primary-custom');
+    if (saveBtn) {
+        saveBtn.innerHTML = '<i class="fas fa-edit me-2"></i>Edit Profile';
+    }
+}
+
+/**
+ * Show success message
+ */
+function showSuccess(message) {
+    // Create success alert
+    const successDiv = document.createElement('div');
+    successDiv.className = 'alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3';
+    successDiv.style.zIndex = '9999';
+    successDiv.innerHTML = `
+        <i class="fas fa-check-circle me-2"></i>${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+    document.body.appendChild(successDiv);
+
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        if (successDiv && successDiv.parentNode) {
+            successDiv.remove();
+        }
+    }, 3000);
+}
+
+/**
+ * Show error message
+ */
+function showError(message) {
+    // Create error alert
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'alert alert-danger alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3';
+    errorDiv.style.zIndex = '9999';
+    errorDiv.innerHTML = `
+        <i class="fas fa-exclamation-circle me-2"></i>${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+    document.body.appendChild(errorDiv);
+
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (errorDiv && errorDiv.parentNode) {
+            errorDiv.remove();
+        }
+    }, 5000);
 }
 
 function deactivateAccount() {
@@ -640,4 +1099,148 @@ function deactivateAccount() {
     }
 }
 
+/**
+ * Logout functionality
+ */
+async function logout() {
+    console.log('🔐 Logout initiated');
+
+    // Prevent multiple logout calls
+    if (isLoggingOut) {
+        console.log('⚠️ Logout already in progress, ignoring duplicate call');
+        return;
+    }
+
+    if (confirm('Are you sure you want to logout?')) {
+        try {
+            isLoggingOut = true; // Set flag to prevent multiple calls
+
+            // Show loading state
+            const logoutBtn = document.querySelector('.btn-outline-danger');
+            if (logoutBtn) {
+                logoutBtn.disabled = true;
+                logoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Logging out...';
+            }
+
+            // Try to call logout API if available (optional)
+            try {
+                const [success, response] = await callApi('POST', '/user-api/logout/', {}, csrf_token);
+                if (success) {
+                    console.log('✅ Server logout successful');
+                } else {
+                    console.log('⚠️ Server logout failed, continuing with client logout');
+                }
+            } catch (apiError) {
+                console.log('⚠️ Logout API not available, continuing with client logout');
+            }
+
+            // Clear user data from localStorage
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('user_token');
+            localStorage.removeItem('user_role');
+            localStorage.removeItem('user_name');
+            localStorage.removeItem('login_time');
+
+            // Clear any other stored user data
+            localStorage.removeItem('buyer_data');
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+
+            // Clear session storage as well
+            sessionStorage.clear();
+
+            // Reset global variables
+            currentUserId = null;
+            buyerData = null;
+            csrf_token = null;
+
+            console.log('✅ User data cleared successfully');
+
+            // Show logout success message
+            showSuccess('Logged out successfully! Redirecting to login page...');
+
+            // Redirect to login page after a short delay
+            setTimeout(() => {
+                window.location.href = '/directlogin/';
+            }, 1500);
+
+        } catch (error) {
+            console.error('❌ Error during logout:', error);
+            showError('Error occurred during logout. Redirecting anyway...');
+
+            // Even if there's an error, still redirect after clearing local data
+            setTimeout(() => {
+                window.location.href = '/directlogin/';
+            }, 2000);
+        } finally {
+            // Reset flag when logout process is complete
+            isLoggingOut = false;
+        }
+    } else {
+        // User cancelled logout, reset flag
+        isLoggingOut = false;
+    }
+}
+
+/**
+ * Initialize logout button functionality
+ */
+function initializeLogoutButton() {
+    const logoutBtn = document.querySelector('.btn-outline-danger');
+    if (logoutBtn) {
+        // Remove any existing onclick to avoid conflicts
+        logoutBtn.removeAttribute('onclick');
+
+        // Remove any existing event listeners
+        logoutBtn.replaceWith(logoutBtn.cloneNode(true));
+
+        // Get the new button reference after cloning
+        const newLogoutBtn = document.querySelector('.btn-outline-danger');
+        if (newLogoutBtn) {
+            newLogoutBtn.addEventListener('click', logout);
+            newLogoutBtn.style.cursor = 'pointer';
+            console.log('🔐 Logout button initialized');
+        }
+    }
+}
+
+// Make functions globally available for HTML onclick events
+window.editProfile = function () {
+    console.log('👤 Edit profile clicked (global)');
+    toggleProfileEdit(true);
+};
+
+window.editCompanyInfo = function () {
+    console.log('🏢 Edit company info clicked (global)');
+    toggleCompanyEdit(true);
+};
+
+// Add window focus event listener to refresh wallet data when returning to page
+window.addEventListener('focus', function () {
+    if (currentUserId && buyerData) {
+        console.log('🔄 Window focused - refreshing wallet data...');
+        loadBuyerProfile();
+    }
+});
+
 console.log('🔐 WasteBazar Buyer Profile System Loaded');
+
+// Reset logout flag on page load/reload
+isLoggingOut = false;
+
+// Initialize the buyer profile when page loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('🚀 DOM loaded, initializing buyer profile...');
+        isLoggingOut = false; // Reset flag
+        initializeUserData();
+        initializeLogoutButton();
+    });
+} else {
+    // DOM already loaded
+    console.log('🚀 DOM already loaded, initializing buyer profile...');
+    isLoggingOut = false; // Reset flag
+    initializeUserData();
+    initializeLogoutButton();
+}

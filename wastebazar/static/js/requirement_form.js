@@ -106,6 +106,22 @@ async function handleFormSubmission() {
             successMessage.style.display = 'block';
             form.style.display = 'none';
 
+            // Update success message with credit information if available
+            if (result.meta && result.meta.credits_deducted && result.meta.remaining_credits) {
+                const creditInfo = result.meta.remaining_credits;
+                const successMessageElement = document.querySelector('#successMessage .alert');
+                if (successMessageElement) {
+                    successMessageElement.innerHTML = `
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Requirement Posted Successfully!</strong><br>
+                        <small class="text-muted">
+                            1 credit deducted. Remaining credits: ${creditInfo.total_credits} 
+                            (Free: ${creditInfo.free_credits}, Paid: ${creditInfo.paid_credits})
+                        </small>
+                    `;
+                }
+            }
+
             // Scroll to top to show success message
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -115,7 +131,7 @@ async function handleFormSubmission() {
             }, 3000);
 
         } else {
-            throw new Error(result.message || 'Failed to create requirement');
+            throw new Error(result.error || result.message || 'Failed to create requirement');
         }
 
     } catch (error) {
