@@ -92,6 +92,10 @@ class SellerListing(models.Model):
     pincode_location = models.CharField(max_length=100)
     address = models.TextField()
 
+    # Image fields for S3 URLs
+    featured_image_url = models.URLField(max_length=500, null=True, blank=True)
+    gallery_images = models.JSONField(default=list, blank=True)  # List of gallery image URLs
+
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
 
     created_at = models.DateTimeField(auto_now_add=True)

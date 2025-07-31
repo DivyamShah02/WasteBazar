@@ -373,46 +373,82 @@ function renderListings(listings) {
     }
 
     container.innerHTML = listings.map(listing => `
-        <div class="card mb-3">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div>
-                        <h5 class="card-title mb-1">${listing.title || listing.category || 'Listing'}</h5>
-                        <small class="text-muted">#${listing.listing_id}</small>
+        <div class="card mb-3 listing-card">
+            <div class="card-body p-0">
+                <div class="row g-0">
+                    <!-- Featured Image Section -->
+                    <div class="col-12 col-md-3 listing-image-container">
+                        ${listing.featured_image_url ? `
+                            <img src="${listing.featured_image_url}" 
+                                 class="listing-featured-image" 
+                                 alt="Featured image for ${listing.category}"
+                                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzZjNzU3ZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';">
+                        ` : `
+                            <div class="listing-no-image">
+                                <i class="fas fa-image"></i>
+                                <span>No Image</span>
+                            </div>
+                        `}
+                        ${listing.gallery_images && listing.gallery_images.length > 0 ? `
+                            <div class="gallery-indicator">
+                                <i class="fas fa-images"></i>
+                                <span>+${listing.gallery_images.length}</span>
+                            </div>
+                        ` : ''}
                     </div>
-                    <span class="badge bg-${getStatusBadgeColor(listing.status)}">${getStatusLabel(listing.status)}</span>
-                </div>
-                
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <i class="fas fa-weight-hanging me-2 text-primary"></i>
-                        <strong>${listing.quantity} ${listing.unit || 'kg'}</strong>
-                    </div>
-                    <div class="col-md-6">
-                        <i class="fas fa-map-marker-alt me-2 text-primary"></i>
-                        ${listing.city_location || 'Not specified'}${listing.state_location ? ', ' + listing.state_location : ''}
-                    </div>
-                </div>
-                
-                <p class="card-text">${listing.description || 'No description available'}</p>
-                
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <small class="text-muted">
-                            <i class="fas fa-calendar me-1"></i>Created: ${formatDate(listing.created_at)} | 
-                            <i class="fas fa-clock me-1"></i>Valid until: ${formatDate(listing.valid_until)}
-                        </small>
-                    </div>
-                    <div class="requirement-actions">
-                        <button class="btn-action btn-edit" onclick="editListing('${listing.listing_id}')">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
-                        <button class="btn-action btn-pause" onclick="pauseListing('${listing.listing_id}')">
-                            <i class="fas fa-pause"></i> Mark Sold
-                        </button>
-                        <button class="btn-action btn-details" onclick="viewListingDetails('${listing.listing_id}')">
-                            <i class="fas fa-eye"></i> Details
-                        </button>
+                    
+                    <!-- Content Section -->
+                    <div class="col-12 col-md-9">
+                        <div class="listing-content p-3">
+                            <!-- Header with title and status -->
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div class="listing-header">
+                                    <h5 class="card-title mb-1">${listing.category || 'Listing'} - ${listing.subcategory || ''}</h5>
+                                    <small class="text-muted listing-id">#${listing.listing_id}</small>
+                                </div>
+                                <span class="badge bg-${getStatusBadgeColor(listing.status)} status-badge">${getStatusLabel(listing.status)}</span>
+                            </div>
+                            
+                            <!-- Quick Details -->
+                            <div class="row listing-details mb-2">
+                                <div>
+                                    <div class="detail-item">
+                                        <i class="fas fa-weight-hanging text-primary"></i>
+                                        <span class="detail-value">${listing.quantity} ${listing.unit || 'kg'}</span>
+                                    </div>
+                                </div>
+                                <div >
+                                    <div class="detail-item">
+                                        <i class="fas fa-map-marker-alt text-primary"></i>
+                                        <span class="detail-value">${listing.city_location || 'Not specified'}${listing.state_location ? ', ' + listing.state_location : ''}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Description -->
+                            <p class="card-text listing-description mb-2">${truncateText(listing.description || 'No description available', 100)}</p>
+                            
+                            <!-- Dates -->
+                            <div class="listing-dates mb-3">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>Created: ${formatDate(listing.created_at)}
+                                    <span class="d-none d-sm-inline"> | <i class="fas fa-clock me-1"></i>Valid until: ${formatDate(listing.valid_until)}</span>
+                                </small>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="listing-actions d-flex flex-wrap gap-2">
+                                <button class="btn btn-outline-primary btn-sm flex-fill" onclick="editListing('${listing.listing_id}')">
+                                    <i class="fas fa-edit"></i> <span class="d-none d-sm-inline">Edit</span>
+                                </button>
+                                <button class="btn btn-outline-warning btn-sm flex-fill" onclick="pauseListing('${listing.listing_id}')">
+                                    <i class="fas fa-pause"></i> <span class="d-none d-sm-inline">Mark Sold</span>
+                                </button>
+                                <button class="btn btn-outline-info btn-sm flex-fill" onclick="viewListingDetails('${listing.listing_id}')">
+                                    <i class="fas fa-eye"></i> <span class="d-none d-sm-inline">Details</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -444,57 +480,94 @@ function renderUnapprovedListings(unapprovedListings) {
     }
 
     container.innerHTML = unapprovedListings.map(listing => `
-        <div class="card mb-3">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-start mb-3">
-                    <div>
-                        <h5 class="card-title mb-1">${listing.title || listing.category || 'Listing'}</h5>
-                        <small class="text-muted">#${listing.listing_id}</small>
-                    </div>
-                    <span class="badge bg-${getStatusBadgeColor(listing.status)}">${getStatusLabel(listing.status)}</span>
-                </div>
-                
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <i class="fas fa-weight-hanging me-2 text-primary"></i>
-                        <strong>${listing.quantity} ${listing.unit || 'kg'}</strong>
-                    </div>
-                    <div class="col-md-6">
-                        <i class="fas fa-map-marker-alt me-2 text-primary"></i>
-                        ${listing.city_location || 'Not specified'}${listing.state_location ? ', ' + listing.state_location : ''}
-                    </div>
-                </div>
-                
-                <p class="card-text">${listing.description || 'No description available'}</p>
-                
-                ${listing.rejection_reason ? `
-                    <div class="alert alert-warning mb-3">
-                        <strong><i class="fas fa-exclamation-triangle me-2"></i>Rejection Reason:</strong>
-                        ${listing.rejection_reason}
-                    </div>
-                ` : ''}
-                
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <small class="text-muted">
-                            <i class="fas fa-calendar me-1"></i>Submitted: ${formatDate(listing.created_at)}
-                            ${listing.status === 'pending' ? ' | <i class="fas fa-clock me-1"></i>Waiting for review' : ''}
-                        </small>
-                    </div>
-                    <div class="requirement-actions">
-                        ${listing.status === 'rejected' ? `
-                            <button class="btn-action btn-edit" onclick="editListing('${listing.listing_id}')">
-                                <i class="fas fa-edit"></i> Edit & Resubmit
-                            </button>
+        <div class="card mb-3 listing-card">
+            <div class="card-body p-0">
+                <div class="row g-0">
+                    <!-- Featured Image Section -->
+                    <div class="col-12 col-md-3 listing-image-container">
+                        ${listing.featured_image_url ? `
+                            <img src="${listing.featured_image_url}" 
+                                 class="listing-featured-image" 
+                                 alt="Featured image for ${listing.category}"
+                                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzZjNzU3ZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';">
+                        ` : `
+                            <div class="listing-no-image">
+                                <i class="fas fa-image"></i>
+                                <span>No Image</span>
+                            </div>
+                        `}
+                        ${listing.gallery_images && listing.gallery_images.length > 0 ? `
+                            <div class="gallery-indicator">
+                                <i class="fas fa-images"></i>
+                                <span>+${listing.gallery_images.length}</span>
+                            </div>
                         ` : ''}
-                        <button class="btn-action btn-details" onclick="viewListingDetails('${listing.listing_id}')">
-                            <i class="fas fa-eye"></i> Details
-                        </button>
-                        ${listing.status === 'pending' ? `
-                            <button class="btn-action btn-cancel" onclick="cancelListing('${listing.listing_id}')">
-                                <i class="fas fa-times"></i> Cancel
-                            </button>
-                        ` : ''}
+                    </div>
+                    
+                    <!-- Content Section -->
+                    <div class="col-12 col-md-9">
+                        <div class="listing-content p-3">
+                            <!-- Header with title and status -->
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div class="listing-header">
+                                    <h5 class="card-title mb-1">${listing.category || 'Listing'} - ${listing.subcategory || ''}</h5>
+                                    <small class="text-muted listing-id">#${listing.listing_id}</small>
+                                </div>
+                                <span class="badge bg-${getStatusBadgeColor(listing.status)} status-badge">${getStatusLabel(listing.status)}</span>
+                            </div>
+                            
+                            <!-- Quick Details -->
+                            <div class="row listing-details mb-2">
+                                <div >
+                                    <div class="detail-item">
+                                        <i class="fas fa-weight-hanging text-primary"></i>
+                                        <span class="detail-value">${listing.quantity} ${listing.unit || 'kg'}</span>
+                                    </div>
+                                </div>
+                                <div >
+                                    <div class="detail-item">
+                                        <i class="fas fa-map-marker-alt text-primary"></i>
+                                        <span class="detail-value">${listing.city_location || 'Not specified'}${listing.state_location ? ', ' + listing.state_location : ''}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Description -->
+                            <p class="card-text listing-description mb-2">${truncateText(listing.description || 'No description available', 100)}</p>
+                            
+                            <!-- Rejection Reason (if any) -->
+                            ${listing.rejection_reason ? `
+                                <div class="alert alert-warning mb-2 p-2">
+                                    <strong><i class="fas fa-exclamation-triangle me-2"></i>Rejection Reason:</strong>
+                                    <br><small>${listing.rejection_reason}</small>
+                                </div>
+                            ` : ''}
+                            
+                            <!-- Dates -->
+                            <div class="listing-dates mb-3">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>Submitted: ${formatDate(listing.created_at)}
+                                    ${listing.status === 'pending' ? '<span class="d-none d-sm-inline"> | <i class="fas fa-clock me-1"></i>Waiting for review</span>' : ''}
+                                </small>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="listing-actions d-flex flex-wrap gap-2">
+                                ${listing.status === 'rejected' ? `
+                                    <button class="btn btn-outline-primary btn-sm flex-fill" onclick="editListing('${listing.listing_id}')">
+                                        <i class="fas fa-edit"></i> <span class="d-none d-sm-inline">Edit & Resubmit</span>
+                                    </button>
+                                ` : ''}
+                                <button class="btn btn-outline-info btn-sm flex-fill" onclick="viewListingDetails('${listing.listing_id}')">
+                                    <i class="fas fa-eye"></i> <span class="d-none d-sm-inline">Details</span>
+                                </button>
+                                ${listing.status === 'pending' ? `
+                                    <button class="btn btn-outline-danger btn-sm flex-fill" onclick="cancelListing('${listing.listing_id}')">
+                                        <i class="fas fa-times"></i> <span class="d-none d-sm-inline">Cancel</span>
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -833,6 +906,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+/**
+ * Utility function to truncate text
+ */
+function truncateText(text, maxLength) {
+    if (!text) return '';
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+}
 
 console.log('🔐 WasteBazar Seller Profile System Loaded');
 

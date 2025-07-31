@@ -138,33 +138,47 @@
                         </div>
                     </div>
 
-                    <!-- Product Photos -->
+                    <!-- Featured Image -->
                     <div class="form-group mb-4">
-                        <label for="productPhotos" class="form-label">
-                            Product Photos <span class="required">*</span>
+                        <label for="featuredImage" class="form-label">
+                            Featured Image <span class="required">*</span>
                         </label>
                         <div class="photo-upload-container">
-                            <div id="dropZone" class="drop-zone">
-                                <input type="file" id="productPhotos" name="productPhotos" class="form-control" 
-                                       accept="image/*" multiple required>
-                                <div class="drop-zone-content">
-                                    <i class="fas fa-cloud-upload-alt drop-icon"></i>
-                                    <p class="drop-text">Drag & drop your photos here or <span class="browse-link">browse</span></p>
-                                    <p class="drop-subtext">Upload up to 5 high-quality photos (JPG, PNG, WEBP - Max 5MB each)</p>
+                            <div id="featuredDropZone" class="drop-zone featured-drop-zone">
+                                <input type="file" id="featuredImage" name="featuredImage" class="form-control" 
+                                       accept="image/*" style="display: none;">
+                                <div id="featuredImagePreview" class="featured-image-preview">
+                                    <!-- Featured image preview will be displayed here -->
                                 </div>
                             </div>
-                            
-                            <!-- Photo Preview Container -->
-                            <div id="photoPreviewContainer" class="photo-preview-container mt-3">
-                                <!-- Preview images will be displayed here -->
-                            </div>
-                            
-                            <!-- Upload Status -->
-                            <div id="uploadStatus" class="upload-status mt-2">
-                                <span id="photoCount">0/5 photos selected</span>
+                            <div class="form-help">
+                                Upload one high-quality featured image (JPG, PNG, WEBP - Max 5MB)
                             </div>
                         </div>
                     </div>
+
+                    <!-- Gallery Images -->
+                    <div class="form-group mb-4">
+                        <label for="galleryImages" class="form-label">
+                            Gallery Images (Optional)
+                        </label>
+                        <div class="photo-upload-container">
+                            <div id="galleryDropZone" class="drop-zone gallery-drop-zone">
+                                <input type="file" id="galleryImages" name="galleryImages" class="form-control" 
+                                       accept="image/*" multiple style="display: none;">
+                                <div id="galleryPreviewContainer" class="gallery-preview-container">
+                                    <!-- Gallery images preview will be displayed here -->
+                                </div>
+                            </div>
+                            <div class="form-help">
+                                Upload up to 5 additional gallery images (JPG, PNG, WEBP - Max 5MB each)
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upload Status -->
+                    <div id="uploadStatus" class="upload-status mt-2"></div>
+                    <div id="imageCount" class="image-count mt-2"></div>
 
                     <!-- Location Details -->
                     <div class="row mb-4">

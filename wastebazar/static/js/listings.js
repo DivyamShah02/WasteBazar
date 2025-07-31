@@ -381,7 +381,10 @@ function transformApiListings(apiData) {
     city: listing.city_location,
     state: listing.state_location,
     address: listing.address || '',
-    seller_id: listing.seller_user_id
+    seller_id: listing.seller_user_id,
+    featured_image_url: listing.featured_image_url || null,
+    gallery_images: listing.gallery_images || [],
+    has_images: !!(listing.featured_image_url || (listing.gallery_images && listing.gallery_images.length > 0))
   }));
 }
 
@@ -708,8 +711,26 @@ function createListingCard(listing) {
   return `
         <div class="listing-card" data-listing-id="${listing.id}" data-aos="fade-up">
             <div class="listing-image">
-                <i class="${listing.icon}"></i>
+                ${listing.featured_image_url ? `
+                    <img src="${listing.featured_image_url}" 
+                         alt="${listing.title}" 
+                         class="listing-featured-image"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="listing-icon-fallback" style="display: none;">
+                        <i class="${listing.icon}"></i>
+                    </div>
+                ` : `
+                    <div class="listing-icon-fallback">
+                        <i class="${listing.icon}"></i>
+                    </div>
+                `}
                 <div class="listing-badge">${listing.badge}</div>
+                ${listing.gallery_images && listing.gallery_images.length > 0 ? `
+                    <div class="gallery-count">
+                        <i class="fas fa-images"></i>
+                        <span>+${listing.gallery_images.length}</span>
+                    </div>
+                ` : ''}
             </div>
             <div class="listing-content">
                 <h3 class="listing-title">${listing.title}</h3>

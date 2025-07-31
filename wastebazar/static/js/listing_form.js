@@ -5,8 +5,9 @@ let csrf_token = null;
 let create_listing_api_url = null;
 
 // Photo upload variables
-let selectedFiles = [];
-const maxFiles = 5;
+let featuredImage = null;
+let galleryImages = [];
+const maxGalleryImages = 5;
 const maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
 
 // Initialize app function
@@ -34,37 +35,81 @@ function getCsrfToken() {
 function initializeForm() {
     console.log("🔧 Initializing form components...");
 
+    // Check if user is logged in and is a seller
+    const user_id = localStorage.getItem('user_id');
+    const user_role = localStorage.getItem('user_role');
+
+    if (!user_id) {
+        console.error("❌ No user ID found in localStorage");
+        showError('Please log in to create a listing.');
+        return;
+    }
+
+    if (!user_role || (!user_role.includes('seller'))) {
+        console.error("❌ User is not a seller");
+        showError('Only sellers can create listings. Please log in with a seller account.');
+        return;
+    }
+
+    console.log("✅ User authenticated as seller:", user_id);
+
     initializePhotoUpload();
     initializeFormSubmission();
     initializeCategorySubcategory();
     initializeStateDropdown();
+
+    // Initialize image previews
+    updateFeaturedImagePreview();
+    updateGalleryImagesPreview();
+    updateImageCount();
 
     console.log("✅ Form initialization complete");
 }
 
 // Initialize photo upload functionality
 function initializePhotoUpload() {
-    const photoInput = document.getElementById('productPhotos');
-    const previewContainer = document.getElementById('photoPreviewContainer');
-    const photoCount = document.getElementById('photoCount');
-    const uploadStatus = document.getElementById('uploadStatus');
-    const dropZone = document.getElementById('dropZone');
+    const featuredInput = document.getElementById('featuredImage');
+    const galleryInput = document.getElementById('galleryImages');
+    const featuredPreview = document.getElementById('featuredImagePreview');
+    const galleryPreview = document.getElementById('galleryPreviewContainer');
+    const featuredDropZone = document.getElementById('featuredDropZone');
+    const galleryDropZone = document.getElementById('galleryDropZone');
 
-    if (!photoInput || !previewContainer || !photoCount || !uploadStatus || !dropZone) {
+    if (!featuredInput || !galleryInput || !featuredPreview || !galleryPreview) {
         console.error("❌ Photo upload elements not found");
         return;
     }
 
-    // File input change event
-    photoInput.addEventListener('change', function (e) {
-        const files = Array.from(e.target.files);
-        handleFileSelection(files);
+    // Featured image input change event
+    featuredInput.addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        if (file) {
+            handleFeaturedImageSelection(file);
+        }
     });
 
-    // Drag and drop events
+    // Gallery images input change event
+    galleryInput.addEventListener('change', function (e) {
+        const files = Array.from(e.target.files);
+        handleGalleryImagesSelection(files);
+    });
+
+    // Featured image drop zone events
+    if (featuredDropZone) {
+        setupDropZone(featuredDropZone, featuredInput, handleFeaturedImageSelection, false);
+    }
+
+    // Gallery images drop zone events
+    if (galleryDropZone) {
+        setupDropZone(galleryDropZone, galleryInput, handleGalleryImagesSelection, true);
+    }
+}
+
+// Setup drop zone functionality
+function setupDropZone(dropZone, input, handler, isMultiple) {
     dropZone.addEventListener('click', function (e) {
-        if (e.target !== photoInput) {
-            photoInput.click();
+        if (e.target !== input) {
+            input.click();
         }
     });
 
@@ -88,23 +133,31 @@ function initializePhotoUpload() {
         dropZone.classList.remove('drag-over');
 
         const files = Array.from(e.dataTransfer.files);
-        handleFileSelection(files);
-    });
-
-    // Prevent default drag behaviors on document
-    document.addEventListener('dragover', function (e) {
-        e.preventDefault();
-    });
-
-    document.addEventListener('drop', function (e) {
-        e.preventDefault();
+        if (isMultiple) {
+            handler(files);
+        } else {
+            handler(files[0]);
+        }
     });
 }
 
-// Handle file selection
-function handleFileSelection(files) {
-    if (selectedFiles.length + files.length > maxFiles) {
-        showError(`You can only upload a maximum of ${maxFiles} photos.`);
+// Handle featured image selection
+function handleFeaturedImageSelection(file) {
+    if (!file) return;
+
+    if (!validateFile(file)) {
+        return;
+    }
+
+    featuredImage = file;
+    updateFeaturedImagePreview();
+    clearError();
+}
+
+// Handle gallery images selection
+function handleGalleryImagesSelection(files) {
+    if (galleryImages.length + files.length > maxGalleryImages) {
+        showError(`You can only upload a maximum of ${maxGalleryImages} gallery photos.`);
         return;
     }
 
@@ -112,13 +165,115 @@ function handleFileSelection(files) {
         if (!validateFile(file)) {
             return;
         }
-        selectedFiles.push(file);
+        galleryImages.push(file);
     }
 
-    updatePhotoPreview();
-    updatePhotoCount();
+    updateGalleryImagesPreview();
+    updateImageCount();
     clearError();
 }
+
+// Update featured image preview
+function updateFeaturedImagePreview() {
+    const featuredPreview = document.getElementById('featuredImagePreview');
+
+    if (featuredImage) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            featuredPreview.innerHTML = `
+                <div class="featured-image-item">
+                    <img src="${e.target.result}" alt="Featured Image">
+                    <button type="button" class="image-remove-btn" onclick="removeFeaturedImage()" title="Remove featured image">
+                        ×
+                    </button>
+                    <div class="image-label">Featured Image</div>
+                </div>
+            `;
+        };
+        reader.readAsDataURL(featuredImage);
+    } else {
+        featuredPreview.innerHTML = `
+            <div class="image-placeholder">
+                <i class="fas fa-camera"></i>
+                <p>Click or drag to add featured image</p>
+            </div>
+        `;
+    }
+}
+
+// Update gallery images preview
+function updateGalleryImagesPreview() {
+    const galleryPreview = document.getElementById('galleryPreviewContainer');
+    galleryPreview.innerHTML = '';
+
+    galleryImages.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'gallery-image-item';
+            previewItem.innerHTML = `
+                <img src="${e.target.result}" alt="Gallery Image ${index + 1}">
+                <button type="button" class="image-remove-btn" onclick="removeGalleryImage(${index})" title="Remove image">
+                    ×
+                </button>
+                <div class="image-label">Gallery ${index + 1}</div>
+            `;
+            galleryPreview.appendChild(previewItem);
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Add placeholder for remaining slots
+    const remainingSlots = maxGalleryImages - galleryImages.length;
+    for (let i = 0; i < remainingSlots; i++) {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'gallery-image-placeholder';
+        placeholder.innerHTML = `
+            <i class="fas fa-plus"></i>
+            <p>Add Image</p>
+        `;
+        placeholder.onclick = () => document.getElementById('galleryImages').click();
+        galleryPreview.appendChild(placeholder);
+    }
+}
+
+// Update image count display
+function updateImageCount() {
+    const imageCount = document.getElementById('imageCount');
+    if (imageCount) {
+        const totalImages = (featuredImage ? 1 : 0) + galleryImages.length;
+        const maxTotal = 1 + maxGalleryImages; // 1 featured + 5 gallery
+        imageCount.textContent = `${totalImages}/${maxTotal} images selected`;
+    }
+}
+
+// Remove featured image function (global)
+window.removeFeaturedImage = function () {
+    featuredImage = null;
+    updateFeaturedImagePreview();
+    updateImageCount();
+
+    // Clear the file input
+    const featuredInput = document.getElementById('featuredImage');
+    if (featuredInput) {
+        featuredInput.value = '';
+    }
+};
+
+// Remove gallery image function (global)
+window.removeGalleryImage = function (index) {
+    galleryImages.splice(index, 1);
+    updateGalleryImagesPreview();
+    updateImageCount();
+
+    // Update the file input
+    const dt = new DataTransfer();
+    galleryImages.forEach(file => dt.items.add(file));
+    const galleryInput = document.getElementById('galleryImages');
+    if (galleryInput) {
+        galleryInput.files = dt.files;
+    }
+};
 
 // Validate individual file
 function validateFile(file) {
@@ -135,50 +290,6 @@ function validateFile(file) {
     return true;
 }
 
-// Update photo preview
-function updatePhotoPreview() {
-    const previewContainer = document.getElementById('photoPreviewContainer');
-    previewContainer.innerHTML = '';
-
-    selectedFiles.forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const previewItem = document.createElement('div');
-            previewItem.className = 'photo-preview-item';
-            previewItem.innerHTML = `
-        <img src="${e.target.result}" alt="Photo ${index + 1}">
-        <button type="button" class="photo-remove-btn" onclick="removePhoto(${index})" title="Remove photo">
-          ×
-        </button>
-      `;
-            previewContainer.appendChild(previewItem);
-        };
-        reader.readAsDataURL(file);
-    });
-}
-
-// Update photo count
-function updatePhotoCount() {
-    const photoCount = document.getElementById('photoCount');
-    photoCount.textContent = `${selectedFiles.length}/${maxFiles} photos selected`;
-}
-
-// Remove photo function (global)
-window.removePhoto = function (index) {
-    selectedFiles.splice(index, 1);
-    updatePhotoPreview();
-    updatePhotoCount();
-
-    // Update the file input
-    const dt = new DataTransfer();
-    selectedFiles.forEach(file => dt.items.add(file));
-    document.getElementById('productPhotos').files = dt.files;
-
-    if (selectedFiles.length === 0) {
-        clearError();
-    }
-};
-
 // Initialize form submission
 function initializeFormSubmission() {
     const form = document.getElementById('listingForm');
@@ -191,8 +302,8 @@ function initializeFormSubmission() {
     form.addEventListener('submit', function (e) {
         e.preventDefault();
 
-        if (selectedFiles.length === 0) {
-            showError('Please upload at least one photo of your product.');
+        if (!featuredImage && galleryImages.length === 0) {
+            showError('Please upload at least one image (featured or gallery).');
             return false;
         }
 
@@ -220,6 +331,18 @@ async function handleFormSubmission() {
         // Create FormData object
         const formData = new FormData();
 
+        // Get user_id from localStorage
+        const user_id = localStorage.getItem('user_id');
+        if (!user_id) {
+            showError('User ID not found. Please log in again.');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Create Listing';
+            return;
+        }
+
+        // Add user_id to form data
+        formData.append('user_id', user_id);
+
         // Add form fields
         formData.append('category', document.getElementById('category').value);
         formData.append('subcategory', document.getElementById('subcategory').value);
@@ -231,10 +354,19 @@ async function handleFormSubmission() {
         formData.append('pincode_location', document.getElementById('pincode_location').value);
         formData.append('address', document.getElementById('address').value);
 
-        // Add photos
-        selectedFiles.forEach((file, index) => {
-            formData.append('photos', file);
+        // Add featured image
+        if (featuredImage) {
+            formData.append('featured_image', featuredImage);
+        }
+
+        // Add gallery images
+        galleryImages.forEach((file, index) => {
+            formData.append(`gallery_image_${index + 1}`, file);
         });
+
+        console.log("📤 Submitting listing with user_id:", user_id);
+        console.log("📤 Featured image:", featuredImage ? featuredImage.name : 'None');
+        console.log("📤 Gallery images:", galleryImages.length);
 
         // Make API call using the centralized API caller
         const [success, result] = await callApi(
@@ -379,13 +511,17 @@ function initializeStateDropdown() {
 // Error handling functions
 function showError(message) {
     const uploadStatus = document.getElementById('uploadStatus');
-    uploadStatus.className = 'upload-status error mt-2';
-    uploadStatus.innerHTML = `<span>${message}</span>`;
+    if (uploadStatus) {
+        uploadStatus.className = 'upload-status error mt-2';
+        uploadStatus.innerHTML = `<span>${message}</span>`;
+    }
 }
 
 function clearError() {
     const uploadStatus = document.getElementById('uploadStatus');
-    uploadStatus.className = 'upload-status mt-2';
-    const photoCount = document.getElementById('photoCount');
-    uploadStatus.innerHTML = `<span id="photoCount">${selectedFiles.length}/${maxFiles} photos selected</span>`;
+    if (uploadStatus) {
+        uploadStatus.className = 'upload-status mt-2';
+        uploadStatus.innerHTML = '';
+    }
+    updateImageCount();
 }
