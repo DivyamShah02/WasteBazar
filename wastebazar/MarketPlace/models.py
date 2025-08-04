@@ -78,9 +78,9 @@ class SellerListing(models.Model):
     ]
 
     listing_id = models.CharField(max_length=15)
-    category = models.CharField(max_length=15)
-    subcategory = models.CharField(max_length=15)
-    
+    category_id = models.BigIntegerField(null=True)  # Reference to Category.category_id
+    subcategory_id = models.BigIntegerField(null=True)  # Reference to SubCategory.sub_category_id
+
     seller_user_id = models.CharField(max_length=15)
     
     quantity = models.FloatField()
@@ -124,7 +124,23 @@ class SellerListing(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.listing_id} - {self.category}/{self.subcategory}"
+        return f"{self.listing_id} - {self.get_category_name()}/{self.get_subcategory_name()}"
+
+    def get_category_name(self):
+        """Get category name from category_id"""
+        try:
+            category = Category.objects.get(category_id=self.category_id)
+            return category.title
+        except Category.DoesNotExist:
+            return f"Category ID: {self.category_id}"
+
+    def get_subcategory_name(self):
+        """Get subcategory name from subcategory_id"""
+        try:
+            subcategory = SubCategory.objects.get(sub_category_id=self.subcategory_id)
+            return subcategory.title
+        except SubCategory.DoesNotExist:
+            return f"Subcategory ID: {self.subcategory_id}"
 
     def is_expired(self):
         """Check if the listing has expired"""
@@ -162,9 +178,9 @@ class BuyerRequirement(models.Model):
     ]
 
     requirement_id = models.CharField(max_length=15)
-    category = models.CharField(max_length=15)
-    subcategory = models.CharField(max_length=15)
-    
+    category_id = models.BigIntegerField(null=True)  # Reference to Category.category_id
+    subcategory_id = models.BigIntegerField(null=True)  # Reference to SubCategory.sub_category_id
+
     buyer_user_id = models.CharField(max_length=15)
 
     quantity = models.FloatField()
@@ -196,4 +212,23 @@ class BuyerRequirement(models.Model):
             self.requirement_id = new_requirement_id
 
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.requirement_id} - {self.get_category_name()}/{self.get_subcategory_name()}"
+
+    def get_category_name(self):
+        """Get category name from category_id"""
+        try:
+            category = Category.objects.get(category_id=self.category_id)
+            return category.title
+        except Category.DoesNotExist:
+            return f"Category ID: {self.category_id}"
+
+    def get_subcategory_name(self):
+        """Get subcategory name from subcategory_id"""
+        try:
+            subcategory = SubCategory.objects.get(sub_category_id=self.subcategory_id)
+            return subcategory.title
+        except SubCategory.DoesNotExist:
+            return f"Subcategory ID: {self.subcategory_id}"
 

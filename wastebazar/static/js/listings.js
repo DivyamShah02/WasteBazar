@@ -7,6 +7,10 @@ const bootstrap = window.bootstrap // Declare bootstrap variable
 // Global variables for API endpoints and CSRF token
 let csrf_token = null;
 let all_listings_api_url = null;
+let categories_api_url = "/marketplace-api/categories/"; // Categories API endpoint
+
+// Categories data
+let categoriesData = [];
 
 // Initialize app function
 async function ListingsApp(csrf_token_param, all_listings_api_url_param) {
@@ -32,6 +36,141 @@ async function ListingsApp(csrf_token_param, all_listings_api_url_param) {
 
 function getCsrfToken() {
   return csrf_token;
+}
+
+// Load categories from API
+async function loadCategories() {
+  try {
+    console.log("📡 Loading categories from API...");
+
+    const response = await fetch("/marketplace-api/categories/with_subcategories/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCsrfToken(),
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("✅ Categories loaded successfully:", data);
+
+    // Handle both data.data and data response formats, and ensure we use the correct structure
+    const rawData = data.data || data || [];
+    categoriesData = rawData;
+    populateCategories();
+
+    // After categories are loaded, reload listings to apply any URL filters
+    loadListingsFromAPI();
+
+  } catch (error) {
+    console.error("❌ Error loading categories:", error);
+    // If API fails, we'll rely on existing hardcoded options
+    // Still try to set URL parameters and load listings
+    setUrlParameterValues();
+    loadListingsFromAPI();
+  }
+}// Populate category dropdowns
+function populateCategories() {
+  const categorySelect = document.getElementById("categoryFilter");
+
+  if (!categoriesData.length) {
+    console.log("⚠️ Category select element not found or no categories data");
+    return;
+  }
+
+  // Clear existing options except the first "All Categories" option
+  while (categorySelect.children.length > 1) {
+    categorySelect.removeChild(categorySelect.lastChild);
+  }
+
+  // Add categories
+  categoriesData.forEach(category => {
+    const option = document.createElement("option");
+    option.value = category.category_id || category.id;
+    option.textContent = category.title || category.name;
+    categorySelect.appendChild(option);
+  });
+
+  console.log("✅ Categories populated in dropdown");
+
+  // After populating categories, set values from URL parameters if they exist
+  setUrlParameterValues();
+}
+
+// Populate subcategories based on selected category
+function populateSubcategories(categoryId) {
+  const subcategorySelect = document.getElementById("subcategoryFilter");
+
+  if (!subcategorySelect || !categoriesData.length) {
+    console.log("⚠️ Subcategory select element not found or no categories data");
+    return;
+  }
+
+  // Clear existing options
+  subcategorySelect.innerHTML = '<option value="">All Subcategories</option>';
+
+  if (!categoryId) {
+    return;
+  }
+
+  // Find the selected category
+  const selectedCategory = categoriesData.find(cat => (cat.category_id || cat.id) == categoryId);
+
+  if (selectedCategory && selectedCategory.subcategories) {
+    selectedCategory.subcategories.forEach(subcategory => {
+      const option = document.createElement("option");
+      option.value = subcategory.sub_category_id || subcategory.id;
+      option.textContent = subcategory.title || subcategory.name;
+      subcategorySelect.appendChild(option);
+    });
+  }
+
+  console.log(`✅ Subcategories populated for category ${categoryId}`);
+}
+
+// Set form values from URL parameters (called after categories are loaded)
+function setUrlParameterValues() {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  // Map URL parameters to filters
+  const urlParamMapping = {
+    'category_id': 'category_id',
+    'subcategory_id': 'subcategory_id',
+    'search': 'search',
+    'location': 'location',
+    'city_location': 'city_location',
+    'state_location': 'state_location',
+    'min_quantity': 'minQuantity',
+    'max_quantity': 'maxQuantity',
+    'unit': 'unit',
+    'sort': 'sort'
+  };
+
+  // Update filters from URL parameters
+  Object.entries(urlParamMapping).forEach(([urlParam, filterKey]) => {
+    const value = urlParams.get(urlParam);
+    if (value) {
+      filters[filterKey] = value;
+
+      // Update corresponding form elements
+      const elementId = getFilterElementId(filterKey);
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.value = value;
+
+        // If this is a category selection, populate subcategories
+        if (filterKey === 'category_id') {
+          populateSubcategories(value);
+        }
+      }
+    }
+  });
+
+  console.log("✅ URL parameters applied to form elements");
 }
 
 // Sample listings data (keeping as fallback)
@@ -112,8 +251,8 @@ const itemsPerPage = 20
 let currentView = "grid"
 let filters = {
   search: "",
-  category: "",
-  subcategory: "",
+  category_id: "",
+  subcategory_id: "",
   location: "",
   city_location: "",
   state_location: "",
@@ -143,6 +282,9 @@ document.addEventListener("DOMContentLoaded", () => {
 function initializePage() {
   console.log("🔧 Initializing page...");
 
+  // Load categories first (this will also trigger loadListingsFromAPI after categories are loaded)
+  loadCategories();
+
   // Navbar scroll effect
   window.addEventListener("scroll", () => {
     const navbar = document.getElementById("navbar")
@@ -153,48 +295,15 @@ function initializePage() {
     }
   })
 
-  // Parse URL parameters and set filters
-  const urlParams = new URLSearchParams(window.location.search);
-
-  // Map URL parameters to filters
-  const urlParamMapping = {
-    'category': 'category',
-    'subcategory': 'subcategory',
-    'search': 'search',
-    'location': 'location',
-    'city_location': 'city_location',
-    'state_location': 'state_location',
-    'min_quantity': 'minQuantity',
-    'max_quantity': 'maxQuantity',
-    'unit': 'unit',
-    'sort': 'sort'
-  };
-
-  // Update filters from URL parameters
-  Object.entries(urlParamMapping).forEach(([urlParam, filterKey]) => {
-    const value = urlParams.get(urlParam);
-    if (value) {
-      filters[filterKey] = value;
-
-      // Update corresponding form elements
-      const elementId = getFilterElementId(filterKey);
-      const element = document.getElementById(elementId);
-      if (element) {
-        element.value = value;
-      }
-    }
-  });
-
-  // Load listings from API
-  loadListingsFromAPI()
+  // URL parameters will be applied after categories load in setUrlParameterValues()
 }
 
 // Helper function to map filter keys to element IDs
 function getFilterElementId(filterKey) {
   const mapping = {
     'search': 'searchInput',
-    'category': 'categoryFilter',
-    'subcategory': 'subcategoryFilter',
+    'category_id': 'categoryFilter',
+    'subcategory_id': 'subcategoryFilter',
     'location': 'locationFilter',
     'city_location': 'cityLocationFilter',
     'state_location': 'stateLocationFilter',
@@ -228,13 +337,13 @@ async function loadListingsFromAPI() {
     let queryParams = {};
 
     // Category filter
-    if (filters.category && filters.category.trim() !== '') {
-      queryParams.category = filters.category;
+    if (filters.category_id && filters.category_id.trim() !== '') {
+      queryParams.category_id = filters.category_id;
     }
 
     // Subcategory filter
-    if (filters.subcategory && filters.subcategory.trim() !== '') {
-      queryParams.subcategory = filters.subcategory;
+    if (filters.subcategory_id && filters.subcategory_id.trim() !== '') {
+      queryParams.subcategory_id = filters.subcategory_id;
     }
 
     // Location filters
@@ -307,7 +416,7 @@ async function loadListingsFromAPI() {
       // Apply any additional client-side filters
       applyFilters();
 
-      // Load listings into UI
+      // Load listings into UIdd
       loadListings();
 
       // Update results count
@@ -366,20 +475,20 @@ function showErrorState(message) {
 function transformApiListings(apiData) {
   return apiData.map(listing => ({
     id: listing.listing_id,
-    title: `${listing.category} - ${listing.subcategory}`,
-    category: listing.category.toLowerCase(),
-    location: listing.city_location.toLowerCase(),
+    title: `${listing.category_name || 'Unknown Category'} - ${listing.subcategory_name || 'Unknown Subcategory'}`,
+    category: (listing.category_name || 'unknown').toLowerCase(),
+    location: (listing.city_location || 'unknown').toLowerCase(),
     price: 0, // API doesn't have price, using 0
-    quantity: listing.quantity,
-    grade: listing.subcategory,
+    quantity: listing.quantity || 0,
+    grade: listing.subcategory_name || 'Standard',
     availability: "Available",
     badge: "Verified",
     postedDate: formatDate(listing.created_at),
-    icon: getCategoryIcon(listing.category),
-    unit: listing.unit,
+    icon: getCategoryIcon(listing.category_name || 'default'),
+    unit: listing.unit || 'Tons',
     description: listing.description || '',
-    city: listing.city_location,
-    state: listing.state_location,
+    city: listing.city_location || '',
+    state: listing.state_location || '',
     address: listing.address || '',
     seller_id: listing.seller_user_id,
     featured_image_url: listing.featured_image_url || null,
@@ -400,22 +509,41 @@ function getCategoryIcon(category) {
     'default': 'fas fa-box'
   };
 
+  if (!category || typeof category !== 'string') {
+    return categoryIcons['default'];
+  }
+
   return categoryIcons[category.toLowerCase()] || categoryIcons['default'];
 }
 
 // Format date
 function formatDate(dateString) {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffTime = Math.abs(now - date);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  if (!dateString) {
+    return "Recently posted";
+  }
 
-  if (diffDays === 1) {
-    return "1 day ago";
-  } else if (diffDays < 7) {
-    return `${diffDays} days ago`;
-  } else {
-    return date.toLocaleDateString();
+  try {
+    const date = new Date(dateString);
+
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      return "Recently posted";
+    }
+
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 1) {
+      return "1 day ago";
+    } else if (diffDays < 7) {
+      return `${diffDays} days ago`;
+    } else {
+      return date.toLocaleDateString();
+    }
+  } catch (error) {
+    console.warn("Error formatting date:", error);
+    return "Recently posted";
   }
 }
 
@@ -470,11 +598,17 @@ function setupEventListeners() {
 
   if (categoryFilter) {
     categoryFilter.addEventListener("change", (e) => {
-      // When category changes, clear subcategory and update filters
+      const categoryId = e.target.value;
+
+      // Populate subcategories based on selected category
+      populateSubcategories(categoryId);
+
+      // Clear subcategory selection when category changes
       const subcategoryFilter = document.getElementById("subcategoryFilter");
       if (subcategoryFilter) {
         subcategoryFilter.value = "";
       }
+
       updateFilters();
     });
   }
@@ -511,17 +645,94 @@ function setupEventListeners() {
       const category = this.dataset.category;
       const subcategory = this.dataset.subcategory || "";
 
-      filters.category = category;
-      filters.subcategory = subcategory;
+      console.log("🔍 Category clicked:", category, "Subcategory:", subcategory);
 
+      // Find category ID from categoriesData if available
+      let categoryId = "";
+      let subcategoryId = "";
+
+      if (categoriesData && categoriesData.length > 0) {
+        // Try multiple matching strategies for robustness
+        let categoryData = null;
+
+        // First try: exact name match (case insensitive)
+        categoryData = categoriesData.find(cat =>
+          (cat.title || cat.name) && (cat.title || cat.name).toLowerCase() === category.toLowerCase()
+        );
+
+        // Second try: partial name match (for cases like "plastic" matching "Plastic")
+        if (!categoryData) {
+          categoryData = categoriesData.find(cat =>
+            (cat.title || cat.name) && (cat.title || cat.name).toLowerCase().includes(category.toLowerCase())
+          );
+        }
+
+        // Third try: if category is a number, use it as ID directly
+        if (!categoryData && !isNaN(category)) {
+          categoryData = categoriesData.find(cat => (cat.category_id || cat.id).toString() === category);
+        }
+
+        if (categoryData) {
+          categoryId = (categoryData.category_id || categoryData.id).toString();
+          console.log("✅ Found category ID:", categoryId, "for category:", category);
+
+          // Find subcategory ID if subcategory is specified
+          if (subcategory && categoryData.subcategories) {
+            let subcategoryData = null;
+
+            // Try exact match first
+            subcategoryData = categoryData.subcategories.find(sub =>
+              (sub.title || sub.name) && (sub.title || sub.name).toLowerCase() === subcategory.toLowerCase()
+            );
+
+            // Try partial match
+            if (!subcategoryData) {
+              subcategoryData = categoryData.subcategories.find(sub =>
+                (sub.title || sub.name) && (sub.title || sub.name).toLowerCase().includes(subcategory.toLowerCase())
+              );
+            }
+
+            // Try ID match if subcategory is a number
+            if (!subcategoryData && !isNaN(subcategory)) {
+              subcategoryData = categoryData.subcategories.find(sub => (sub.sub_category_id || sub.id).toString() === subcategory);
+            }
+
+            if (subcategoryData) {
+              subcategoryId = (subcategoryData.sub_category_id || subcategoryData.id).toString();
+              console.log("✅ Found subcategory ID:", subcategoryId, "for subcategory:", subcategory);
+            }
+          }
+        } else {
+          console.warn("⚠️ Could not find category data for:", category);
+        }
+      } else {
+        console.warn("⚠️ No categories data available for mapping");
+      }
+
+      // Update filters with the mapped IDs
+      filters.category_id = categoryId;
+      filters.subcategory_id = subcategoryId;
+
+      console.log("🔄 Updated filters - Category ID:", categoryId, "Subcategory ID:", subcategoryId);
+
+      // Update form elements
       if (categoryFilter) {
-        categoryFilter.value = category;
+        categoryFilter.value = categoryId;
+        console.log("✅ Updated category filter dropdown to:", categoryId);
       }
 
       if (subcategoryFilter) {
-        subcategoryFilter.value = subcategory;
+        // Populate subcategories for the selected category first
+        populateSubcategories(categoryId);
+
+        // Set subcategory value after population
+        setTimeout(() => {
+          subcategoryFilter.value = subcategoryId;
+          console.log("✅ Updated subcategory filter dropdown to:", subcategoryId);
+        }, 100);
       }
 
+      // Apply the filters and reload listings
       updateFilters();
     });
   });
@@ -536,8 +747,8 @@ function performSearch() {
 function updateFilters() {
   // Update filter object
   filters.search = document.getElementById("searchInput")?.value.trim() || "";
-  filters.category = document.getElementById("categoryFilter")?.value || "";
-  filters.subcategory = document.getElementById("subcategoryFilter")?.value || "";
+  filters.category_id = document.getElementById("categoryFilter")?.value || "";
+  filters.subcategory_id = document.getElementById("subcategoryFilter")?.value || "";
   filters.location = document.getElementById("locationFilter")?.value || "";
   filters.city_location = document.getElementById("cityLocationFilter")?.value || "";
   filters.state_location = document.getElementById("stateLocationFilter")?.value || "";
@@ -606,11 +817,17 @@ function clearAllFilters() {
     }
   });
 
+  // Clear subcategories when category is cleared
+  const subcategoryFilter = document.getElementById("subcategoryFilter");
+  if (subcategoryFilter) {
+    subcategoryFilter.innerHTML = '<option value="">All Subcategories</option>';
+  }
+
   // Reset filter object
   filters = {
     search: "",
-    category: "",
-    subcategory: "",
+    category_id: "",
+    subcategory_id: "",
     location: "",
     city_location: "",
     state_location: "",
@@ -816,9 +1033,16 @@ function updateResultsInfo() {
 
   document.getElementById("resultsCount").textContent = `Showing ${startIndex}-${endIndex} of ${total} listings`
 
-  const categoryText = filters.category
-    ? filters.category.charAt(0).toUpperCase() + filters.category.slice(1) + " "
-    : ""
+  // Get category name from categoriesData for display
+  let categoryText = "";
+  if (filters.category_id && categoriesData.length > 0) {
+    const categoryData = categoriesData.find(cat => (cat.category_id || cat.id).toString() === filters.category_id);
+    if (categoryData && (categoryData.title || categoryData.name)) {
+      const categoryName = categoryData.title || categoryData.name;
+      categoryText = categoryName.charAt(0).toUpperCase() + categoryName.slice(1) + " ";
+    }
+  }
+
   document.getElementById("resultsDescription").textContent = `${categoryText}scrap materials from verified sellers`
 }
 

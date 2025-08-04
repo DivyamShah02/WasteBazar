@@ -140,16 +140,23 @@ async function loadSellerListings() {
             renderUnapprovedListings(unapprovedListings);
             updateListingsStats(listings, meta);
         } else {
-            console.error('❌ Failed to load listings:', response.error);
+            console.error('❌ Failed to load listings:', response?.error || 'Unknown error');
+            // Show empty state instead of error to maintain UI
             renderListings([]);
             renderUnapprovedListings([]);
             updateListingsStats([], {});
+
+            // Only show error if it's not just "no listings found"
+            if (response?.error && !response.error.includes('not found')) {
+                showError(response.error);
+            }
         }
     } catch (error) {
         console.error('❌ Error loading listings:', error);
         renderListings([]);
         renderUnapprovedListings([]);
         updateListingsStats([], {});
+        showError('Failed to load listings. Please refresh the page.');
     }
 }
 
@@ -364,7 +371,7 @@ function renderListings(listings) {
                 </div>
                 <h4>No Listings Yet</h4>
                 <p class="text-muted">Start selling by creating your first listing!</p>
-                <button class="btn btn-primary" onclick="/listing-form">
+                <button class="btn btn-primary" onclick="window.location.href='/listing-form/'">
                     <i class="fas fa-plus me-2"></i>Create First Listing
                 </button>
             </div>
@@ -411,13 +418,13 @@ function renderListings(listings) {
                             
                             <!-- Quick Details -->
                             <div class="row listing-details mb-2">
-                                <div>
+                                <div class="col-6 col-sm-4">
                                     <div class="detail-item">
                                         <i class="fas fa-weight-hanging text-primary"></i>
                                         <span class="detail-value">${listing.quantity} ${listing.unit || 'kg'}</span>
                                     </div>
                                 </div>
-                                <div >
+                                <div class="col-6 col-sm-8">
                                     <div class="detail-item">
                                         <i class="fas fa-map-marker-alt text-primary"></i>
                                         <span class="detail-value">${listing.city_location || 'Not specified'}${listing.state_location ? ', ' + listing.state_location : ''}</span>
@@ -518,13 +525,13 @@ function renderUnapprovedListings(unapprovedListings) {
                             
                             <!-- Quick Details -->
                             <div class="row listing-details mb-2">
-                                <div >
+                                <div class="col-6 col-sm-4">
                                     <div class="detail-item">
                                         <i class="fas fa-weight-hanging text-primary"></i>
                                         <span class="detail-value">${listing.quantity} ${listing.unit || 'kg'}</span>
                                     </div>
                                 </div>
-                                <div >
+                                <div class="col-6 col-sm-8">
                                     <div class="detail-item">
                                         <i class="fas fa-map-marker-alt text-primary"></i>
                                         <span class="detail-value">${listing.city_location || 'Not specified'}${listing.state_location ? ', ' + listing.state_location : ''}</span>
@@ -732,9 +739,32 @@ window.editListing = function (listingId) {
     window.location.href = `/listing-form/?edit=${listingId}`;
 };
 
-window.pauseListing = function (listingId) {
-    console.log('Pause/Activate listing:', listingId);
-    // This would need API implementation
+window.pauseListing = async function (listingId) {
+    console.log('Mark as sold listing:', listingId);
+
+    if (!confirm('Are you sure you want to mark this listing as sold?')) {
+        return;
+    }
+
+    try {
+        const [success, response] = await callApi(
+            'PATCH',
+            `/marketplace-api/seller-listings/${listingId}/`,
+            { user_id: current_user_id },
+            csrf_token
+        );
+
+        if (success && response.success) {
+            showSuccess('Listing marked as sold successfully!');
+            // Reload listings to update the UI
+            await loadSellerListings();
+        } else {
+            throw new Error(response.error || 'Failed to mark listing as sold');
+        }
+    } catch (error) {
+        console.error('Error marking listing as sold:', error);
+        showError('Failed to mark listing as sold: ' + error.message);
+    }
 };
 
 window.viewListingDetails = function (listingId) {
@@ -742,11 +772,78 @@ window.viewListingDetails = function (listingId) {
     window.location.href = `/listing-detail/?id=${listingId}`;
 };
 
-window.cancelListing = function (listingId) {
+window.cancelListing = async function (listingId) {
     console.log('Cancel listing:', listingId);
-    if (confirm('Are you sure you want to cancel this listing?')) {
-        // This would need API implementation to cancel the listing
-        console.log('Canceling listing:', listingId);
+
+    if (!confirm('Are you sure you want to cancel this listing? This action cannot be undone.')) {
+        return;
+    }
+
+    try {
+        // For now, we'll mark it as inactive since there's no delete endpoint
+        // You can implement a proper delete endpoint later if needed
+        const [success, response] = await callApi(
+            'PUT',
+            `/marketplace-api/seller-listings/${listingId}/`,
+            {
+                user_id: current_user_id,
+                status: 'deleted'
+            },
+            csrf_token
+        );
+
+        if (success && response.success) {
+            showSuccess('Listing cancelled successfully!');
+            // Reload listings to update the UI
+            await loadSellerListings();
+        } else {
+            throw new Error(response.error || 'Failed to cancel listing');
+        }
+    } catch (error) {
+        console.error('Error cancelling listing:', error);
+        showError('Failed to cancel listing: ' + error.message);
+    }
+};
+
+/**
+ * Logout functionality
+ */
+window.logout = function () {
+    console.log('🚪 Logging out user...');
+
+    if (confirm('Are you sure you want to logout?')) {
+        try {
+            // Clear all user data from localStorage
+            localStorage.removeItem('user_id');
+            localStorage.removeItem('user_role');
+            localStorage.removeItem('user_name');
+            localStorage.removeItem('user_email');
+            localStorage.removeItem('is_logged_in');
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+
+            // Clear any other session data
+            sessionStorage.clear();
+
+            console.log('✅ User data cleared from localStorage');
+
+            // Show logout message
+            showSuccess('Logged out successfully!');
+
+            // Redirect to direct login page after a short delay
+            setTimeout(() => {
+                window.location.href = '/directlogin/';
+            }, 1000);
+
+        } catch (error) {
+            console.error('❌ Error during logout:', error);
+            showError('Error during logout. Redirecting anyway...');
+
+            // Force redirect even if there's an error
+            setTimeout(() => {
+                window.location.href = '/directlogin/';
+            }, 1500);
+        }
     }
 };
 
@@ -903,6 +1000,26 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', function (e) {
             e.preventDefault(); // Prevent default navigation
             window.location.href = '/listing-form/';
+        });
+    });
+
+    // Set up logout button functionality
+    const logoutButtons = document.querySelectorAll('a[href="#logout"], button[onclick*="logout"], .logout-btn, [data-action="logout"]');
+
+    logoutButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent default navigation
+            logout();
+        });
+    });
+
+    // Also handle any logout links in the navbar or sidebar
+    const navLogoutLinks = document.querySelectorAll('a[href="/logout/"], a[href*="logout"]');
+
+    navLogoutLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault(); // Prevent default navigation
+            logout();
         });
     });
 });

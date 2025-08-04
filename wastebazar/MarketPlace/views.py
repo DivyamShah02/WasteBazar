@@ -141,7 +141,7 @@ class SellerListingViewSet(viewsets.ViewSet):
                 "error": f"Seller not found with ID: {user_id}"
             }, status=status.HTTP_404_NOT_FOUND)
 
-        required_fields = ['category', 'subcategory', 'quantity', 'unit', 'city_location', 'state_location', 'pincode_location', 'address']
+        required_fields = ['category_id', 'subcategory_id', 'quantity', 'unit', 'city_location', 'state_location', 'pincode_location', 'address']
         for field in required_fields:
             if not data.get(field):
                 return Response({
@@ -152,12 +152,35 @@ class SellerListingViewSet(viewsets.ViewSet):
                     "error": f"{field} is required."
                 }, status=status.HTTP_400_BAD_REQUEST)
 
+        # Validate category_id and subcategory_id exist
+        try:
+            category = Category.objects.get(category_id=data['category_id'])
+        except Category.DoesNotExist:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": f"Category with ID {data['category_id']} does not exist."
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            subcategory = SubCategory.objects.get(sub_category_id=data['subcategory_id'])
+        except SubCategory.DoesNotExist:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": f"Subcategory with ID {data['subcategory_id']} does not exist."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
         # Create the listing first
         listing = SellerListing.objects.create(
             seller_user_id=user_id,
             # seller_user_id="SC5294468983",
-            category=data['category'],
-            subcategory=data['subcategory'],
+            category_id=data['category_id'],
+            subcategory_id=data['subcategory_id'],
             quantity=data['quantity'],
             unit=data['unit'],
             description=data.get('description', ''),
@@ -323,12 +346,37 @@ class SellerListingViewSet(viewsets.ViewSet):
                 "error": "No data provided for update."
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        updatable_fields = ['category', 'subcategory', 'quantity', 'unit', 'description', 
+        updatable_fields = ['category_id', 'subcategory_id', 'quantity', 'unit', 'description', 
                         'city_location', 'state_location', 'pincode_location', 'address']
         
         updated_fields = []
         for field in updatable_fields:
             if field in data:
+                # Validate category_id and subcategory_id if they are being updated
+                if field == 'category_id':
+                    try:
+                        Category.objects.get(category_id=data[field])
+                    except Category.DoesNotExist:
+                        return Response({
+                            "success": False,
+                            "user_not_logged_in": False,
+                            "user_unauthorized": False,
+                            "data": None,
+                            "error": f"Category with ID {data[field]} does not exist."
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                
+                if field == 'subcategory_id':
+                    try:
+                        SubCategory.objects.get(sub_category_id=data[field])
+                    except SubCategory.DoesNotExist:
+                        return Response({
+                            "success": False,
+                            "user_not_logged_in": False,
+                            "user_unauthorized": False,
+                            "data": None,
+                            "error": f"Subcategory with ID {data[field]} does not exist."
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                
                 setattr(listing, field, data[field])
                 updated_fields.append(field)
 
@@ -621,14 +669,23 @@ class AllListingsViewset(viewsets.ViewSet):
         listings = SellerListing.objects.filter(status='approved')
         
         # Get filter parameters from request body or query params
-        filters = request.data if request.data else request.query_params
+        filters = request.query_params
         
         # Apply filters if provided
-        if filters.get('category'):
-            listings = listings.filter(category__icontains=filters['category'])
+        if filters.get('category_id'):
+            listings = listings.filter(category_id=filters['category_id'])
+       
+        if filters.get('subcategory_id'):
+            listings = listings.filter(subcategory_id=filters['subcategory_id'])
             
-        if filters.get('subcategory'):
-            listings = listings.filter(subcategory__icontains=filters['subcategory'])
+        if filters.get('search'):
+            search_term = filters['search']
+            listings = listings.filter(
+                Q(description__icontains=search_term) |
+                Q(city_location__icontains=search_term) |
+                Q(state_location__icontains=search_term) |
+                Q(address__icontains=search_term)
+            )
             
         if filters.get('city_location'):
             listings = listings.filter(city_location__icontains=filters['city_location'])
@@ -673,12 +730,16 @@ class AllListingsViewset(viewsets.ViewSet):
             listings = listings.order_by('-auto_approved_at')
         
         serializer = SellerListingSerializer(listings, many=True)
+        
+        # Add debugging information
+        total_approved_listings = SellerListing.objects.filter(status='approved').count()
+        filtered_count = listings.count()
+        
         return Response({
             "success": True,
             "user_not_logged_in": False,
             "user_unauthorized": False,
             "data": serializer.data,
-            "error": None
         })
 
     @handle_exceptions
@@ -845,7 +906,7 @@ class BuyerRequirementsViewset(viewsets.ViewSet):
                 "error": "Wallet not found for this user. Please contact support."
             }, status=status.HTTP_404_NOT_FOUND)
 
-        required_fields = ['category', 'subcategory', 'quantity', 'unit', 'city_location', 'state_location', 'pincode_location', 'address']
+        required_fields = ['category_id', 'subcategory_id', 'quantity', 'unit', 'city_location', 'state_location', 'pincode_location', 'address']
         for field in required_fields:
             if not data.get(field):
                 return Response({
@@ -856,10 +917,33 @@ class BuyerRequirementsViewset(viewsets.ViewSet):
                     "error": f"{field} is required."
                 }, status=status.HTTP_400_BAD_REQUEST)
 
+        # Validate category_id and subcategory_id exist
+        try:
+            category = Category.objects.get(category_id=data['category_id'])
+        except Category.DoesNotExist:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": f"Category with ID {data['category_id']} does not exist."
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            subcategory = SubCategory.objects.get(sub_category_id=data['subcategory_id'])
+        except SubCategory.DoesNotExist:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": f"Subcategory with ID {data['subcategory_id']} does not exist."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
         requirement = BuyerRequirement.objects.create(
             buyer_user_id=user_id,
-            category=data['category'],
-            subcategory=data['subcategory'],
+            category_id=data['category_id'],
+            subcategory_id=data['subcategory_id'],
             quantity=data['quantity'],
             unit=data['unit'],
             description=data.get('description', ''),
@@ -1105,11 +1189,25 @@ class AllBuyerRequirementsViewset(viewsets.ViewSet):
         filters = request.query_params
         
         # Apply filters if provided
-        if filters.get('category'):
-            requirements = requirements.filter(category__icontains=filters['category'])
+        if filters.get('category_id'):
+            requirements = requirements.filter(category_id=filters['category_id'])
+        elif filters.get('category'):
+            # Support filtering by category name for backward compatibility
+            try:
+                category = Category.objects.get(title__icontains=filters['category'])
+                requirements = requirements.filter(category_id=category.category_id)
+            except Category.DoesNotExist:
+                requirements = requirements.none()  # Return empty queryset if category not found
             
-        if filters.get('subcategory'):
-            requirements = requirements.filter(subcategory__icontains=filters['subcategory'])
+        if filters.get('subcategory_id'):
+            requirements = requirements.filter(subcategory_id=filters['subcategory_id'])
+        elif filters.get('subcategory'):
+            # Support filtering by subcategory name for backward compatibility
+            try:
+                subcategory = SubCategory.objects.get(title__icontains=filters['subcategory'])
+                requirements = requirements.filter(subcategory_id=subcategory.sub_category_id)
+            except SubCategory.DoesNotExist:
+                requirements = requirements.none()  # Return empty queryset if subcategory not found
             
         if filters.get('city_location'):
             requirements = requirements.filter(city_location__icontains=filters['city_location'])
@@ -1175,6 +1273,31 @@ class CategoriesViewSet(viewsets.ViewSet):
             "user_not_logged_in": False,
             "user_unauthorized": False,
             "data": serializer.data,
+            "error": None
+        })
+    
+    @handle_exceptions
+    @action(detail=False, methods=['get'])
+    def with_subcategories(self, request):
+        """Get all categories with their subcategories in one call"""
+        categories = Category.objects.filter(is_active=True).order_by('title')
+        
+        result = []
+        for category in categories:
+            subcategories = SubCategory.objects.filter(
+                category_id=category.category_id, 
+                is_active=True
+            ).order_by('title')
+            
+            category_data = CategorySerializer(category).data
+            category_data['subcategories'] = SubCategorySerializer(subcategories, many=True).data
+            result.append(category_data)
+        
+        return Response({
+            "success": True,
+            "user_not_logged_in": False,
+            "user_unauthorized": False,
+            "data": result,
             "error": None
         })
     
