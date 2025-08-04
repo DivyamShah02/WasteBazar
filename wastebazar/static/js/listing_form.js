@@ -44,7 +44,7 @@ async function initializeForm() {
     const user_id = localStorage.getItem('user_id');
     const user_role = localStorage.getItem('user_role');
     const user_name = localStorage.getItem('user_name'); // Default to 'Guest' if not set
-    console.log("User name:", user_name);
+
     if (!user_id) {
         console.error("❌ No user ID found in localStorage");
         showError('Please log in to create a listing.');
@@ -241,7 +241,7 @@ function updateGalleryImagesPreview() {
             <i class="fas fa-plus"></i>
             <p>Add Image</p>
         `;
-        placeholder.onclick = () => document.getElementById('galleryImages').click();
+        // placeholder.onclick = () => document.getElementById('galleryImages').click();
         galleryPreview.appendChild(placeholder);
     }
 }
