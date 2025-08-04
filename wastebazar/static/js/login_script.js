@@ -378,7 +378,8 @@ async function verifyOtp(otp) {
 
                 if (result.data.user_details) {
                     // User details already filled, redirect to appropriate profile
-                    const userRole = result.data.user_details.role || selectedRole;
+                    const userRole = result.data.user_role || selectedRole;
+
                     const redirectUrl = getRedirectUrl(userRole);
 
                     showSuccess("Login successful! Redirecting...")

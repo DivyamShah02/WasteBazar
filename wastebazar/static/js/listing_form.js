@@ -23,6 +23,7 @@ async function ListingsFormApp(csrf_token_param, create_listing_api_url_param) {
     csrf_token = csrf_token_param;
     create_listing_api_url = create_listing_api_url_param;
 
+
     if (!csrf_token) {
         console.error("❌ Missing CSRF Token for ListingsFormApp");
         return;
@@ -42,7 +43,8 @@ async function initializeForm() {
     // Check if user is logged in and is a seller
     const user_id = localStorage.getItem('user_id');
     const user_role = localStorage.getItem('user_role');
-
+    const user_name = localStorage.getItem('user_name'); // Default to 'Guest' if not set
+    console.log("User name:", user_name);
     if (!user_id) {
         console.error("❌ No user ID found in localStorage");
         showError('Please log in to create a listing.');
@@ -340,6 +342,8 @@ async function handleFormSubmission() {
 
         // Get user_id from localStorage
         const user_id = localStorage.getItem('user_id');
+        const sellerName = localStorage.getItem('user_name'); // Default to 'Guest' if not set
+        console.log("User name :", sellerName);
         if (!user_id) {
             showError('User ID not found. Please log in again.');
             submitBtn.disabled = false;
@@ -355,6 +359,8 @@ async function handleFormSubmission() {
         formData.append('subcategory_id', document.getElementById('subcategory').value);
         formData.append('quantity', document.getElementById('quantity').value);
         formData.append('unit', document.getElementById('unit').value);
+        formData.append('priceperunit', document.getElementById('pricePerUnit').value);
+        formData.append('seller_name', sellerName); // Use the determined seller name
         formData.append('description', document.getElementById('description').value);
         formData.append('city_location', document.getElementById('city_location').value);
         formData.append('state_location', document.getElementById('state_location').value);
@@ -419,6 +425,7 @@ function validateFormFields() {
         { id: 'subcategory', name: 'Subcategory' },
         { id: 'quantity', name: 'Quantity' },
         { id: 'unit', name: 'Unit' },
+        { id: 'pricePerUnit', name: 'Price Per Unit' },
         { id: 'description', name: 'Description' },
         { id: 'city_location', name: 'City' },
         { id: 'state_location', name: 'State' },
@@ -448,6 +455,14 @@ function validateFormFields() {
     if (quantity <= 0) {
         showError('Quantity must be greater than 0.');
         document.getElementById('quantity').focus();
+        return false;
+    }
+
+    // Validate price per unit
+    const pricePerUnit = parseFloat(document.getElementById('pricePerUnit').value);
+    if (pricePerUnit < 0) {
+        showError('Price per unit must be 0 or greater.');
+        document.getElementById('pricePerUnit').focus();
         return false;
     }
 

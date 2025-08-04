@@ -141,7 +141,7 @@ class SellerListingViewSet(viewsets.ViewSet):
                 "error": f"Seller not found with ID: {user_id}"
             }, status=status.HTTP_404_NOT_FOUND)
 
-        required_fields = ['category_id', 'subcategory_id', 'quantity', 'unit', 'city_location', 'state_location', 'pincode_location', 'address']
+        required_fields = ['category_id', 'subcategory_id', 'quantity', 'unit', 'priceperunit', 'city_location', 'state_location', 'pincode_location', 'address']
         for field in required_fields:
             if not data.get(field):
                 return Response({
@@ -151,6 +151,26 @@ class SellerListingViewSet(viewsets.ViewSet):
                     "data": None,
                     "error": f"{field} is required."
                 }, status=status.HTTP_400_BAD_REQUEST)
+
+        # Validate priceperunit is a positive number
+        try:
+            priceperunit = float(data['priceperunit'])
+            if priceperunit < 0:
+                return Response({
+                    "success": False,
+                    "user_not_logged_in": False,
+                    "user_unauthorized": False,
+                    "data": None,
+                    "error": "Price per unit must be a positive number."
+                }, status=status.HTTP_400_BAD_REQUEST)
+        except (ValueError, TypeError):
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": "Price per unit must be a valid number."
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         # Validate category_id and subcategory_id exist
         try:
@@ -183,6 +203,8 @@ class SellerListingViewSet(viewsets.ViewSet):
             subcategory_id=data['subcategory_id'],
             quantity=data['quantity'],
             unit=data['unit'],
+            priceperunit=data['priceperunit'],
+            seller_name=data.get('seller_name', ''),
             description=data.get('description', ''),
             city_location=data['city_location'],
             state_location=data['state_location'],
@@ -346,7 +368,7 @@ class SellerListingViewSet(viewsets.ViewSet):
                 "error": "No data provided for update."
             }, status=status.HTTP_400_BAD_REQUEST)
         
-        updatable_fields = ['category_id', 'subcategory_id', 'quantity', 'unit', 'description', 
+        updatable_fields = ['category_id', 'subcategory_id', 'quantity', 'unit', 'priceperunit', 'seller_name', 'description', 
                         'city_location', 'state_location', 'pincode_location', 'address']
         
         updated_fields = []
@@ -375,6 +397,26 @@ class SellerListingViewSet(viewsets.ViewSet):
                             "user_unauthorized": False,
                             "data": None,
                             "error": f"Subcategory with ID {data[field]} does not exist."
+                        }, status=status.HTTP_400_BAD_REQUEST)
+                
+                if field == 'priceperunit':
+                    try:
+                        priceperunit = float(data[field])
+                        if priceperunit < 0:
+                            return Response({
+                                "success": False,
+                                "user_not_logged_in": False,
+                                "user_unauthorized": False,
+                                "data": None,
+                                "error": "Price per unit must be a positive number."
+                            }, status=status.HTTP_400_BAD_REQUEST)
+                    except (ValueError, TypeError):
+                        return Response({
+                            "success": False,
+                            "user_not_logged_in": False,
+                            "user_unauthorized": False,
+                            "data": None,
+                            "error": "Price per unit must be a valid number."
                         }, status=status.HTTP_400_BAD_REQUEST)
                 
                 setattr(listing, field, data[field])
@@ -704,6 +746,21 @@ class AllListingsViewset(viewsets.ViewSet):
         if filters.get('unit'):
             listings = listings.filter(unit__icontains=filters['unit'])
         
+        # Price range filtering
+        if filters.get('min_price'):
+            try:
+                min_price = float(filters['min_price'])
+                listings = listings.filter(priceperunit__gte=min_price)
+            except (ValueError, TypeError):
+                pass  # Ignore invalid price values
+            
+        if filters.get('max_price'):
+            try:
+                max_price = float(filters['max_price'])
+                listings = listings.filter(priceperunit__lte=max_price)
+            except (ValueError, TypeError):
+                pass  # Ignore invalid price values
+        
         # Sorting options
         sort_by = filters.get('sort_by', 'approved_at')  # Default sort by approved_at
         sort_order = filters.get('sort_order', 'desc')  # Default descending order
@@ -712,6 +769,7 @@ class AllListingsViewset(viewsets.ViewSet):
         valid_sort_fields = {
             'approved_at': 'auto_approved_at',  # Using auto_approved_at as proxy for approved_at
             'quantity': 'quantity',
+            'priceperunit': 'priceperunit',
             'unit': 'unit',
             'city_location': 'city_location',
             'state_location': 'state_location',
@@ -735,11 +793,45 @@ class AllListingsViewset(viewsets.ViewSet):
         total_approved_listings = SellerListing.objects.filter(status='approved').count()
         filtered_count = listings.count()
         
+        # Create applied filters summary for debugging
+        applied_filters = {}
+        if filters.get('category_id'):
+            applied_filters['category_id'] = filters['category_id']
+        if filters.get('subcategory_id'):
+            applied_filters['subcategory_id'] = filters['subcategory_id']
+        if filters.get('search'):
+            applied_filters['search'] = filters['search']
+        if filters.get('city_location'):
+            applied_filters['city_location'] = filters['city_location']
+        if filters.get('state_location'):
+            applied_filters['state_location'] = filters['state_location']
+        if filters.get('min_quantity'):
+            applied_filters['min_quantity'] = filters['min_quantity']
+        if filters.get('max_quantity'):
+            applied_filters['max_quantity'] = filters['max_quantity']
+        if filters.get('unit'):
+            applied_filters['unit'] = filters['unit']
+        if filters.get('min_price'):
+            applied_filters['min_price'] = filters['min_price']
+        if filters.get('max_price'):
+            applied_filters['max_price'] = filters['max_price']
+        if filters.get('sort_by'):
+            applied_filters['sort_by'] = filters['sort_by']
+        if filters.get('sort_order'):
+            applied_filters['sort_order'] = filters['sort_order']
+        
         return Response({
             "success": True,
             "user_not_logged_in": False,
             "user_unauthorized": False,
             "data": serializer.data,
+            "debug_info": {
+                "total_approved_listings": total_approved_listings,
+                "filtered_count": filtered_count,
+                "applied_filters": applied_filters,
+                "available_sort_fields": list(valid_sort_fields.keys())
+            },
+            "error": None
         })
 
     @handle_exceptions

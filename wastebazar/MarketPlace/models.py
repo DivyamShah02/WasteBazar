@@ -33,7 +33,6 @@ class Category(models.Model):
 
 
 
-
 def generate_subcategory_id():
     """Generate unique 10-digit subcategory ID starting with 20"""
     from .models import SubCategory
@@ -60,12 +59,14 @@ class SubCategory(models.Model):
         return f"{self.sub_category_id} - {self.title}"
 
 
+
 def generate_listing_id():
     from .models import SellerListing
     while True:
         listing_id = ''.join(random.choices(string.digits, k=10))
         if not SellerListing.objects.filter(listing_id=listing_id).exists():
             return listing_id
+
 
 class SellerListing(models.Model):
     STATUS_CHOICES = [
@@ -82,9 +83,10 @@ class SellerListing(models.Model):
     subcategory_id = models.BigIntegerField(null=True)  # Reference to SubCategory.sub_category_id
 
     seller_user_id = models.CharField(max_length=15)
-    
+    seller_name= models.CharField(max_length=255, blank=True, null=True)  # Optional seller name field
     quantity = models.FloatField()
     unit = models.CharField(max_length=20)  # e.g. kg, tons
+    priceperunit = models.FloatField(default=0.0)  # Price per unit
     description = models.TextField(blank=True)
     
     city_location = models.CharField(max_length=100)
@@ -162,12 +164,14 @@ class SellerListing(models.Model):
         self.save()
 
 
+
 def generate_requirement_id():
     from .models import BuyerRequirement
     while True:
         requirement_id = ''.join(random.choices(string.digits, k=10))
         if not BuyerRequirement.objects.filter(requirement_id=requirement_id).exists():
             return requirement_id
+
 
 class BuyerRequirement(models.Model):
     STATUS_CHOICES = [

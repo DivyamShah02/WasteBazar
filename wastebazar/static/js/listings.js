@@ -478,7 +478,8 @@ function transformApiListings(apiData) {
     title: `${listing.category_name || 'Unknown Category'} - ${listing.subcategory_name || 'Unknown Subcategory'}`,
     category: (listing.category_name || 'unknown').toLowerCase(),
     location: (listing.city_location || 'unknown').toLowerCase(),
-    price: 0, // API doesn't have price, using 0
+    price: listing.priceperunit || 0, // Use priceperunit from API
+    priceperunit: listing.priceperunit || 0, // Add explicit priceperunit field
     quantity: listing.quantity || 0,
     grade: listing.subcategory_name || 'Standard',
     availability: "Available",
@@ -491,6 +492,7 @@ function transformApiListings(apiData) {
     state: listing.state_location || '',
     address: listing.address || '',
     seller_id: listing.seller_user_id,
+    seller_name: listing.seller_name || 'Unknown Seller', // Add seller name field
     featured_image_url: listing.featured_image_url || null,
     gallery_images: listing.gallery_images || [],
     has_images: !!(listing.featured_image_url || (listing.gallery_images && listing.gallery_images.length > 0))
@@ -922,8 +924,9 @@ function createListingCard(listing) {
     `${listing.city}, ${listing.state}` :
     (locationNames[listing.location] || listing.location);
 
-  const displayPrice = listing.price ? `₹${listing.price.toLocaleString()}/Ton` : 'Price on Request';
+  const displayPrice = listing.priceperunit ? `₹${listing.priceperunit.toLocaleString()}/${listing.unit}` : 'Price on Request';
   const displayQuantity = listing.unit ? `${listing.quantity} ${listing.unit}` : `${listing.quantity} Tons Available`;
+  const displaySellerName = listing.seller_name || 'Unknown Seller';
 
   return `
         <div class="listing-card" data-listing-id="${listing.id}" data-aos="fade-up">
@@ -975,6 +978,12 @@ function createListingCard(listing) {
                             <i class="fas fa-truck"></i>
                         </div>
                         <div class="detail-text">${listing.availability}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="detail-text">${displaySellerName}</div>
                     </div>
                 </div>
                 <div class="listing-price">${displayPrice}</div>

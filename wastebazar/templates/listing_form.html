@@ -125,6 +125,24 @@
                         </div>
                     </div>
 
+                    <!-- Seller Name and Price Per Unit -->
+                    <div class="row mb-4">
+    
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="pricePerUnit" class="form-label">
+                                    Price Per Unit <span class="required">*</span>
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₹</span>
+                                    <input type="number" id="pricePerUnit" name="pricePerUnit" class="form-control" 
+                                           placeholder="0.00" min="0" step="0.01" required>
+                                </div>
+                                <div class="form-help">Price per unit selected above (e.g., per KG, per piece)</div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Description -->
                     <div class="form-group mb-4">
                         <label for="description" class="form-label">
@@ -227,7 +245,7 @@
                     <div class="row justify-content-center">
                         <div class="col-md-6">
                             <button type="submit" id="submitBtn" class="btn-primary w-100 text-white">
-                                Create Listing
+                                <i class="fas fa-plus me-2"></i>Create Listing
                             </button>
                         </div>
                     </div>

@@ -99,6 +99,16 @@ async function loadSellerProfile() {
             seller_data = response.data;
             console.log('✅ Seller profile loaded:', seller_data);
 
+            // Store user details in localStorage for future use
+            if (seller_data.user_details) {
+                const userName = seller_data.user_details.name;
+
+                if (userName) {
+                    localStorage.setItem('user_name', userName);
+                    console.log('✅ Stored user name in localStorage:', userName);
+                }
+            }
+
             // Render profile data
             renderProfileData();
 
@@ -418,13 +428,19 @@ function renderListings(listings) {
                             
                             <!-- Quick Details -->
                             <div class="row listing-details mb-2">
-                                <div class="col-6 col-sm-4">
+                                <div class="col-6 col-sm-3">
                                     <div class="detail-item">
                                         <i class="fas fa-weight-hanging text-primary"></i>
                                         <span class="detail-value">${listing.quantity} ${listing.unit || 'kg'}</span>
                                     </div>
                                 </div>
-                                <div class="col-6 col-sm-8">
+                                <div class="col-6 col-sm-3">
+                                    <div class="detail-item">
+                                        <i class="fas fa-rupee-sign text-primary"></i>
+                                        <span class="detail-value">₹${listing.priceperunit || '0'}/${listing.unit || 'unit'}</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
                                     <div class="detail-item">
                                         <i class="fas fa-map-marker-alt text-primary"></i>
                                         <span class="detail-value">${listing.city_location || 'Not specified'}${listing.state_location ? ', ' + listing.state_location : ''}</span>
