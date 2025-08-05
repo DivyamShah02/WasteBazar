@@ -929,7 +929,7 @@ function createListingCard(listing) {
   const displaySellerName = listing.seller_name || 'Unknown Seller';
 
   return `
-        <div class="listing-card" data-listing-id="${listing.id}" data-aos="fade-up">
+        <div class="listing-card" data-listing-id="${listing.listing_id || listing.id}" data-aos="fade-up">
             <div class="listing-image">
                 ${listing.featured_image_url ? `
                     <img src="${listing.featured_image_url}" 
@@ -989,7 +989,7 @@ function createListingCard(listing) {
                 <div class="listing-price">${displayPrice}</div>
                 <div class="listing-footer">
                     <div class="listing-date">Posted ${listing.postedDate}</div>
-                    <button class="btn-view-details" onclick="event.stopPropagation(); viewListingDetails('${listing.id}')">
+                    <button class="btn-view-details" onclick="event.stopPropagation(); viewListingDetails('${listing.listing_id || listing.id}')">
                         View Details
                     </button>
                 </div>

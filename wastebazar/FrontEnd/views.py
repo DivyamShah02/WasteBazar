@@ -68,6 +68,26 @@ class ListingFormViewSet(viewsets.ViewSet):
             'listing_id': pk
         }
         return render(request, "listing_form.html", context)
+
+class ListingEditViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        """Redirect to specific listing edit (listing_id required)"""
+        return render(request, "listing_edit.html", {
+            'error': 'Listing ID is required for editing'
+        })
+    
+    def retrieve(self, request, pk=None):
+        """Render listing edit page for a specific listing ID"""
+        if not pk:
+            return render(request, "listing_edit.html", {
+                'error': 'Listing ID is required for editing'
+            })
+        
+        context = {
+            'listing_id': pk
+        }
+        return render(request, "listing_edit.html", context)
     
 class RequirementFormViewSet(viewsets.ViewSet):
 

@@ -13,6 +13,7 @@ from utils.decorators import handle_exceptions, check_authentication
 import uuid
 import boto3
 import base64
+import json
 import os
 
 
@@ -321,6 +322,17 @@ class SellerListingViewSet(viewsets.ViewSet):
     def update(self, request, pk=None):
         """Update an existing seller listing - Enhanced author validation"""
         
+        # Get user_id from request data first
+        user_id = request.data.get('user_id')
+        if not user_id:
+            return Response({
+                "success": False,
+                "user_not_logged_in": True,
+                "user_unauthorized": False,
+                "data": None,
+                "error": "User ID is required in request data."
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
         # Step 1: Check if listing exists at all
         try:
             listing_exists = SellerListing.objects.get(listing_id=pk)
@@ -334,7 +346,7 @@ class SellerListingViewSet(viewsets.ViewSet):
             }, status=status.HTTP_404_NOT_FOUND)
         
         # Step 2: Check if current user owns this listing
-        if listing_exists.seller_user_id != request.user.user_id:
+        if listing_exists.seller_user_id != user_id:
         # if listing_exists.seller_user_id != "SC5294468983":
             
             return Response({
@@ -435,6 +447,12 @@ class SellerListingViewSet(viewsets.ViewSet):
                 updated_fields.append('featured_image_url')
             except Exception as e:
                 print(f"Failed to upload featured image during update: {str(e)}")
+        
+        # Handle featured image removal
+        remove_featured_image = data.get('remove_featured_image')
+        if remove_featured_image == 'true':
+            listing.featured_image_url = None
+            updated_fields.append('featured_image_url')
 
         # Handle gallery images update
         gallery_urls = list(listing.gallery_images) if listing.gallery_images else []
@@ -454,12 +472,17 @@ class SellerListingViewSet(viewsets.ViewSet):
                     print(f"Failed to upload gallery image {i} during update: {str(e)}")
         
         # Check if user wants to remove specific gallery images
-        remove_gallery_urls = data.get('remove_gallery_images', [])
-        if remove_gallery_urls:
-            for url_to_remove in remove_gallery_urls:
-                if url_to_remove in gallery_urls:
-                    gallery_urls.remove(url_to_remove)
-                    gallery_updated = True
+        remove_gallery_urls_json = data.get('remove_gallery_images')
+        if remove_gallery_urls_json:
+            try:
+                import json
+                remove_gallery_urls = json.loads(remove_gallery_urls_json)
+                for url_to_remove in remove_gallery_urls:
+                    if url_to_remove in gallery_urls:
+                        gallery_urls.remove(url_to_remove)
+                        gallery_updated = True
+            except (json.JSONDecodeError, TypeError):
+                print(f"Failed to parse remove_gallery_images: {remove_gallery_urls_json}")
         
         if gallery_updated:
             listing.gallery_images = gallery_urls
@@ -603,6 +626,239 @@ class SellerListingViewSet(viewsets.ViewSet):
     #     }, status=status.HTTP_204_NO_CONTENT)
 
 
+class SellerListingDetailViewset(viewsets.ViewSet):
+    
+    def upload_file_to_s3(self, uploaded_file):
+        """Uploads a file to AWS S3, renaming it if a file with the same name exists."""
+        region_name = "eu-north-1"
+        s3_client = boto3.client(
+            "s3",
+            aws_access_key_id = self.decrypt("QUtJQTVJSk9YQlFVVEVFNU9NSkI="),
+            aws_secret_access_key = self.decrypt("TlIwblU5T0oyQ0lkQm1nRkFXMEk4RTRiT01na3NEVXVPQnJJTU5iNQ=="),
+            region_name = region_name
+        )
+        
+        bucket_name = "sankievents"
+        base_name, extension = os.path.splitext(uploaded_file.name)
+        file_name = uploaded_file.name
+        s3_key = f"uploads/{file_name}"
+        counter = 1
+
+        # Check if file exists and rename if necessary
+        while True:
+            try:
+                s3_client.head_object(Bucket=bucket_name, Key=s3_key)
+                # If file exists, update the filename
+                file_name = f"{base_name}({counter}){extension}"
+                s3_key = f"uploads/{file_name}"
+                counter += 1
+            except s3_client.exceptions.ClientError:
+                break  # File does not exist, proceed with upload
+
+        # Upload file
+        s3_client.upload_fileobj(uploaded_file, bucket_name, s3_key)
+
+        # Generate file URL
+        file_url = f"https://{bucket_name}.s3.{region_name}.amazonaws.com/{s3_key}"
+
+        return file_url
+
+    def decrypt(self, b64_text):
+        # Decode the Base64 string back to bytes, then to text
+        return base64.b64decode(b64_text.encode()).decode()
+
+    def retrieve(self, request, pk=None):
+        """Get details of a specific seller listing by listing_id"""
+        try:
+            listing = SellerListing.objects.get(listing_id=pk)
+        except SellerListing.DoesNotExist:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": "Listing not found."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = SellerListingSerializer(listing)
+        return Response({
+            "success": True,
+            "user_not_logged_in": False,
+            "user_unauthorized": False,
+            "data": serializer.data,
+            "error": None
+        })
+    
+    def update(self, request, pk=None):
+        """Update a specific seller listing by listing_id"""
+        # Step 1: Get user_id from request data
+        user_id = request.data.get('user_id')
+        if not user_id:
+            return Response({
+                "success": False,
+                "user_not_logged_in": True,
+                "user_unauthorized": False,
+                "data": None,
+                "error": "User ID is required in request data."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # Step 2: Check if listing exists
+        try:
+            listing = SellerListing.objects.get(listing_id=pk)
+        except SellerListing.DoesNotExist:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": "Listing not found."
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        # Step 3: Check if the logged-in user is the owner of the listing
+        if listing.seller_user_id != user_id:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": True,
+                "data": None,
+                "error": "You don't have permission to edit this listing. Only the original author can modify their listings."
+            }, status=status.HTTP_403_FORBIDDEN)
+
+        # Step 4: Validate user exists and is a seller
+        try:
+            from UserDetail.models import User
+            seller = User.objects.get(
+                user_id=user_id,
+                role__in=['seller_individual', 'seller_corporate'],
+                is_deleted=False
+            )
+        except User.DoesNotExist:
+            return Response({
+                "success": False,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": None,
+                "error": f"Seller not found with ID: {user_id}"
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        # # Step 5: Check if listing can be updated (status validation)
+        # if listing.status not in ['pending', 'rejected']:
+        #     return Response({
+        #         "success": False,
+        #         "user_not_logged_in": False,
+        #         "user_unauthorized": False,
+        #         "data": None,
+        #         "error": f"Cannot update {listing.status} listings. Only pending or rejected listings can be updated."
+        #     }, status=status.HTTP_400_BAD_REQUEST)
+
+        # Step 6: Update the listing with basic fields first
+        serializer = SellerListingSerializer(listing, data=request.data, partial=True)
+        if serializer.is_valid():
+            # Reset status to pending if it was rejected
+            if listing.status == 'rejected':
+                listing.status = 'pending'
+            
+            listing.updated_at = timezone.now()
+            serializer.save()
+            
+            # Handle image uploads after basic data is saved
+            uploaded_images = []
+            
+            print(f"🔍 [DEBUG] Processing image updates for listing {listing.listing_id}")
+            print(f"🔍 [DEBUG] Current featured_image_url: {listing.featured_image_url}")
+            print(f"🔍 [DEBUG] FILES in request: {list(request.FILES.keys())}")
+            print(f"🔍 [DEBUG] remove_featured_image flag: {request.data.get('remove_featured_image')}")
+            
+            # Handle featured image update
+            featured_image = request.FILES.get('featured_image')
+            if featured_image:
+                print(f"🔍 [DEBUG] New featured image found: {featured_image.name}")
+                try:
+                    featured_image_url = self.upload_file_to_s3(featured_image)
+                    print(f"🔍 [DEBUG] Uploaded featured image to: {featured_image_url}")
+                    listing.featured_image_url = featured_image_url
+                    uploaded_images.append({"type": "featured", "url": featured_image_url})
+                    print(f"🔍 [DEBUG] Updated listing.featured_image_url to: {listing.featured_image_url}")
+                except Exception as e:
+                    print(f"❌ [DEBUG] Failed to upload featured image: {str(e)}")
+            else:
+                print(f"🔍 [DEBUG] No new featured image in request")
+            
+            # Handle removed featured image
+            if request.data.get('remove_featured_image') == 'true':
+                print(f"🔍 [DEBUG] Removing existing featured image")
+                listing.featured_image_url = None
+                print(f"🔍 [DEBUG] Set featured_image_url to None")
+            
+            # Handle gallery images update (up to 5)
+            # Get existing gallery images
+            existing_gallery_images = listing.gallery_images or []
+            
+            # Handle removed gallery images
+            removed_gallery_images = request.data.get('remove_gallery_images')
+            if removed_gallery_images:
+                try:
+                    removed_urls = json.loads(removed_gallery_images)
+                    # Remove the specified URLs from existing gallery images
+                    existing_gallery_images = [url for url in existing_gallery_images if url not in removed_urls]
+                except (json.JSONDecodeError, TypeError):
+                    print("Failed to parse removed gallery images")
+            
+            # Add new gallery images
+            new_gallery_urls = []
+            for i in range(1, 6):  # gallery_image_1 to gallery_image_5
+                gallery_image = request.FILES.get(f'gallery_image_{i}')
+                if gallery_image:
+                    try:
+                        gallery_image_url = self.upload_file_to_s3(gallery_image)
+                        new_gallery_urls.append(gallery_image_url)
+                        uploaded_images.append({"type": f"gallery_{i}", "url": gallery_image_url})
+                    except Exception as e:
+                        print(f"Failed to upload gallery image {i}: {str(e)}")
+            
+            # Combine existing and new gallery images (maintain order: existing first, then new)
+            updated_gallery_images = existing_gallery_images + new_gallery_urls
+            
+            # Ensure we don't exceed the maximum of 5 gallery images
+            if len(updated_gallery_images) > 5:
+                updated_gallery_images = updated_gallery_images[:5]
+            
+            # Update gallery images
+            listing.gallery_images = updated_gallery_images if updated_gallery_images else None
+            
+            # Save the listing with updated image URLs
+            print(f"🔍 [DEBUG] Before save - featured_image_url: {listing.featured_image_url}")
+            print(f"🔍 [DEBUG] Before save - gallery_images: {listing.gallery_images}")
+            listing.save()
+            print(f"🔍 [DEBUG] After save - listing saved successfully")
+            
+            # Serialize the updated listing for response
+            response_serializer = SellerListingSerializer(listing)
+            
+            return Response({
+                "success": True,
+                "user_not_logged_in": False,
+                "user_unauthorized": False,
+                "data": response_serializer.data,
+                "error": None,
+                "meta": {
+                    "message": "Listing updated successfully by owner.",
+                    "listing_id": listing.listing_id,
+                    "seller_id": user_id,
+                    "status": listing.status,
+                    "uploaded_images": uploaded_images,
+                    "total_images": len(uploaded_images)
+                }
+            })
+        return Response({
+            "success": False,
+            "user_not_logged_in": False,
+            "user_unauthorized": False,
+            "data": None,
+            "error": serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+
 class AdminListingViewSet(viewsets.ViewSet):
     
     @handle_exceptions
@@ -632,8 +888,6 @@ class AdminListingViewSet(viewsets.ViewSet):
             "data": serializer.data,
             "error": None
         })
-
-
 
 class AdminListingApprovalViewSet(viewsets.ViewSet):
     @handle_exceptions

@@ -752,7 +752,7 @@ function showError(message) {
  */
 window.editListing = function (listingId) {
     console.log('Edit listing:', listingId);
-    window.location.href = `/listing-form/?edit=${listingId}`;
+    window.location.href = `/listing-edit/${listingId}/`;
 };
 
 window.pauseListing = async function (listingId) {
@@ -763,10 +763,19 @@ window.pauseListing = async function (listingId) {
     }
 
     try {
+        // Get user_id from localStorage
+        const user_id = localStorage.getItem('user_id');
+        if (!user_id) {
+            showError('User not logged in. Please refresh the page and try again.');
+            return;
+        }
+
+        console.log('📤 Marking listing as sold:', listingId, 'for user:', user_id);
+
         const [success, response] = await callApi(
-            'PATCH',
-            `/marketplace-api/seller-listings/${listingId}/`,
-            { user_id: current_user_id },
+            'PATCH',  // Use PATCH for partial_update method
+            `/marketplace-api/seller-listings/${listingId}/`,  // Use listing-detail endpoint
+            { user_id: user_id },  // Ensure user_id is explicitly sent
             csrf_token
         );
 
