@@ -1139,7 +1139,7 @@ function changePage(page) {
 function viewListingDetails(listingId) {
   console.log("Viewing details for listing:", listingId)
   // Navigate to the listing detail page with the listing ID
-  window.location.href = `/listing_detail/${listingId}/`
+  window.location.href = `/listing-detail/?id=${listingId}`
 }
 
 // Advertisement Management

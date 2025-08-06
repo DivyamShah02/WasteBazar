@@ -128,49 +128,35 @@
                 <!-- Listing Header -->
                 <div class="listing-header" data-aos="fade-up">
                     <div class="listing-header-content">
-                        <div class="listing-badges">
-                            <span class="badge-premium">Premium</span>
+                        <div class="listing-badges" id="listing-badges">
                             <span class="badge-verified">Verified Seller</span>
-                            <span class="badge-category">Plastic Waste</span>
+                            <span class="badge-category"></span>
                         </div>
-                        <h1 class="listing-title">High-Grade PET Bottle Bales</h1>
+                        <h1 class="listing-title" id="listing-title">Loading Listing....</h1>
                         <div class="listing-meta">
                             <div class="meta-item">
                                 <i class="fas fa-map-marker-alt"></i>
-                                <span>Mumbai, Maharashtra</span>
+                                <span id="listing-location">Loading Location ...</span>
                             </div>
                             <div class="meta-item">
                                 <i class="fas fa-clock"></i>
-                                <span>Posted 2 days ago</span>
+                                <span id="listing-date">Posted .. days ago </span>
                             </div>
-                            <div class="meta-item">
-                                <i class="fas fa-eye"></i>
-                                <span>1,247 views</span>
-                            </div>
-                            <div class="meta-item">
-                                <i class="fas fa-heart"></i>
-                                <span>23 favorites</span>
-                            </div>
+                        
                         </div>
                         <div class="listing-price">
-                            <span class="price-amount">₹35,000</span>
-                            <span class="price-unit">per Ton</span>
-                            <span class="price-negotiable">Negotiable</span>
+                            <span class="price-amount" id="price-amount">Loading Price</span>
+                            <span class="price-unit" id="price-unit">per..</span>
+
                         </div>
                     </div>
                     <div class="listing-actions">
-                        <button class="btn-action btn-favorite" id="favoriteBtn">
-                            <i class="far fa-heart"></i>
-                            <span>Save</span>
-                        </button>
+                    
                         <button class="btn-action btn-share" id="shareBtn">
                             <i class="fas fa-share-alt"></i>
                             <span>Share</span>
                         </button>
-                        <button class="btn-action btn-report" id="reportBtn">
-                            <i class="fas fa-flag"></i>
-                            <span>Report</span>
-                        </button>
+                        
                     </div>
                 </div>
 
@@ -180,7 +166,7 @@
                     <div class="detail-left-column">
                         <!-- Image Gallery -->
                         <div class="image-gallery" data-aos="fade-up">
-                            <div class="main-image-container">
+                            <div class="main-image-container" id="main-image-container">
                                 <img src="https://www.bruker.com/en/applications/industrial/metals/_jcr_content/root/overviewstage/desktopImage.coreimg.82.1920.jpeg/1733859095146/metal-tubes.jpeg" alt="High-Grade PET Bottle Bales" class="main-image" id="mainImage">
                                 <div class="image-overlay">
                                     <button class="btn-fullscreen" onclick="openImageModal()">
@@ -188,7 +174,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="thumbnail-gallery">
+                            <div class="thumbnail-gallery" id="thumbnail-gallery">
                                 <div class="thumbnail active" onclick="changeMainImage(this, `https://www.bruker.com/en/applications/industrial/metals/_jcr_content/root/overviewstage/desktopImage.coreimg.82.1920.jpeg/1733859095146/metal-tubes.jpeg`)">
                                     <img src="https://www.bruker.com/en/applications/industrial/metals/_jcr_content/root/overviewstage/desktopImage.coreimg.82.1920.jpeg/1733859095146/metal-tubes.jpeg" alt="PET Bottles 1">
                                 </div>
@@ -210,7 +196,7 @@
                         <!-- Description -->
                         <div class="listing-description" data-aos="fade-up">
                             <h2>Description</h2>
-                            <div class="description-content">
+                            <div class="description-content" id="description-content">
                                 <p>Premium quality PET bottle bales available for immediate pickup. These high-grade plastic waste materials are perfect for recycling into new products. All bottles have been properly sorted, cleaned, and compressed into convenient bales for easy transportation.</p>
                                 
                                 <p>Our PET bottle bales meet industry standards and are sourced from verified collection centers across Mumbai. Each bale contains approximately 500kg of compressed PET bottles, making them ideal for large-scale recycling operations.</p>
@@ -238,7 +224,7 @@
                         <!-- Specifications -->
                         <div class="specifications-section" data-aos="fade-up">
                             <h2>Specifications</h2>
-                            <div class="specs-table">
+                            <div class="specs-table" id="specs-table">
                                 <div class="spec-row">
                                     <div class="spec-label">Material Type</div>
                                     <div class="spec-value">PET (Polyethylene Terephthalate)</div>
@@ -277,7 +263,7 @@
                         <!-- Location -->
                         <div class="location-section" data-aos="fade-up">
                             <h2>Location & Pickup</h2>
-                            <div class="location-content">
+                            <div class="location-content" id="location-content">
                                 <div class="location-info">
                                     <div class="location-address">
                                         <i class="fas fa-map-marker-alt"></i>
@@ -317,7 +303,7 @@
                         <!-- Quick Info Card -->
                         <div class="quick-info-card" data-aos="fade-up">
                             <h3>Quick Information</h3>
-                            <div class="quick-info-grid">
+                            <div class="quick-info-grid" id="quick-info-grid">
                                 <div class="info-item">
                                     <div class="info-icon">
                                         <i class="fas fa-weight-hanging"></i>
@@ -360,7 +346,7 @@
                         <!-- Seller Information -->
                         <div class="seller-card" data-aos="fade-up">
                             <h3>Seller Information</h3>
-                            <div class="seller-profile">
+                            <div class="seller-profile" id="seller-profile">
                                 <!-- <div class="seller-avatar">
                                     <img src="/placeholder.svg?height=80&width=80" alt="Mumbai Recyclers Pvt Ltd">
                                 </div> -->
@@ -396,7 +382,7 @@
                                     <span class="stat-label">Response Rate</span>
                                 </div>
                             </div>
-                            <div class="seller-actions">
+                            <div class="seller-actions" id="seller-actions">
                                 <button class="btn-contact-seller" onclick="openContactModal()">
                                     <i class="fas fa-phone"></i>
                                     Contact Seller
@@ -411,7 +397,7 @@
                         <!-- Inquiry Form -->
                         <div class="inquiry-form-card" data-aos="fade-up">
                             <h3>Send Inquiry</h3>
-                            <form class="inquiry-form" id="inquiryForm">
+                            <form class="inquiry-form" id="inquiry-form">
                                 <div class="form-group">
                                     <label for="inquiryName">Your Name *</label>
                                     <input type="text" id="inquiryName" class="form-control" required>
@@ -439,28 +425,7 @@
                             </form>
                         </div>
 
-                        <!-- Safety Tips -->
-                        <div class="safety-tips-card" data-aos="fade-up">
-                            <h3>Safety Tips</h3>
-                            <div class="safety-tips">
-                                <div class="tip-item">
-                                    <i class="fas fa-shield-alt"></i>
-                                    <span>Always verify seller credentials before making payment</span>
-                                </div>
-                                <div class="tip-item">
-                                    <i class="fas fa-eye"></i>
-                                    <span>Inspect materials before finalizing the deal</span>
-                                </div>
-                                <div class="tip-item">
-                                    <i class="fas fa-handshake"></i>
-                                    <span>Meet in person for high-value transactions</span>
-                                </div>
-                                <div class="tip-item">
-                                    <i class="fas fa-file-contract"></i>
-                                    <span>Use proper documentation for all transactions</span>
-                                </div>
-                            </div>
-                        </div>
+                       
                     </div>
                 </div>
 
@@ -633,4 +598,5 @@
     <!-- <script src="/static/js/listings.js"></script> -->
     <script src="/static/js/listing-detail.js"></script>
 </body>
+</html>
 </html>
