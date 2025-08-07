@@ -5,6 +5,7 @@ from .views import *
 router = DefaultRouter()
 router.register(r'', HomeViewSet, basename='home')
 router.register(r'marketplace', ListingsViewSet, basename='MarketPlace')
+router.register(r'requirements', RequirementsViewSet, basename='requirements')
 router.register(r'listing-detail', ListingDetailViewSet, basename='listing_detail')
 router.register(r'login', LoginViewSet, basename='login')
 router.register(r'buyer-profile', BuyerProfileViewSet, basename='buyer_profile')

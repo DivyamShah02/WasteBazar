@@ -246,9 +246,10 @@
   }
 }
 
-.main-image.fade-in {
+
+/* .main-image.fade-in {
   animation: fadeIn 0.3s ease-in-out;
-}
+} */
 
 .main-image {
   width: 100%;
@@ -263,10 +264,11 @@
   transform: scale(1.02);
 }
 
+/* 
 .main-image.loading {
   opacity: 0.7;
   filter: blur(2px);
-}
+} */
 
 /* Slider Navigation Buttons */
 .slider-btn {
@@ -699,6 +701,7 @@
 }
 
 .info-value {
+  text-align: end;
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--text-dark);
@@ -1471,7 +1474,7 @@
 
 /* Quick Info Grid Enhancement */
 .info-item {
-  text-align: center;
+  /* text-align: space-between; */
   padding: 1rem;
   background: var(--bg-light);
   border-radius: 12px;
@@ -1480,8 +1483,9 @@
 
 .info-label {
   font-size: 0.85rem;
+  width: 200px;
   color: var(--text-muted);
-  margin-bottom: 0.5rem;
+  /* margin-bottom: 0.5rem; */
   font-weight: 500;
 }
 

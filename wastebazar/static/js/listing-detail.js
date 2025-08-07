@@ -648,14 +648,14 @@ class ListingDetailApp {
 
     if (mainImage) {
       // Add loading state
-      mainImage.classList.add('loading');
+      // mainImage.classList.add('loading');
 
       // Preload new image
       const newImg = new Image();
       newImg.onload = () => {
         mainImage.src = this.currentImages[imageIndex];
-        mainImage.classList.remove('loading');
-        mainImage.classList.add('fade-in');
+        // mainImage.classList.remove('loading');
+        // mainImage.classList.add('fade-in');
         // Update onclick for modal
         mainImage.setAttribute('onclick', `openImageModal('${this.currentImages[imageIndex]}')`);
 

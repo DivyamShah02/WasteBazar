@@ -21,6 +21,12 @@ class ListingsViewSet(viewsets.ViewSet):
         return render(request, "listings.html")
 
 
+class RequirementsViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        return render(request, "requirements.html")
+
+
 class ListingDetailViewSet(viewsets.ViewSet):
 
     def list(self, request):

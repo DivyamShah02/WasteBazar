@@ -69,55 +69,55 @@ window.addEventListener('scroll', function () {
     }
 });
 
-// Search tabs functionality
-document.querySelectorAll('.search-tab').forEach(tab => {
-    tab.addEventListener('click', function () {
-        document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
+// // Search tabs functionality
+// document.querySelectorAll('.search-tab').forEach(tab => {
+//     tab.addEventListener('click', function () {
+//         document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
+//         this.classList.add('active');
 
-        const tabType = this.dataset.tab;
-        console.log('Search tab changed to:', tabType);
+//         const tabType = this.dataset.tab;
+//         console.log('Search tab changed to:', tabType);
 
-        // Update form placeholder text based on tab
-        // const searchBtn = document.querySelector('.search-btn');
-        // if (tabType === 'buy') {
-        //     searchBtn.innerHTML = '<i class="fas fa-search me-2"></i>Find Sellers';
-        // } else if (tabType === 'sell') {
-        //     searchBtn.innerHTML = '<i class="fas fa-search me-2"></i>Find Buyers';
-        // } else {
-        //     searchBtn.innerHTML = '<i class="fas fa-search me-2"></i>View Requirements';
-        // }
-    });
-});
+//         // Update form placeholder text based on tab
+//         // const searchBtn = document.querySelector('.search-btn');
+//         // if (tabType === 'buy') {
+//         //     searchBtn.innerHTML = '<i class="fas fa-search me-2"></i>Find Sellers';
+//         // } else if (tabType === 'sell') {
+//         //     searchBtn.innerHTML = '<i class="fas fa-search me-2"></i>Find Buyers';
+//         // } else {
+//         //     searchBtn.innerHTML = '<i class="fas fa-search me-2"></i>View Requirements';
+//         // }
+//     });
+// });
 
 // Search form submission
-document.getElementById('searchForm').addEventListener('submit', function (e) {
-    e.preventDefault();
+// document.getElementById('searchForm').addEventListener('submit', function (e) {
+//     e.preventDefault();
 
-    const formData = {
-        category: document.getElementById('category').value,
-        subcategory: document.getElementById('subcategory').value,
-        location: document.getElementById('location').value,
-        // minQuantity: document.getElementById('minQuantity').value,
-        // maxQuantity: document.getElementById('maxQuantity').value,
-        // priceRange: document.getElementById('priceRange').value
-    };
+//     const formData = {
+//         category: document.getElementById('category').value,
+//         subcategory: document.getElementById('subcategory').value,
+//         location: document.getElementById('location').value,
+//         // minQuantity: document.getElementById('minQuantity').value,
+//         // maxQuantity: document.getElementById('maxQuantity').value,
+//         // priceRange: document.getElementById('priceRange').value
+//     };
 
-    console.log('Search submitted:', formData);
+//     console.log('Search submitted:', formData);
 
-    // Show loading state
-    const searchBtn = document.querySelector('.search-btn');
-    const originalText = searchBtn.innerHTML;
-    searchBtn.innerHTML = '<div class="loading"></div> Searching...';
-    searchBtn.disabled = true;
+//     // Show loading state
+//     const searchBtn = document.querySelector('.search-btn');
+//     const originalText = searchBtn.innerHTML;
+//     searchBtn.innerHTML = '<div class="loading"></div> Searching...';
+//     searchBtn.disabled = true;
 
-    // Simulate search delay
-    setTimeout(() => {
-        searchBtn.innerHTML = originalText;
-        searchBtn.disabled = false;
-        window.location.href = `listings.html?${new URLSearchParams(formData).toString()}`;
-    }, 1500);
-});
+//     // Simulate search delay
+//     setTimeout(() => {
+//         searchBtn.innerHTML = originalText;
+//         searchBtn.disabled = false;
+//         window.location.href = `listings.html?${new URLSearchParams(formData).toString()}`;
+//     }, 1500);
+// });
 
 // Category card click handlers
 document.querySelectorAll('.category-card').forEach(card => {
