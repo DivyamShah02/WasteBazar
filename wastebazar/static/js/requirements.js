@@ -19,10 +19,7 @@ let filters = {
     subcategory_id: '',
     city_location: '',
     state_location: '',
-    min_quantity: '',
-    max_quantity: '',
-    unit: '',
-    sort_by: 'created_at'
+    unit: ''
 };
 
 // Pagination state
@@ -65,6 +62,9 @@ function initializePage() {
 
     // Set up event listeners
     setupEventListeners();
+
+    // Hide deprecated filters if present in DOM
+    hideDeprecatedFilters();
 
     // Initialize AOS animations
     if (typeof AOS !== 'undefined') {
@@ -185,10 +185,7 @@ function setUrlParameterValues() {
         'search': 'search',
         'city_location': 'city_location',
         'state_location': 'state_location',
-        'min_quantity': 'min_quantity',
-        'max_quantity': 'max_quantity',
-        'unit': 'unit',
-        'sort_by': 'sort_by'
+        'unit': 'unit'
     };
 
     // Update filters from URL parameters
@@ -222,10 +219,7 @@ function getFilterElementId(filterKey) {
         'search': 'searchInput',
         'city_location': 'locationFilter',
         'state_location': 'locationFilter',
-        'min_quantity': 'minQuantity',
-        'max_quantity': 'maxQuantity',
-        'unit': 'unitFilter',
-        'sort_by': 'sortFilter'
+        'unit': 'unitFilter'
     };
     return mapping[filterKey] || filterKey;
 }
@@ -267,31 +261,6 @@ function setupEventListeners() {
     if (locationFilter) {
         locationFilter.addEventListener('change', function () {
             filters.city_location = this.value;
-            loadRequirementsFromAPI();
-        });
-    }
-
-    const sortFilter = document.getElementById('sortFilter');
-    if (sortFilter) {
-        sortFilter.addEventListener('change', function () {
-            filters.sort_by = this.value;
-            loadRequirementsFromAPI();
-        });
-    }
-
-    // Quantity filter inputs
-    const minQuantityInput = document.getElementById('minQuantity');
-    if (minQuantityInput) {
-        minQuantityInput.addEventListener('change', function () {
-            filters.min_quantity = this.value;
-            loadRequirementsFromAPI();
-        });
-    }
-
-    const maxQuantityInput = document.getElementById('maxQuantity');
-    if (maxQuantityInput) {
-        maxQuantityInput.addEventListener('change', function () {
-            filters.max_quantity = this.value;
             loadRequirementsFromAPI();
         });
     }
@@ -365,24 +334,15 @@ function clearAllFilters() {
         subcategory_id: '',
         city_location: '',
         state_location: '',
-        min_quantity: '',
-        max_quantity: '',
-        unit: '',
-        sort_by: 'created_at'
+        unit: ''
     };
 
     // Clear form elements
     const searchInput = document.getElementById('searchInput');
     if (searchInput) searchInput.value = '';
 
-    const selects = ['categoryFilter', 'subcategoryFilter', 'locationFilter', 'sortFilter'];
+    const selects = ['categoryFilter', 'subcategoryFilter', 'locationFilter'];
     selects.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) element.value = '';
-    });
-
-    const numberInputs = ['minQuantity', 'maxQuantity'];
-    numberInputs.forEach(id => {
         const element = document.getElementById(id);
         if (element) element.value = '';
     });
@@ -393,6 +353,23 @@ function clearAllFilters() {
     // Reload requirements
     currentPage = 1;
     loadRequirementsFromAPI();
+}
+
+// Hide deprecated filters (Quantity Range and Sort By) if present
+function hideDeprecatedFilters() {
+    const idsToHide = ['minQuantity', 'maxQuantity', 'sortFilter'];
+    idsToHide.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            // Try hiding the closest common wrapper if available
+            const wrapper = el.closest('.filter-group') || el.closest('.form-group') || el.closest('.input-group') || el.parentElement;
+            if (wrapper) {
+                wrapper.style.display = 'none';
+            } else {
+                el.style.display = 'none';
+            }
+        }
+    });
 }
 
 // Load requirements from API
@@ -488,7 +465,7 @@ function createRequirementCard(requirement) {
     const timeAgo = getTimeAgo(requirement.created_at);
 
     return `
-        <div class="listing-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="listing-card" >
             <div class="listing-content">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <h3 class="listing-title mb-0">${categoryInfo.categoryName} - ${categoryInfo.subcategoryName || 'All Types'}</h3>

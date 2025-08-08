@@ -78,7 +78,7 @@ async function initializeEditForm() {
         await loadListingData();
 
         // Initialize form components
-        initializePhotoUpload();
+        // initializePhotoUpload();
         initializeFormSubmission();
         await initializeCategorySubcategory();
         initializeStateDropdown();
@@ -88,8 +88,8 @@ async function initializeEditForm() {
         await prefillForm();
 
         // Initialize image previews
-        updateFeaturedImagePreview();
-        updateGalleryImagesPreview();
+        // updateFeaturedImagePreview();
+        // updateGalleryImagesPreview();
         updateImageCount();
 
         // Show the form
@@ -195,8 +195,7 @@ function displayExistingImages() {
         existingFeaturedImageContainer.innerHTML = `
             <div class="existing-image">
                 <img src="${existingFeaturedImage}" alt="Current Featured Image">
-                <button type="button" class="image-remove-btn" onclick="removeExistingFeaturedImage()" 
-                        title="Remove current featured image">×</button>
+                
             </div>
         `;
         existingFeaturedContainer.style.display = 'block';
@@ -214,8 +213,7 @@ function displayExistingImages() {
             imageDiv.className = 'existing-image';
             imageDiv.innerHTML = `
                 <img src="${imageUrl}" alt="Current Gallery Image ${index + 1}">
-                <button type="button" class="image-remove-btn" onclick="removeExistingGalleryImage(${index})" 
-                        title="Remove this gallery image">×</button>
+                
             `;
             existingGalleryImagesContainer.appendChild(imageDiv);
         });
@@ -225,106 +223,106 @@ function displayExistingImages() {
 }
 
 // Remove existing featured image
-window.removeExistingFeaturedImage = function () {
-    if (existingFeaturedImage) {
-        removedExistingImages.push({
-            type: 'featured',
-            url: existingFeaturedImage
-        });
-        existingFeaturedImage = null;
-        document.getElementById('existingFeaturedImage').style.display = 'none';
-        updateImageCount();
-    }
-};
+// window.removeExistingFeaturedImage = function () {
+//     if (existingFeaturedImage) {
+//         removedExistingImages.push({
+//             type: 'featured',
+//             url: existingFeaturedImage
+//         });
+//         existingFeaturedImage = null;
+//         document.getElementById('existingFeaturedImage').style.display = 'none';
+//         updateImageCount();
+//     }
+// };
 
 // Remove existing gallery image
-window.removeExistingGalleryImage = function (index) {
-    if (existingGalleryImages[index]) {
-        removedExistingImages.push({
-            type: 'gallery',
-            url: existingGalleryImages[index],
-            index: index
-        });
-        existingGalleryImages.splice(index, 1);
-        displayExistingImages();
-        updateImageCount();
-    }
-};
+// window.removeExistingGalleryImage = function (index) {
+//     if (existingGalleryImages[index]) {
+//         removedExistingImages.push({
+//             type: 'gallery',
+//             url: existingGalleryImages[index],
+//             index: index
+//         });
+//         existingGalleryImages.splice(index, 1);
+//         displayExistingImages();
+//         updateImageCount();
+//     }
+// };
 
-// Initialize photo upload functionality
-function initializePhotoUpload() {
-    const featuredInput = document.getElementById('featuredImage');
-    const galleryInput = document.getElementById('galleryImages');
-    const featuredPreview = document.getElementById('featuredImagePreview');
-    const galleryPreview = document.getElementById('galleryPreviewContainer');
-    const featuredDropZone = document.getElementById('featuredDropZone');
-    const galleryDropZone = document.getElementById('galleryDropZone');
+// // Initialize photo upload functionality
+// function initializePhotoUpload() {
+//     const featuredInput = document.getElementById('featuredImage');
+//     const galleryInput = document.getElementById('galleryImages');
+//     const featuredPreview = document.getElementById('featuredImagePreview');
+//     const galleryPreview = document.getElementById('galleryPreviewContainer');
+//     const featuredDropZone = document.getElementById('featuredDropZone');
+//     const galleryDropZone = document.getElementById('galleryDropZone');
 
-    if (!featuredInput || !galleryInput || !featuredPreview || !galleryPreview) {
-        console.error("❌ Photo upload elements not found");
-        return;
-    }
+//     if (!featuredInput || !galleryInput || !featuredPreview || !galleryPreview) {
+//         console.error("❌ Photo upload elements not found");
+//         return;
+//     }
 
-    // Featured image input change event
-    featuredInput.addEventListener('change', function (e) {
-        const file = e.target.files[0];
-        if (file) {
-            handleFeaturedImageSelection(file);
-        }
-    });
+//     // Featured image input change event
+//     featuredInput.addEventListener('change', function (e) {
+//         const file = e.target.files[0];
+//         if (file) {
+//             handleFeaturedImageSelection(file);
+//         }
+//     });
 
-    // Gallery images input change event
-    galleryInput.addEventListener('change', function (e) {
-        const files = Array.from(e.target.files);
-        handleGalleryImagesSelection(files);
-    });
+//     // Gallery images input change event
+//     galleryInput.addEventListener('change', function (e) {
+//         const files = Array.from(e.target.files);
+//         handleGalleryImagesSelection(files);
+//     });
 
-    // Featured image drop zone events
-    if (featuredDropZone) {
-        setupDropZone(featuredDropZone, featuredInput, handleFeaturedImageSelection, false);
-    }
+//     // Featured image drop zone events
+//     if (featuredDropZone) {
+//         setupDropZone(featuredDropZone, featuredInput, handleFeaturedImageSelection, false);
+//     }
 
-    // Gallery images drop zone events
-    if (galleryDropZone) {
-        setupDropZone(galleryDropZone, galleryInput, handleGalleryImagesSelection, true);
-    }
-}
+//     // Gallery images drop zone events
+//     if (galleryDropZone) {
+//         setupDropZone(galleryDropZone, galleryInput, handleGalleryImagesSelection, true);
+//     }
+// }
 
 // Setup drop zone functionality
-function setupDropZone(dropZone, input, handler, isMultiple) {
-    dropZone.addEventListener('click', function (e) {
-        if (e.target !== input) {
-            input.click();
-        }
-    });
+// function setupDropZone(dropZone, input, handler, isMultiple) {
+//     dropZone.addEventListener('click', function (e) {
+//         if (e.target !== input) {
+//             input.click();
+//         }
+//     });
 
-    dropZone.addEventListener('dragover', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        dropZone.classList.add('drag-over');
-    });
+//     dropZone.addEventListener('dragover', function (e) {
+//         e.preventDefault();
+//         e.stopPropagation();
+//         dropZone.classList.add('drag-over');
+//     });
 
-    dropZone.addEventListener('dragleave', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (!dropZone.contains(e.relatedTarget)) {
-            dropZone.classList.remove('drag-over');
-        }
-    });
+//     dropZone.addEventListener('dragleave', function (e) {
+//         e.preventDefault();
+//         e.stopPropagation();
+//         if (!dropZone.contains(e.relatedTarget)) {
+//             dropZone.classList.remove('drag-over');
+//         }
+//     });
 
-    dropZone.addEventListener('drop', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        dropZone.classList.remove('drag-over');
+//     dropZone.addEventListener('drop', function (e) {
+//         e.preventDefault();
+//         e.stopPropagation();
+//         dropZone.classList.remove('drag-over');
 
-        const files = Array.from(e.dataTransfer.files);
-        if (isMultiple) {
-            handler(files);
-        } else {
-            handler(files[0]);
-        }
-    });
-}
+//         const files = Array.from(e.dataTransfer.files);
+//         if (isMultiple) {
+//             handler(files);
+//         } else {
+//             handler(files[0]);
+//         }
+//     });
+// }
 
 // Handle featured image selection
 function handleFeaturedImageSelection(file) {
@@ -372,9 +370,7 @@ function updateFeaturedImagePreview() {
             featuredPreview.innerHTML = `
                 <div class="featured-image-item">
                     <img src="${e.target.result}" alt="New Featured Image">
-                    <button type="button" class="image-remove-btn" onclick="removeFeaturedImage()" title="Remove new featured image">
-                        ×
-                    </button>
+                   
                     <div class="image-label">New Featured Image</div>
                 </div>
             `;
@@ -405,9 +401,7 @@ function updateGalleryImagesPreview() {
             previewItem.className = 'gallery-image-item';
             previewItem.innerHTML = `
                 <img src="${e.target.result}" alt="New Gallery Image ${index + 1}">
-                <button type="button" class="image-remove-btn" onclick="removeGalleryImage(${index})" title="Remove image">
-                    ×
-                </button>
+                
                 <div class="image-label">New Gallery ${index + 1}</div>
             `;
             galleryPreview.appendChild(previewItem);
@@ -740,11 +734,11 @@ async function initializeCategorySubcategory() {
     // Populate categories
     populateCategories(categorySelect);
 
-    // Category change event listener
-    categorySelect.addEventListener('change', function () {
-        const selectedCategoryId = this.value;
-        populateSubcategories(subcategorySelect, selectedCategoryId);
-    });
+    // // Category change event listener
+    // categorySelect.addEventListener('change', function () {
+    //     const selectedCategoryId = this.value;
+    //     populateSubcategories(subcategorySelect, selectedCategoryId);
+    // });
 }
 
 // Populate categories dropdown

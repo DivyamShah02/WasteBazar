@@ -211,6 +211,8 @@ class SellerListingViewSet(viewsets.ViewSet):
             state_location=data['state_location'],
             pincode_location=data['pincode_location'],
             address=data['address'],
+            waste_packed_type=data.get('waste_packed_type') or None,
+            waste_stored=data.get('waste_stored') or None,
             status='pending'
         )
 
@@ -764,21 +766,16 @@ class SellerListingDetailViewset(viewsets.ViewSet):
             # Handle image uploads after basic data is saved
             uploaded_images = []
             
-            print(f"🔍 [DEBUG] Processing image updates for listing {listing.listing_id}")
-            print(f"🔍 [DEBUG] Current featured_image_url: {listing.featured_image_url}")
-            print(f"🔍 [DEBUG] FILES in request: {list(request.FILES.keys())}")
-            print(f"🔍 [DEBUG] remove_featured_image flag: {request.data.get('remove_featured_image')}")
             
             # Handle featured image update
             featured_image = request.FILES.get('featured_image')
             if featured_image:
-                print(f"🔍 [DEBUG] New featured image found: {featured_image.name}")
+               
                 try:
                     featured_image_url = self.upload_file_to_s3(featured_image)
-                    print(f"🔍 [DEBUG] Uploaded featured image to: {featured_image_url}")
+                   
                     listing.featured_image_url = featured_image_url
                     uploaded_images.append({"type": "featured", "url": featured_image_url})
-                    print(f"🔍 [DEBUG] Updated listing.featured_image_url to: {listing.featured_image_url}")
                 except Exception as e:
                     print(f"❌ [DEBUG] Failed to upload featured image: {str(e)}")
             else:

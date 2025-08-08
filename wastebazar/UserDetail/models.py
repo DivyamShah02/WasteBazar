@@ -38,7 +38,8 @@ class User(AbstractUser):
     role = models.CharField(max_length=20, choices=USER_ROLES)
     name = models.CharField(max_length=255)
     contact_number = models.CharField(max_length=15, unique=True)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, null=True, blank=True)
+    pan_number = models.CharField(max_length=20, blank=True, null=True)
     is_approved = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
 
@@ -67,7 +68,11 @@ class CorporateUserDetail(models.Model):
     email = models.EmailField(unique=True)
     company_name = models.CharField(max_length=255)
     pan_number = models.CharField(max_length=20)
+    aadhar_number = models.CharField(max_length=12, blank=True, null=True)
+    cin_number = models.CharField(max_length=21, blank=True, null=True)
     gst_number = models.CharField(max_length=20, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    state = models.CharField(max_length=100, blank=True, null=True)
     address = models.TextField()
     certificate_url = models.URLField(blank=True, null=True)  # S3 link or similar
     is_approved = models.BooleanField(default=False)

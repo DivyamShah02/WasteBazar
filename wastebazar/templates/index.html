@@ -21,7 +21,7 @@
     <div id="spinner" class="spinner-container">
         <div class="spinner">
             <!-- You can replace this with your actual logo path -->
-            <img src="/static/images/wastebazar-logo.png" alt="WasteBazar Logo" class="spinner-logo" onerror="this.style.display='none'" />
+            {% comment %} <img src="/static/images/wastebazzar-logo.png" alt="WasteBazar Logo" class="spinner-logo" onerror="this.style.display='none'" /> {% endcomment %}
         </div>
         <div class="loading-text">Loading WasteBazar...</div>
     </div>
@@ -50,7 +50,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="listings.html">Market Place</a>
+                        <a class="nav-link" href="/marketplace">Market Place</a>
                     </li>
                     {% comment %} <li class="nav-item">
                         <a class="nav-link" href="listings.html">Browse Listings</a>
@@ -232,6 +232,8 @@
                                 <p>Founded in 2019, WasteBazar emerged from a simple vision: to create a transparent, efficient, and accessible platform where scrap traders could connect, share information, and grow their businesses together.</p>
                                 
                                 <p>We recognized that the traditional scrap trading industry lacked a centralized information hub. Buyers struggled to find reliable sellers, and sellers couldn't reach their ideal customers. WasteBazar bridges this gap by providing a comprehensive platform for information sharing and direct connections.</p>
+
+                                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Et, facere eos adipisci asperiores laboriosam dolor ut ipsa omnis incidunt corrupti. Ipsam quis est illo repellat autem ullam odit ad iure! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cumque, facilis nemo. Animi voluptatibus sed iure ducimus alias, pariatur nesciunt similique saepe fugit consectetur autem dolore sequi id dolorum facilis consequuntur?</p>
                             </div>
                             <div class="col-12 col-lg-6">
                             
@@ -258,7 +260,7 @@
                                         <div class="highlight-icon">
                                             <i class="fas fa-newspaper"></i>
                                         </div>
-                                        <div class="highlight-text">Paper waste</div>
+                                        <div class="highlight-text">Paper & Cardboard waste</div>
                                     </div>
                                     
                                     <div class="highlight-item">
@@ -272,7 +274,33 @@
                                             <i class="fas fa-wine-bottle"></i>
                                         </div>
                                         <div class="highlight-text">Glass Waste</div>
-                                    </div>                        
+                                    </div> 
+                                    
+                                    <div class="highlight-item">
+                                        <div class="highlight-icon">
+                                            <i class="fas fa-building"></i>
+                                        </div>
+                                        <div class="highlight-text">Construction, demolition </div>
+                                    </div>
+                                    <div class="highlight-item">
+                                        <div class="highlight-icon">
+                                            <i class="fas fa-battery-full"></i>
+                                        </div>
+                                        <div class="highlight-text">Battery Waste</div>
+                                    </div>     
+                                    
+                                    <div class="highlight-item">
+                                        <div class="highlight-icon">
+                                            <i class="fas fa-eraser"></i>
+                                        </div>
+                                        <div class="highlight-text">Rubber & tire waste</div>
+                                    </div>
+                                    <div class="highlight-item">
+                                        <div class="highlight-icon">
+                                            <i class="fas fa-couch"></i>
+                                        </div>
+                                        <div class="highlight-text">Furniture Waste</div>
+                                    </div>      
                                 </div>
                             </div>
                         </div>

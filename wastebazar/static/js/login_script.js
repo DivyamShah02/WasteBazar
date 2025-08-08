@@ -433,6 +433,7 @@ async function submitUserDetails() {
             formData = {
                 name: document.getElementById("fullName").value.trim(),
                 email: document.getElementById("email").value.trim(),
+                pan_number: document.getElementById("panNumber").value.trim()
             }
         } else {
             formData = {
@@ -440,8 +441,12 @@ async function submitUserDetails() {
                 email: document.getElementById("corporateEmail").value.trim(),
                 company_name: document.getElementById("companyName").value.trim(),
                 pan_number: document.getElementById("panNumber").value.trim(),
+                cin_number: document.getElementById("cinNumber").value.trim(),
+                aadhar_number: document.getElementById("aadharNumber").value.trim(),
                 gst_number: document.getElementById("gstNumber").value.trim(),
                 address: document.getElementById("companyAddress").value.trim(),
+                city: document.getElementById("companyCity").value.trim(),
+                state: document.getElementById("companyState").value.trim(),
                 certificate_url: document.getElementById("certificateUrl").value.trim(),
             }
         }

@@ -69,6 +69,17 @@ def generate_listing_id():
 
 
 class SellerListing(models.Model):
+    PACKED_TYPE_CHOICES = [
+        ('bags', 'Bags'),
+        ('box', 'Box'),
+        ('lumps', 'Lumps'),
+        ('rolls', 'Rolls'),
+    ]
+
+    STORED_CHOICES = [
+        ('indoor', 'Indoor'),
+        ('outdoor', 'Outdoor'),
+    ]
     STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('auto_approved', 'Auto Approved'),
@@ -93,6 +104,22 @@ class SellerListing(models.Model):
     state_location = models.CharField(max_length=100)
     pincode_location = models.CharField(max_length=100)
     address = models.TextField()
+
+    # Waste packaging and storage details
+    waste_packed_type = models.CharField(
+        max_length=20,
+        choices=PACKED_TYPE_CHOICES,
+        null=True,
+        blank=True,
+        default='bags'
+    )
+    waste_stored = models.CharField(
+        max_length=10,
+        choices=STORED_CHOICES,
+        null=True,
+        blank=True,
+        default='indoor'
+    )
 
     # Image fields for S3 URLs
     featured_image_url = models.URLField(max_length=500, null=True, blank=True)

@@ -366,6 +366,8 @@ async function handleFormSubmission() {
         formData.append('state_location', document.getElementById('state_location').value);
         formData.append('pincode_location', document.getElementById('pincode_location').value);
         formData.append('address', document.getElementById('address').value);
+        formData.append('waste_packed_type', document.getElementById('waste_packed_type').value);
+        formData.append('waste_stored', document.getElementById('waste_stored').value);
 
         // Add featured image
         if (featuredImage) {

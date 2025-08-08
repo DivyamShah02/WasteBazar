@@ -11,6 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
             'name',
             'contact_number',
             'email',
+            'pan_number',
             'username',
             'is_deleted',
         ]

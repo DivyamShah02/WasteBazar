@@ -126,7 +126,8 @@ class OtpAuthViewSet(viewsets.ViewSet):
         else:
             user = User.objects.create(
                 contact_number=otp_obj.mobile,
-                role=user_type
+                role=user_type,
+                email=None,
             )
             # Create wallet for buyer users
             if user_type in ['buyer_individual', 'buyer_corporate']:
@@ -155,7 +156,7 @@ class OtpAuthViewSet(viewsets.ViewSet):
 class UserDetailViewSet(viewsets.ViewSet):
 
     @handle_exceptions
-    @check_authentication()
+    # @check_authentication()
     def update(self, request, pk):
         """
         API 3: Fill User Details after OTP verification
@@ -173,8 +174,12 @@ class UserDetailViewSet(viewsets.ViewSet):
             if role in ['buyer_corporate', 'seller_corporate']:
                 company_name = request.data.get("company_name")
                 pan_number = request.data.get("pan_number")
+                cin_number = request.data.get("cin_number")
+                aadhar_number = request.data.get("aadhar_number")
                 gst_number = request.data.get("gst_number")
                 address = request.data.get("address")
+                city = request.data.get("city")
+                state = request.data.get("state")
                 certificate_url = request.data.get("certificate_url")
                 name = request.data.get('name')
                 contact_number = user.contact_number
@@ -202,7 +207,11 @@ class UserDetailViewSet(viewsets.ViewSet):
                         "email": email,
                         "company_name": company_name,
                         "pan_number": pan_number,
+                        "cin_number": cin_number,
+                        "aadhar_number": aadhar_number,
                         "gst_number": gst_number,
+                        "city": city,
+                        "state": state,
                         "address": address,
                         "certificate_url": certificate_url,
                         "requested_at": timezone.now(),
