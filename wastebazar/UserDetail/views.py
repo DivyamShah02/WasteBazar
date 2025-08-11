@@ -166,7 +166,20 @@ class UserDetailViewSet(viewsets.ViewSet):
         user = User.objects.get(user_id=user_id)
         role = user.role
 
-        serializer = UserSerializer(user, data=request.data, partial=True)
+        # Prepare update payload; normalize empty strings to None for optional IDs
+        incoming = request.data
+        update_data = {}
+        for key in ['name', 'email', 'pan_number', 'aadhar_number']:
+            if key in incoming:
+                val = incoming.get(key)
+                if isinstance(val, str):
+                    val = val.strip()
+                # Normalize empty strings to None for optional fields
+                if key in ['pan_number', 'aadhar_number'] and (val == '' or val is None):
+                    val = None
+                update_data[key] = val
+
+        serializer = UserSerializer(user, data=update_data, partial=True)
         if serializer.is_valid():
             serializer.save()
 
@@ -189,14 +202,6 @@ class UserDetailViewSet(viewsets.ViewSet):
                 if role == "seller_corporate":
                     is_approved = True 
 
-                if not company_name or not pan_number or not address:
-                    return Response({
-                        "success": False,
-                        "user_not_logged_in": False,
-                        "user_unauthorized": False,
-                        "data": None,
-                        "error": "Corporate fields missing: company_name, pan_number, address are required."
-                    }, status=status.HTTP_400_BAD_REQUEST)
 
                 # Save corporate details
                 CorporateUserDetail.objects.update_or_create(
@@ -225,6 +230,27 @@ class UserDetailViewSet(viewsets.ViewSet):
                 # Corporate users are inactive until approved
                 user.is_active = False
                 user.save()
+            else:
+                # Individual users: ensure PAN/Aadhar are updated based on provided data
+                # At least one may be provided depending on UI selection; treat missing/empty as None
+                pan_number = update_data.get('pan_number', None)
+                aadhar_number = update_data.get('aadhar_number', None)
+                fields_changed = []
+                name = request.data.get('name', user.name)
+                email = request.data.get('email', user.email)
+
+                fields_changed.append('name')
+                fields_changed.append('email')
+
+                if 'pan_number' in update_data:
+                    user.pan_number = pan_number
+                    fields_changed.append('pan_number')
+                if 'aadhar_number' in update_data:
+                    user.aadhar_number = aadhar_number
+                    fields_changed.append('aadhar_number')
+
+                if fields_changed:
+                    user.save(update_fields=fields_changed)
 
             return Response({
                 "success": True,

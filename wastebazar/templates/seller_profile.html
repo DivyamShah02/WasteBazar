@@ -392,7 +392,7 @@
 
                     <!-- Contact Information -->
                     <div class="sidebar-card">
-                        <h3 class="sidebar-title">
+                        <h3 class="sidebar-title" id="sidebarInfoTitle">
                             <i class="fas fa-address-book"></i>
                             Company Information
                         </h3>
@@ -401,8 +401,18 @@
                                 <i class="fas fa-building"></i>
                             </div>
                             <div class="contact-info">
-                                <div class="contact-label">Company</div>
+                                <div class="contact-label" id="sidebarCompanyLabel">Company</div>
                                 <div class="contact-value" id="sidebarCompanyName">Company name</div>
+                            </div>
+                        </div>
+                        <!-- ID Document (PAN/Aadhar) for Individual Sellers -->
+                        <div class="contact-item" id="sidebarIdDocItem" style="display: none;">
+                            <div class="contact-icon">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <div class="contact-info">
+                                <div class="contact-label" id="sidebarIdDocLabel">ID</div>
+                                <div class="contact-value" id="sidebarIdDocValue">-</div>
                             </div>
                         </div>
                         <div class="contact-item">
@@ -421,15 +431,6 @@
                             <div class="contact-info">
                                 <div class="contact-label">Phone</div>
                                 <div class="contact-value" id="sidebarPhone">Phone</div>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div class="contact-info">
-                                <div class="contact-label">Address</div>
-                                <div class="contact-value" id="sidebarAddress">Address</div>
                             </div>
                         </div>
                     </div>

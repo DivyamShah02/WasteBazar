@@ -13,7 +13,7 @@
     padding: 3rem;
     box-shadow: var(--shadow-2xl);
     border: 1px solid var(--border-color);
-    max-width: 500px;
+    max-width: 1000px;
     width: 100%;
     margin: 0 1rem;
     position: relative;
@@ -289,6 +289,32 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
+}
+
+/* Custom select arrow */
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper select.form-control {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 2.5rem;
+    /* space for arrow */
+}
+
+.select-wrapper::after {
+    content: "\f107";
+    /* Font Awesome chevron-down */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    pointer-events: none;
 }
 
 @media (max-width: 768px) {

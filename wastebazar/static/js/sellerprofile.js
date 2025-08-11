@@ -253,13 +253,26 @@ function updateProfileHeader(userDetails, corporateDetails) {
  * Update contact information in sidebar
  */
 function updateContactInfo(userDetails, corporateDetails) {
+    const sidebarTitleEl = document.getElementById('sidebarInfoTitle');
+    const sidebarCompanyLabelEl = document.getElementById('sidebarCompanyLabel');
     const sidebarCompanyNameEl = document.getElementById('sidebarCompanyName');
     const sidebarEmailEl = document.getElementById('sidebarEmail');
     const sidebarPhoneEl = document.getElementById('sidebarPhone');
-    const sidebarAddressEl = document.getElementById('sidebarAddress');
+    const idDocItemEl = document.getElementById('sidebarIdDocItem');
+    const idDocLabelEl = document.getElementById('sidebarIdDocLabel');
+    const idDocValueEl = document.getElementById('sidebarIdDocValue');
+
+    const isIndividual = userDetails.role === 'seller_individual';
+
+    // Title: Company Information -> Seller Information for individuals
+    if (sidebarTitleEl) {
+        const titleText = isIndividual ? 'Seller Information' : 'Company Information';
+        sidebarTitleEl.innerHTML = `<i class="fas fa-address-book"></i> ${titleText}`;
+    }
+    if (sidebarCompanyLabelEl) sidebarCompanyLabelEl.textContent = isIndividual ? 'Seller' : 'Company';
 
     if (sidebarCompanyNameEl) {
-        if (corporateDetails && corporateDetails.company_name) {
+        if (!isIndividual && corporateDetails && corporateDetails.company_name) {
             sidebarCompanyNameEl.textContent = corporateDetails.company_name;
         } else {
             sidebarCompanyNameEl.textContent = userDetails.name || 'Not provided';
@@ -269,11 +282,26 @@ function updateContactInfo(userDetails, corporateDetails) {
     if (sidebarEmailEl) sidebarEmailEl.textContent = userDetails.email || 'Not provided';
     if (sidebarPhoneEl) sidebarPhoneEl.textContent = userDetails.contact_number || 'Not provided';
 
-    if (sidebarAddressEl) {
-        if (corporateDetails && corporateDetails.address) {
-            sidebarAddressEl.textContent = corporateDetails.address;
+    // Address/location is intentionally not displayed in the sidebar per requirement
+
+    // Show PAN/Aadhar for individuals if available
+    if (idDocItemEl && idDocLabelEl && idDocValueEl) {
+        if (isIndividual) {
+            const pan = userDetails.pan_number;
+            const aadhar = userDetails.aadhar_number || (corporateDetails && corporateDetails.aadhar_number);
+            if (pan) {
+                idDocLabelEl.textContent = 'PAN';
+                idDocValueEl.textContent = pan;
+                idDocItemEl.style.display = 'flex';
+            } else if (aadhar) {
+                idDocLabelEl.textContent = 'Aadhar';
+                idDocValueEl.textContent = aadhar;
+                idDocItemEl.style.display = 'flex';
+            } else {
+                idDocItemEl.style.display = 'none';
+            }
         } else {
-            sidebarAddressEl.textContent = 'Not provided';
+            idDocItemEl.style.display = 'none';
         }
     }
 }

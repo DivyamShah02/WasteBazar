@@ -100,9 +100,9 @@
 }
 
 .listing-title {
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 2.5rem;
-  font-weight: 800;
+  /* font-family: "Space Grotesk", sans-serif; */
+  font-size: 2rem;
+  font-weight: 700;
   color: var(--text-dark);
   margin-bottom: 1rem;
   line-height: 1.2;
@@ -521,15 +521,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.spec-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding: 1rem;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
 
 
 .spec-label {
@@ -662,6 +656,13 @@
   margin-bottom: 1.5rem;
 }
 
+.listing-description h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-dark);
+
+}
+
 /* Quick Info Card */
 .quick-info-grid {
   display: flex;
@@ -696,14 +697,14 @@
 
 .info-label {
   font-size: 0.9rem;
-  color: var(--text-light);
+  color: black;
   margin-bottom: 0.25rem;
 }
 
 .info-value {
   text-align: end;
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 0.85 rem;
+  font-weight: 500;
   color: var(--text-dark);
 }
 
@@ -804,6 +805,7 @@
   gap: 0.5rem;
   transition: all 0.3s ease;
   font-size: 1rem;
+  width: 100%;
 }
 
 .btn-contact-seller:hover {
@@ -957,7 +959,7 @@
 }
 
 .modal-body {
-  padding: 2rem;
+  /* padding: 2rem; */
 }
 
 .contact-info {
@@ -1424,7 +1426,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1rem;
+  padding: 10px 0px;
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -1482,16 +1484,17 @@
 }
 
 .info-label {
-  font-size: 0.85rem;
-  width: 200px;
-  color: var(--text-muted);
+  font-size: 1 rem;
+  width: 150px;
+  color: black;
   /* margin-bottom: 0.5rem; */
   font-weight: 500;
 }
 
 .info-value {
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1 rem;
+  width: 150px;
+  font-weight: 500;
   color: var(--text-dark);
 }
 

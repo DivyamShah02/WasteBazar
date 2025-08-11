@@ -154,8 +154,8 @@ class ListingDetailApp {
     breadcrumb.innerHTML = `
             <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item"><a href="/marketplace">Listings</a></li>
-            <li class="breadcrumb-item"><a href="/marketplace?category=${listing.category_id}">${categoryName}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">${listingTitle}</li>
+            <li class="breadcrumb-item"><a href="/marketplace?category=${listing.category_name}">${categoryName}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">${listing.subcategory_name || 'Subcategory'}</li>
         `;
   }
 
@@ -165,7 +165,7 @@ class ListingDetailApp {
     if (titleElement) {
       const title =
         // listing.seller_name ||
-        `${listing.subcategory_name || 'Subcategory'}` ||
+        `${listing.category_name || 'Category'} - ${listing.subcategory_name || 'Subcategory'}` ||
         'Listing Details';
       titleElement.textContent = title;
     }
@@ -180,26 +180,26 @@ class ListingDetailApp {
     }
 
     // Update date meta
-    const dateMeta = document.getElementById('listing-date');
-    if (dateMeta) {
-      dateMeta.textContent = `Posted ${this.getRelativeTime(listing.created_at)}`;
-    }
+    // const dateMeta = document.getElementById('listing-date');
+    // if (dateMeta) {
+    //   dateMeta.textContent = `Posted ${this.getRelativeTime(listing.created_at)}`;
+    // }
 
     // Update price
-    const priceAmountElement = document.getElementById('price-amount');
-    const priceUnitElement = document.getElementById('price-unit');
+    // const priceAmountElement = document.getElementById('price-amount');
+    // const priceUnitElement = document.getElementById('price-unit');
 
-    if (priceAmountElement) {
-      if (listing.priceperunit && listing.priceperunit > 0) {
-        priceAmountElement.textContent = `₹${listing.priceperunit.toLocaleString()}`;
-      } else {
-        priceAmountElement.textContent = 'Price on Request';
-      }
-    }
+    // if (priceAmountElement) {
+    //   if (listing.priceperunit && listing.priceperunit > 0) {
+    //     priceAmountElement.textContent = `₹${listing.priceperunit.toLocaleString()}`;
+    //   } else {
+    //     priceAmountElement.textContent = 'Price on Request';
+    //   }
+    // }
 
-    if (priceUnitElement && listing.unit) {
-      priceUnitElement.textContent = `per ${listing.unit}`;
-    }
+    // if (priceUnitElement && listing.unit) {
+    //   priceUnitElement.textContent = `per ${listing.unit}`;
+    // }
 
     // Update badges
     const badgesContainer = document.getElementById('listing-badges');
@@ -210,9 +210,7 @@ class ListingDetailApp {
         badgesHTML += '<span class="badge-verified">Verified Seller</span>';
       }
 
-      if (listing.category_name) {
-        badgesHTML += `<span class="badge-category">${listing.category_name}</span>`;
-      }
+
 
       badgesContainer.innerHTML = badgesHTML;
     }
@@ -311,11 +309,9 @@ class ListingDetailApp {
     const specifications = [
       { label: 'Category', value: listing.category_name || 'N/A' },
       { label: 'Subcategory', value: listing.subcategory_name || 'N/A' },
-      { label: 'Quantity', value: `${listing.quantity} ${listing.unit}` },
-      { label: 'Price per Unit', value: listing.priceperunit ? `₹${listing.priceperunit}` : 'Price on Request' },
-      { label: 'Status', value: this.formatStatus(listing.status) },
+      { label: 'Waste packed type', value: listing.waste_packed_type || 'N/A' },
+      { label: 'Waste stored', value: listing.waste_stored || 'N/A' },
       { label: 'Listed Date', value: this.formatDate(listing.created_at) },
-      { label: 'Valid Until', value: this.formatDate(listing.valid_until) },
     ];
 
     const specsHTML = specifications.map(spec => `
@@ -333,7 +329,7 @@ class ListingDetailApp {
     if (!locationContent) return;
 
     const fullAddress = [
-      listing.address,
+
       listing.city_location,
       listing.state_location,
       listing.pincode_location
@@ -341,13 +337,7 @@ class ListingDetailApp {
 
     locationContent.innerHTML = `
             <div class="location-details">
-                <div class="location-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <div>
-                        <strong>Pickup Location</strong>
-                        <p>${fullAddress || 'Location details not provided'}</p>
-                    </div>
-                </div>
+              
                 <div class="location-item">
                     <i class="fas fa-city"></i>
                     <div>
@@ -396,7 +386,7 @@ class ListingDetailApp {
   updateSellerInfo(listing) {
     const sellerProfile = document.getElementById('seller-profile');
     const sellerActions = document.getElementById('seller-actions');
-    const sellerStats = document.querySelector('.seller-stats');
+    // const sellerStats = document.querySelector('.seller-stats');
 
     if (!sellerProfile) return;
 
@@ -406,19 +396,15 @@ class ListingDetailApp {
             </div>
             <div class="seller-details">
                 <h4>${listing.seller_name || 'Anonymous Seller'}</h4>
-                <p class="seller-id">ID: ${listing.seller_user_id}</p>
-                
+                <p class="seller-id">ID: ${listing.seller_user_id}</p>     
             </div>
         `;
 
-    if (sellerStats) {
-      sellerStats.innerHTML = `
-           <div class="stat-item">
-              <span class="stat-label">Member Since</span>
-              <span class="stat-value">${this.formatDate(listing.created_at, true)}</span>
-          </div>
-        `;
-    }
+    // if (sellerStats) {
+    //   sellerStats.innerHTML = `
+
+    //     `;
+    // }
 
     if (sellerActions) {
       sellerActions.innerHTML = `
@@ -548,10 +534,10 @@ class ListingDetailApp {
 
   setupEventListeners() {
     // Share button
-    const shareBtn = document.getElementById('shareBtn');
-    if (shareBtn) {
-      shareBtn.addEventListener('click', () => this.shareListing());
-    }
+    // const shareBtn = document.getElementById('shareBtn');
+    // if (shareBtn) {
+    //   shareBtn.addEventListener('click', () => this.shareListing());
+    // }
 
     // Keyboard navigation for image slider
     document.addEventListener('keydown', (e) => {
@@ -837,11 +823,14 @@ function initializePage() {
 
 function setupEventListeners() {
 
-  // Share button
-  document.getElementById("shareBtn").addEventListener("click", shareListing)
+  // // Share button
+  // document.getElementById("shareBtn").addEventListener("click", shareListing)
 
-  // Inquiry form
-  // document.getElementById("inquiryForm").addEventListener("submit", submitInquiry)
+  // Inquiry modal form submission
+  const inquiryFormModal = document.getElementById("inquiryFormModal")
+  if (inquiryFormModal) {
+    inquiryFormModal.addEventListener("submit", submitInquiryModal)
+  }
 
   // Contact seller button
   document.querySelector(".btn-contact-seller").addEventListener("click", openContactModal)
@@ -1004,6 +993,48 @@ function submitInquiry(event) {
     // Show success message
     showToast("Inquiry sent successfully! The seller will contact you soon.")
   }, 2000)
+}
+
+// New: handle inquiry submission from modal
+function submitInquiryModal(event) {
+  event.preventDefault()
+
+  const inquiryData = {
+    name: document.getElementById("inquiryNameModal").value.trim(),
+    email: document.getElementById("inquiryEmailModal").value.trim(),
+    phone: document.getElementById("inquiryPhoneModal").value.trim(),
+    quantity: document.getElementById("inquiryQuantityModal").value.trim(),
+    message: document.getElementById("inquiryMessageModal").value.trim(),
+    listingId: getListingIdFromUrl(),
+    timestamp: new Date().toISOString(),
+  }
+
+  if (!inquiryData.name || !inquiryData.email || !inquiryData.phone || !inquiryData.message) {
+    showToast("Please fill in all required fields", "error")
+    return
+  }
+
+  const submitBtn = event.target.querySelector(".btn-login")
+  const originalHtml = submitBtn.innerHTML
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...'
+  submitBtn.disabled = true
+
+  // Simulate API call; TODO: wire to backend endpoint if available
+  setTimeout(() => {
+    console.log("Inquiry submitted:", inquiryData)
+
+    // Reset
+    event.target.reset()
+    submitBtn.innerHTML = originalHtml
+    submitBtn.disabled = false
+
+    // Hide modal
+    const modalEl = document.getElementById("inquiryModal")
+    const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl)
+    modal.hide()
+
+    showToast("Inquiry sent successfully! The seller will contact you soon.")
+  }, 1200)
 }
 
 function openContactModal() {

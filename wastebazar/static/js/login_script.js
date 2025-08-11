@@ -304,6 +304,9 @@ function setupUserDetailsFields() {
                 field.setAttribute('required', 'required')
             }
         })
+
+        // Initialize individual PAN/Aadhar selector
+        setupIndividualIdSelector()
     } else {
         individualFields.style.display = "none"
         corporateFields.style.display = "block"
@@ -315,11 +318,82 @@ function setupUserDetailsFields() {
 
         // Add required attribute to corporate fields
         corporateFields.querySelectorAll('input, textarea').forEach(field => {
-            if (field.id !== 'certificateUrl') {
+            // certificateUrl is optional; PAN/CIN handled by toggle logic
+            if (field.id !== 'certificateUrl' && field.id !== 'corporatepanNumber' && field.id !== 'cinNumber') {
                 field.setAttribute('required', 'required')
             }
         })
+
+        // Initialize PAN/CIN selector
+        setupCorporateIdSelector()
     }
+}
+
+// PAN/CIN selector for corporate users (dropdown based)
+function setupCorporateIdSelector() {
+    const selectEl = document.getElementById('corpIdSelect')
+    const panGroup = document.getElementById('corpPanGroup')
+    const cinGroup = document.getElementById('corpCinGroup')
+    const panInput = document.getElementById('corporatepanNumber')
+    const cinInput = document.getElementById('cinNumber')
+
+    if (!selectEl || !panGroup || !cinGroup || !panInput || !cinInput) {
+        return
+    }
+
+    const applySelection = () => {
+        const which = selectEl.value
+        if (which === 'pan') {
+            panGroup.style.display = 'block'
+            cinGroup.style.display = 'none'
+            panInput.setAttribute('required', 'required')
+            cinInput.removeAttribute('required')
+            cinInput.value = ''
+        } else {
+            cinGroup.style.display = 'block'
+            panGroup.style.display = 'none'
+            cinInput.setAttribute('required', 'required')
+            panInput.removeAttribute('required')
+            panInput.value = ''
+        }
+    }
+
+    selectEl.addEventListener('change', applySelection)
+    // Initialize based on default selection
+    applySelection()
+}
+
+// PAN/Aadhar selector for individual users (dropdown based)
+function setupIndividualIdSelector() {
+    const selectEl = document.getElementById('individualIdSelect')
+    const panGroup = document.getElementById('individualPanGroup')
+    const aadharGroup = document.getElementById('individualAadharGroup')
+    const panInput = document.getElementById('panNumber')
+    const aadharInput = document.getElementById('individualAadharNumber')
+
+    if (!selectEl || !panGroup || !aadharGroup || !panInput || !aadharInput) {
+        return
+    }
+
+    const applySelection = () => {
+        const which = selectEl.value
+        if (which === 'pan') {
+            panGroup.style.display = 'block'
+            aadharGroup.style.display = 'none'
+            panInput.setAttribute('required', 'required')
+            aadharInput.removeAttribute('required')
+            aadharInput.value = ''
+        } else {
+            aadharGroup.style.display = 'block'
+            panGroup.style.display = 'none'
+            aadharInput.setAttribute('required', 'required')
+            panInput.removeAttribute('required')
+            panInput.value = ''
+        }
+    }
+
+    selectEl.addEventListener('change', applySelection)
+    applySelection()
 }
 
 // API Functions
@@ -430,18 +504,27 @@ async function submitUserDetails() {
         let formData = {}
 
         if (selectedType === "individual") {
+            const indivIdType = document.getElementById('individualIdSelect')?.value
+            const panVal = indivIdType === 'pan' ? document.getElementById("panNumber").value.trim() : ''
+            const aadharVal = indivIdType === 'aadhar' ? document.getElementById("individualAadharNumber").value.trim() : ''
+
             formData = {
                 name: document.getElementById("fullName").value.trim(),
                 email: document.getElementById("email").value.trim(),
-                pan_number: document.getElementById("panNumber").value.trim()
+                pan_number: panVal,
+                aadhar_number: aadharVal
             }
         } else {
+            const idType = document.getElementById('corpIdSelect')?.value
+            const panVal = idType === 'pan' ? document.getElementById("corporatepanNumber").value.trim() : ''
+            const cinVal = idType === 'cin' ? document.getElementById("cinNumber").value.trim() : ''
+
             formData = {
                 name: document.getElementById("contactName").value.trim(),
                 email: document.getElementById("corporateEmail").value.trim(),
                 company_name: document.getElementById("companyName").value.trim(),
-                pan_number: document.getElementById("panNumber").value.trim(),
-                cin_number: document.getElementById("cinNumber").value.trim(),
+                pan_number: panVal,
+                cin_number: cinVal,
                 aadhar_number: document.getElementById("aadharNumber").value.trim(),
                 gst_number: document.getElementById("gstNumber").value.trim(),
                 address: document.getElementById("companyAddress").value.trim(),

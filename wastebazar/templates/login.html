@@ -151,8 +151,23 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group" style="width:100%">
-                                <label class="form-label" for="panNumber">PAN Number</label>
-                                <input type="text" class="form-control" id="panNumber" name="panNumber" placeholder="Enter PAN number">
+                                <label class="form-label" for="individualIdSelect">Select ID Type</label>
+                                <div class="select-wrapper">
+                                    <select class="form-control" id="individualIdSelect" name="individualIdSelect">
+                                        <option value="pan" selected>PAN Number</option>
+                                        <option value="aadhar">Aadhar Card</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="form-group" id="individualPanGroup">
+                                    <label class="form-label" for="panNumber">PAN Number</label>
+                                    <input type="text" class="form-control" id="panNumber" name="panNumber" placeholder="Enter PAN number">
+                                </div>
+                                <div class="form-group" id="individualAadharGroup" style="display:none">
+                                    <label class="form-label" for="individualAadharNumber">Aadhar Number</label>
+                                    <input type="text" class="form-control" id="individualAadharNumber" name="individualAadharNumber" placeholder="Enter Aadhar number" maxlength="12">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -180,16 +195,27 @@
                             </div>
                             
                         </div>
+                        <!-- PAN/CIN selection dropdown -->
                         <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label" for="panNumber">PAN Number</label>
-                                <input type="text" class="form-control" id="panNumber" name="panNumber" placeholder="Enter PAN number" required>
+                            <div class="form-group" style="width:100%">
+                                <label class="form-label" for="corpIdSelect">Select ID Type</label>
+                                <div class="select-wrapper">
+                                    <select class="form-control" id="corpIdSelect" name="corpIdSelect">
+                                        <option value="pan" selected>PAN Number</option>
+                                        <option value="cin">CIN Number</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label" for="cinNumber">CIN Number (Optional)</label>
-                                <input type="text" class="form-control" id="cinNumber" name="cinNumber" placeholder="Enter CIN number">
+                            <div>
+                                <div class="form-group" id="corpPanGroup">
+                                    <label class="form-label" for="corporatepanNumber">PAN Number</label>
+                                    <input type="text" class="form-control" id="corporatepanNumber" name="panNumber" placeholder="Enter PAN number" required>
+                                </div>
+                                <div class="form-group" id="corpCinGroup" style="display:none">
+                                    <label class="form-label" for="cinNumber">CIN Number</label>
+                                    <input type="text" class="form-control" id="cinNumber" name="cinNumber" placeholder="Enter CIN number">
+                                </div>
                             </div>
-                            
                         </div>
                         <div class="form-row">
                             <div class="form-group">

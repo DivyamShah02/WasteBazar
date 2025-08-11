@@ -40,6 +40,7 @@ class User(AbstractUser):
     contact_number = models.CharField(max_length=15, unique=True)
     email = models.EmailField(unique=True, null=True, blank=True)
     pan_number = models.CharField(max_length=20, blank=True, null=True)
+    aadhar_number = models.CharField(max_length=12, blank=True, null=True)
     is_approved = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
 
