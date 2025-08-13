@@ -391,12 +391,26 @@ class ListingDetailApp {
     if (!sellerProfile) return;
 
     sellerProfile.innerHTML = `
-            <div class="seller-avatar">
-                <i class="fas fa-user-circle fa-4x"></i>
+            <div class="seller-main-info row">
+                <div class="seller-avatar">
+                    <i class="fas fa-user-circle fa-4x"></i>
+                </div>
+                <div class="seller-basic-details">
+                    <h4>${listing.seller_name || 'Anonymous Seller'}</h4>
+                    <p class="seller-id">ID: ${listing.seller_user_id}</p>
+                </div>
             </div>
-            <div class="seller-details">
-                <h4>${listing.seller_name || 'Anonymous Seller'}</h4>
-                <p class="seller-id">ID: ${listing.seller_user_id}</p>     
+            
+            <div class="seller-specs">
+                <div class="spec-row">
+                    <div class="spec-label"><i class="fas fa-phone"></i> Phone</div>
+                    <div class="spec-value">${listing.seller_phone || 'Not provided'}</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label"><i class="fas fa-envelope"></i> Email</div>
+                    <div class="spec-value">${listing.seller_email || 'Not provided'}</div>
+                </div>
+               
             </div>
         `;
 

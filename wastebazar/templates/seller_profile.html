@@ -18,7 +18,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg" id="navbar">
         <div class="container">
-            <a class="navbar-brand" href="index.html">WasteBazar</a>
+            <a class="navbar-brand" href="/">WasteBazar</a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -67,9 +67,9 @@
                             <span class="profile-badge" id="verificationBadge">
                                 <i class="fas fa-check-circle me-1"></i>Verified
                             </span>
-                            <span class="profile-badge">
+                            {% comment %} <span class="profile-badge">
                                 <i class="fas fa-calendar me-1"></i>Member since 2024
-                            </span>
+                            </span> {% endcomment %}
                         </div>
                         <div class="profile-meta">
                             <div class="meta-item">
@@ -341,9 +341,9 @@
                                     <button class="btn btn-primary me-2" onclick="editCompanyInfo()">
                                         <i class="fas fa-edit me-2"></i>Edit Company Info
                                     </button>
-                                    <button class="btn btn-outline-primary" id="downloadCertificateBtn" style="display: none;">
+                                    {% comment %} <button class="btn btn-outline-primary" id="downloadCertificateBtn" style="display: none;">
                                         <i class="fas fa-download me-2"></i>Download Certificate
-                                    </button>
+                                    </button> {% endcomment %}
                                 </div>
                             </div>
                         </div>

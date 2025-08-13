@@ -178,22 +178,10 @@ body {
     font-size: 0.95rem;
 }
 
+
 .nav-link:hover {
     color: var(--primary-color) !important;
     transform: translateY(-1px);
-}
-
-.nav-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -5px;
-    left: 50%;
-    background: var(--gradient-primary);
-    transition: all 0.3s ease;
-    transform: translateX(-50%);
-    border-radius: 2px;
 }
 
 .nav-link:hover::after {
@@ -3916,10 +3904,12 @@ body {
     display: grid;
     border: 4.5px solid #0000;
     border-radius: 50%;
-    border-right-color: var(--primary-color);
+    border-right-color: #E03CCF;
     animation: spinner-animation 1s infinite linear;
     position: relative;
 }
+
+
 
 .spinner::before,
 .spinner::after {
@@ -3938,7 +3928,7 @@ body {
 .spinner::after {
     margin: 8.9px;
     animation-duration: 3s;
-    border-right-color: #E03CCF;
+    border-right-color: var(--primary-color);
 }
 
 /* Logo in the center */
@@ -4076,7 +4066,7 @@ body {
     border-radius: 16px;
     cursor: pointer;
     transition: all 0.3s ease;
-    min-width: 80px;
+    min-width: 100px;
 }
 
 .selector-item:hover {
@@ -4140,6 +4130,81 @@ body {
 
 .bg-gradient-teal {
     background: linear-gradient(135deg, #14b8a6, #0d9488);
+}
+
+/* Materials Category Navigation */
+.materials-category-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.materials-category-nav button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    border: 2px solid #e2e8f0;
+    color: #64748b;
+    font-weight: 600;
+    padding: 15px 25px;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.materials-category-nav button i {
+    font-size: 16px;
+    transition: transform 0.3s ease;
+}
+
+.materials-category-nav button span {
+    text-decoration: none;
+}
+
+.materials-category-nav button:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 116, 232, 0.15);
+    text-decoration: none;
+}
+
+.materials-category-nav button:hover i {
+    transform: scale(1.1);
+}
+
+.materials-category-nav button.active {
+    background: white;
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 8px 25px rgba(0, 116, 232, 0.25);
+    text-decoration: none;
+}
+
+.materials-category-nav button.active i {
+    /* color: white; */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .materials-category-nav {
+        gap: 10px;
+    }
+
+    .materials-category-nav button {
+        padding: 12px 20px;
+        font-size: 13px;
+    }
+
+    .materials-category-nav button i {
+        font-size: 14px;
+    }
 }
 
 /* Material Detail */
@@ -4253,7 +4318,22 @@ body {
     font-weight: 600;
     font-size: 1.1rem;
     transition: all 0.3s ease;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+
+}
+
+.btn-registration {
+    background: var(--gradient-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 0.75rem 2rem;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
 }
 
 .learn-more-btn:hover {
@@ -4363,4 +4443,9 @@ body {
 
 .material-detail {
     animation: slideIn 0.6s ease-out;
+}
+
+
+.nav-link:active {
+    background-color: white;
 }

@@ -646,6 +646,10 @@
   border: 1px solid var(--border-color);
 }
 
+.seller-main-info {
+  justify-content: center;
+}
+
 .quick-info-card h3,
 .seller-card h3,
 .inquiry-form-card h3,
@@ -710,7 +714,7 @@
 
 /* Seller Card */
 .seller-profile {
-  display: flex;
+  /* display: flex; */
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
@@ -721,6 +725,7 @@
   /* border-radius: 50%; */
   overflow: hidden;
   flex-shrink: 0;
+  text-align: center;
   /* border: 3px solid var(--primary-light); */
 }
 
@@ -756,6 +761,10 @@
 .seller-badges {
   display: flex;
   gap: 0.5rem;
+}
+
+.seller-basic-details {
+  text-align: center;
 }
 
 .seller-stats {

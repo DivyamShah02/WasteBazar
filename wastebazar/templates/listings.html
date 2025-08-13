@@ -20,7 +20,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg" id="navbar">
         <div class="container">
-            <a class="navbar-brand" href="index.html">WasteBazar</a>
+            <a class="navbar-brand" href="/">WasteBazar</a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -44,7 +44,7 @@
                         <a class="nav-link active" href="listings.html">Browse Listings</a>
                     </li> {% endcomment %}
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html#market-insights">Marketplace</a>
+                        <a class="nav-link" href="/marketplace">Marketplace</a>
                     </li>
                     {% comment %} <li class="nav-item">
                         <a class="nav-link" href="index.html#how-it-works">How It Works</a>
@@ -56,7 +56,7 @@
                 
                 <div class="d-flex gap-2">
                     <button class="btn btn-outline-primary">Logout</button>
-                    <button class="btn btn-primary">Dashboard</button>
+                    <a href="/seller-profile" class="btn btn-primary">Dashboard</a>
                 </div>
             </div>
         </div>
@@ -207,7 +207,7 @@
                                 </div>
                             </div> {% endcomment %}
                             
-                            <div class="filter-group">
+                            {% comment %} <div class="filter-group">
                                 <label>Sort By</label>
                                 <select class="form-select" id="sortFilter">
                                     <option value="newest">Newest First</option>
@@ -217,7 +217,7 @@
                                     <option value="quantity-low">Quantity: Low to High</option>
                                     <option value="quantity-high">Quantity: High to Low</option>
                                 </select>
-                            </div>
+                            </div> {% endcomment %}
                         </div>
                     </div>
                 </div>

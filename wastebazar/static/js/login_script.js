@@ -319,7 +319,7 @@ function setupUserDetailsFields() {
         // Add required attribute to corporate fields
         corporateFields.querySelectorAll('input, textarea').forEach(field => {
             // certificateUrl is optional; PAN/CIN handled by toggle logic
-            if (field.id !== 'certificateUrl' && field.id !== 'corporatepanNumber' && field.id !== 'cinNumber') {
+            if (field.id !== 'corporatepanNumber' && field.id !== 'cinNumber') {
                 field.setAttribute('required', 'required')
             }
         })
@@ -416,9 +416,11 @@ async function sendOtp() {
             goToStep(4)
             console.log("OTP sent. ID:", otpId)
 
-            // For development - show OTP in console
+            // For development - show OTP in console and auto-fill
             if (result.data.otp) {
                 console.log("🔐 OTP for testing:", result.data.otp)
+                // Auto-fill OTP inputs for development
+                autoFillOtpInputs(result.data.otp)
             }
         } else {
             showError(result.error || "Failed to send OTP. Please try again.")
@@ -530,7 +532,7 @@ async function submitUserDetails() {
                 address: document.getElementById("companyAddress").value.trim(),
                 city: document.getElementById("companyCity").value.trim(),
                 state: document.getElementById("companyState").value.trim(),
-                certificate_url: document.getElementById("certificateUrl").value.trim(),
+                // certificate_url: document.getElementById("certificateUrl").value.trim(),
             }
         }
 
@@ -626,6 +628,49 @@ function startResendTimer() {
             resendLink.style.display = "inline"
         }
     }, 1000)
+}
+
+/**
+ * Auto-fills the OTP input fields with the provided OTP value
+ * @param {string|number} otp - The OTP value to fill in the inputs
+ */
+function autoFillOtpInputs(otp) {
+    console.log('🔄 Auto-filling OTP inputs with value:', otp);
+
+    const otpInputs = document.querySelectorAll('.otp-input');
+    const otpString = otp.toString();
+
+    // Clear all inputs first
+    otpInputs.forEach(input => {
+        input.value = '';
+    });
+
+    // Fill each input with the corresponding digit
+    otpInputs.forEach((input, index) => {
+        if (index < otpString.length) {
+            input.value = otpString[index];
+
+            // Add a small animation effect
+            input.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                input.style.transform = 'scale(1)';
+            }, 150);
+        }
+    });
+
+    // Enable the verify button if OTP is complete
+    if (otpString.length === 6) {
+        const verifyOtpBtn = document.getElementById('verifyOtp');
+        if (verifyOtpBtn) {
+            verifyOtpBtn.disabled = false;
+
+            // Add visual feedback
+            verifyOtpBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            setTimeout(() => {
+                verifyOtpBtn.style.background = '';
+            }, 300);
+        }
+    }
 }
 
 

@@ -666,6 +666,35 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Top-level materials category tabs (Plastic, Metal, Paper)
+    const categoryNavButtons = document.querySelectorAll('.materials-category-nav .nav-link');
+    const categoryPanels = document.querySelectorAll('.category-panel');
+
+    categoryNavButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+            // activate button
+            categoryNavButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            const cat = this.getAttribute('data-category');
+            // toggle panels
+            let activePanel = null;
+            categoryPanels.forEach(panel => {
+                if (panel.getAttribute('data-category') === cat) {
+                    panel.style.display = 'block';
+                    activePanel = panel;
+                } else {
+                    panel.style.display = 'none';
+                }
+            });
+            // auto-select first material in the active panel
+            if (activePanel) {
+                const firstItem = activePanel.querySelector('.selector-item');
+                if (firstItem) firstItem.click();
+            }
+        });
+    });
+
     // WasteBazar Materials Section - Mobile Tab functionality (Bootstrap)
     const mobileTabTriggers = document.querySelectorAll('#materials-mobile-tabs button[data-bs-toggle="pill"]');
 
@@ -677,132 +706,33 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 // JavaScript for materials section interactivity
-const materialsData = {
-    pet: {
-        code: "01",
-        title: "PET Recycling",
-        category: "Beverage Containers",
-        properties: ["Clear & Transparent", "Lightweight", "Food-safe", "100% Recyclable"],
-        description: "<strong>PET (Polyethylene Terephthalate)</strong> - The most widely recycled plastic, primarily used for beverage bottles and food containers. PET is formed when ethylene glycol and terephthalic acid are combined, creating a clear, strong, and lightweight material that's perfect for single-use applications.",
-        learnMoreUrl: "https://www.wastetrade.com/polyethylene-terephthalate-pet/",
-        gradient: "bg-gradient-blue"
-    },
-    hdpe: {
-        code: "02",
-        title: "HDPE Recycling",
-        category: "Milk Jugs & Bottles",
-        properties: ["Chemical Resistant", "Durable", "Impact Resistant", "Weather Resistant"],
-        description: "<strong>HDPE (High-Density Polyethylene)</strong> - A versatile plastic known for its strength and chemical resistance. Commonly used for milk jugs, detergent bottles, and shopping bags. HDPE has excellent impact resistance and can withstand extreme temperatures.",
-        learnMoreUrl: "https://www.wastetrade.com/high-density-polyethylene-hdpe/",
-        gradient: "bg-gradient-green"
-    },
-    pvc: {
-        code: "03",
-        title: "PVC Recycling",
-        category: "Pipes & Construction",
-        properties: ["Fire Resistant", "Long-lasting", "Flexible", "Cost-effective"],
-        description: "<strong>PVC (Polyvinyl Chloride)</strong> - A durable plastic widely used in construction and healthcare applications. Known for its versatility, PVC can be rigid or flexible depending on additives. Commonly found in pipes, window frames, and medical devices.",
-        learnMoreUrl: "https://www.wastetrade.com/polyvinyl-chloride-pvc/",
-        gradient: "bg-gradient-purple"
-    },
-    ldpe: {
-        code: "04",
-        title: "LDPE Recycling",
-        category: "Plastic Bags & Films",
-        properties: ["Flexible", "Transparent", "Moisture Resistant", "Low Cost"],
-        description: "<strong>LDPE (Low-Density Polyethylene)</strong> - A flexible plastic commonly used for shopping bags, plastic wraps, and squeezable bottles. LDPE is known for its clarity, flexibility, and resistance to moisture and chemicals.",
-        learnMoreUrl: "https://www.wastetrade.com/low-density-polyethylene-ldpe/",
-        gradient: "bg-gradient-cyan"
-    },
-    pp: {
-        code: "05",
-        title: "PP Recycling",
-        category: "Food Containers & Caps",
-        properties: ["Heat Resistant", "Chemical Resistant", "Lightweight", "Fatigue Resistant"],
-        description: "<strong>PP (Polypropylene)</strong> - A versatile thermoplastic used in food containers, bottle caps, and automotive parts. PP has excellent chemical resistance and can withstand high temperatures, making it ideal for microwave-safe containers.",
-        learnMoreUrl: "https://www.wastetrade.com/polypropylene-pp/",
-        gradient: "bg-gradient-orange"
-    },
-    ps: {
-        code: "06",
-        title: "PS Recycling",
-        category: "Disposable Cups & Foam",
-        properties: ["Insulating", "Lightweight", "Rigid", "Clear"],
-        description: "<strong>PS (Polystyrene)</strong> - A lightweight plastic used in disposable cups, food containers, and packaging foam. PS provides excellent insulation properties and can be clear or foam-like depending on processing.",
-        learnMoreUrl: "https://www.wastetrade.com/polystyrene-ps/",
-        gradient: "bg-gradient-pink"
-    },
-    pc: {
-        code: "07",
-        title: "PC Recycling",
-        category: "Water Bottles & Electronics",
-        properties: ["Impact Resistant", "Heat Resistant", "Transparent", "Durable"],
-        description: "<strong>PC (Polycarbonate)</strong> - A strong, clear plastic used in water bottles, electronic components, and safety equipment. PC offers excellent impact resistance and can withstand high temperatures while maintaining clarity.",
-        learnMoreUrl: "https://www.wastetrade.com/polycarbonate-pc/",
-        gradient: "bg-gradient-indigo"
-    },
-    abs: {
-        code: "08",
-        title: "ABS Recycling",
-        category: "Electronics & Automotive",
-        properties: ["Tough", "Heat Resistant", "Easy to Process", "Chemical Resistant"],
-        description: "<strong>ABS (Acrylonitrile Butadiene Styrene)</strong> - A tough thermoplastic used in automotive parts, electronic housings, and toys. ABS combines strength, heat resistance, and ease of processing, making it ideal for durable consumer products.",
-        learnMoreUrl: "https://www.wastetrade.com/acrylonitrile-butadiene-styreneabs-abs/",
-        gradient: "bg-gradient-red"
-    },
-    eps: {
-        code: "09",
-        title: "EPS Recycling",
-        category: "Packaging & Insulation",
-        properties: ["Lightweight", "Insulating", "Shock Absorbing", "Moisture Resistant"],
-        description: "<strong>EPS (Expanded Polystyrene)</strong> - A lightweight foam plastic used for packaging, insulation, and disposable food containers. EPS provides excellent thermal insulation and shock absorption properties.",
-        learnMoreUrl: "https://www.wastetrade.com/expanded-polystyrene-eps/",
-        gradient: "bg-gradient-teal"
-    }
-};
 
 document.addEventListener('DOMContentLoaded', function () {
-    const selectorItems = document.querySelectorAll('.selector-item');
     const detailContents = document.querySelectorAll('.detail-content');
     const materialImages = document.querySelectorAll('.material-image');
     const overlayBadges = document.querySelectorAll('.overlay-badge');
 
-    selectorItems.forEach(item => {
-        item.addEventListener('click', function () {
-            // Remove active class from all items
-            selectorItems.forEach(i => i.classList.remove('active'));
+    // delegate click from container to support per-panel scoping
+    document.addEventListener('click', function (e) {
+        const item = e.target.closest('.selector-item');
+        if (!item) return;
 
-            // Add active class to clicked item
-            this.classList.add('active');
+        // Remove active from siblings only (current grid)
+        const grid = item.closest('.selector-grid');
+        if (grid) {
+            grid.querySelectorAll('.selector-item').forEach(i => i.classList.remove('active'));
+        }
+        item.classList.add('active');
 
-            // Get material data
-            const materialId = this.dataset.material;
-
-            // Hide all detail contents
-            detailContents.forEach(content => content.classList.remove('active'));
-
-            // Show the selected material content
-            const targetContent = document.querySelector(`.detail-content[data-material="${materialId}"]`);
-            if (targetContent) {
-                targetContent.classList.add('active');
-            }
-
-            // Hide all images and badges
-            materialImages.forEach(img => img.style.display = 'none');
-            overlayBadges.forEach(badge => badge.style.display = 'none');
-
-            // Show the selected material image and badge
-            const targetImage = document.querySelector(`.material-image[data-material="${materialId}"]`);
-            const targetBadge = document.querySelector(`.overlay-badge[data-material="${materialId}"]`);
-
-            if (targetImage) {
-                targetImage.style.display = 'block';
-            }
-
-            if (targetBadge) {
-                targetBadge.style.display = 'block';
-            }
+        const materialId = item.dataset.material;
+        // Toggle detail content
+        detailContents.forEach(content => {
+            if (content.dataset.material === materialId) content.classList.add('active');
+            else content.classList.remove('active');
         });
+        // Toggle images and badges
+        materialImages.forEach(img => img.style.display = (img.dataset.material === materialId) ? 'block' : 'none');
+        overlayBadges.forEach(badge => badge.style.display = (badge.dataset.material === materialId) ? 'block' : 'none');
     });
 });
 

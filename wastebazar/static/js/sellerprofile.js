@@ -348,7 +348,7 @@ function updateCompanySettings(corporateDetails) {
     const settingsCompanyAddressEl = document.getElementById('settingsCompanyAddress');
     const settingsVerificationStatusEl = document.getElementById('settingsVerificationStatus');
     const settingsVerificationDateEl = document.getElementById('settingsVerificationDate');
-    const downloadCertificateBtn = document.getElementById('downloadCertificateBtn');
+    // const downloadCertificateBtn = document.getElementById('downloadCertificateBtn');
 
     if (settingsCompanyNameEl) settingsCompanyNameEl.value = corporateDetails.company_name || '';
     if (settingsPanNumberEl) settingsPanNumberEl.value = corporateDetails.pan_number || '';
@@ -381,16 +381,16 @@ function updateCompanySettings(corporateDetails) {
     }
 
     // Show/hide download certificate button
-    if (downloadCertificateBtn) {
-        if (corporateDetails.certificate_url) {
-            downloadCertificateBtn.style.display = 'inline-block';
-            downloadCertificateBtn.onclick = function () {
-                window.open(corporateDetails.certificate_url, '_blank');
-            };
-        } else {
-            downloadCertificateBtn.style.display = 'none';
-        }
-    }
+    // if (downloadCertificateBtn) {
+    //     if (corporateDetails.certificate_url) {
+    //         downloadCertificateBtn.style.display = 'inline-block';
+    //         downloadCertificateBtn.onclick = function () {
+    //             window.open(corporateDetails.certificate_url, '_blank');
+    //         };
+    //     } else {
+    //         downloadCertificateBtn.style.display = 'none';
+    //     }
+    // }
 }
 
 

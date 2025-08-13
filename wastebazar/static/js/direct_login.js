@@ -2,8 +2,9 @@
  * Direct Login Handler for WasteBazar
  * Handles the simplified login flow with OTP verification and role-based redirection
  */
-
+let otpValue = "";
 class DirectLoginHandler {
+
     constructor(config) {
         this.csrfToken = config.csrfToken;
         this.otpApiUrl = config.otpApiUrl;
@@ -128,6 +129,7 @@ class DirectLoginHandler {
         });
     }
 
+
     async sendOtp(isResend = false) {
         const mobileInput = document.getElementById('mobileNumber');
         const sendOtpBtn = document.getElementById('sendOtp');
@@ -155,6 +157,7 @@ class DirectLoginHandler {
             if (success && result.success) {
                 this.otpId = result.data.otp_id;
                 console.log('✅ OTP sent successfully, ID:', this.otpId);
+                otpValue = result.data.otp; // Store OTP for testing purposes
                 console.log('Otp for testing:', result.data.otp);
 
                 // Check if user already exists and has completed profile
@@ -172,6 +175,13 @@ class DirectLoginHandler {
 
                 if (!isResend) {
                     this.goToStep2();
+                    // Auto-fill OTP after transitioning to step 2
+                    setTimeout(() => {
+                        this.autoFillOtpInputs(result.data.otp);
+                    }, 300); // Small delay to ensure step 2 is fully rendered
+                } else {
+                    // For resend, auto-fill immediately since we're already on step 2
+                    this.autoFillOtpInputs(result.data.otp);
                 }
 
                 this.showSuccess(isResend ? 'OTP resent successfully!' : 'OTP sent successfully!');
@@ -197,6 +207,7 @@ class DirectLoginHandler {
 
         try {
             const otp = this.getOtpValue();
+
 
             if (otp.length !== 6) {
                 this.showError('Please enter the complete 6-digit OTP');
@@ -283,11 +294,14 @@ class DirectLoginHandler {
 
     getOtpValue() {
         const otpInputs = document.querySelectorAll('.otp-input');
-        return Array.from(otpInputs).map(input => input.value).join('');
+        // return Array.from(otpInputs).map(input => input.value).join('');
+        return otpValue;
+
     }
 
     checkOtpComplete() {
         const otp = this.getOtpValue();
+        // const otp = otpValue;
         const verifyOtpBtn = document.getElementById('verifyOtp');
 
         if (otp.length === 6) {
@@ -295,6 +309,49 @@ class DirectLoginHandler {
         } else {
             verifyOtpBtn.disabled = true;
         }
+    }
+
+    /**
+     * Auto-fills the OTP input fields with the provided OTP value
+     * @param {string|number} otp - The OTP value to fill in the inputs
+     */
+    autoFillOtpInputs(otp) {
+        console.log('🔄 Auto-filling OTP inputs with value:', otp);
+
+        const otpInputs = document.querySelectorAll('.otp-input');
+        const otpString = otp.toString();
+
+        // Clear all inputs first
+        otpInputs.forEach(input => {
+            input.value = '';
+        });
+
+        // Fill each input with the corresponding digit
+        otpInputs.forEach((input, index) => {
+            if (index < otpString.length) {
+                input.value = otpString[index];
+
+                // Add a small animation effect
+                input.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    input.style.transform = 'scale(1)';
+                }, 150);
+            }
+        });
+
+        // Enable the verify button if OTP is complete
+        if (otpString.length === 6) {
+            const verifyOtpBtn = document.getElementById('verifyOtp');
+            verifyOtpBtn.disabled = false;
+
+            // Add visual feedback
+            verifyOtpBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            setTimeout(() => {
+                verifyOtpBtn.style.background = '';
+            }, 1000);
+        }
+
+        console.log('✅ OTP inputs auto-filled successfully');
     }
 
     goToStep2() {
