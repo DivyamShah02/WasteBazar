@@ -404,64 +404,81 @@
             <!-- Desktop Version - Tabbed Interface -->
             <div class="how-it-works-desktop d-none d-lg-block" data-aos="fade-up" data-aos-delay="200">
                 <div class="tabs-container">
-                    <div class="tabs-navigation">
-                        <div class="tab-button active" data-tab="browse">
-                            <div class="tab-icon">
-                                <i class="fas fa-search"></i>
-                            </div>
-                            <h4 class="tab-title">Browse Materials</h4>
-                        </div>
-                        <div class="tab-button" data-tab="list">
-                            <div class="tab-icon">
-                                <i class="fas fa-plus-circle"></i>
-                            </div>
-                            <h4 class="tab-title">List a Product</h4>
-                        </div>
-                        <div class="tab-button" data-tab="transact">
-                            <div class="tab-icon">
-                                <i class="fas fa-handshake"></i>
-                            </div>
-                            <h4 class="tab-title">Complete Transaction</h4>
-                        </div>
-                    </div>
-
-                    <div class="tabs-content">
-                        <div class="tab-panel active" id="browse-panel">
-                            <div class="video-container">
-                                <div class="video-wrapper">
-                                    <div class="video-thumbnail" style="background-image: url('https://i.vimeocdn.com/video/1664678066-754eea8767593fef15e43857402c9c77e58d4a539a1493797d9b8e7e9838a7e2-d_640?region=us');">
-                                        <div class="video-play-button" data-video="https://player.vimeo.com/video/823328161">
-                                            <svg viewBox="0 0 415.346 415.346" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M41.712,415.346c-11.763,0-21.3-9.537-21.3-21.3V21.299C20.412,9.536,29.949,0,41.712,0l346.122,191.697c0,0,15.975,15.975,0,31.951C371.859,239.622,41.712,415.346,41.712,415.346z"/>
-                                            </svg>
-                                        </div>
+                    <div class="row g-0">
+                        <!-- Left Column - Navigation Tabs -->
+                        <div class="col-lg-4">
+                            <div class="tabs-navigation">
+                                <div class="tab-button active" data-tab="browse">
+                                    <div class="tab-icon">
+                                        <i class="fas fa-search"></i>
+                                    </div>
+                                    <div class="tab-content-text">
+                                        <h4 class="tab-title">Browse Materials</h4>
+                                        <p class="tab-description">Search through thousands of listings to find exactly what you need</p>
+                                    </div>
+                                </div>
+                                <div class="tab-button" data-tab="list">
+                                    <div class="tab-icon">
+                                        <i class="fas fa-plus-circle"></i>
+                                    </div>
+                                    <div class="tab-content-text">
+                                        <h4 class="tab-title">List a Product</h4>
+                                        <p class="tab-description">Post your materials and connect with potential buyers</p>
+                                    </div>
+                                </div>
+                                <div class="tab-button" data-tab="transact">
+                                    <div class="tab-icon">
+                                        <i class="fas fa-handshake"></i>
+                                    </div>
+                                    <div class="tab-content-text">
+                                        <h4 class="tab-title">Complete Transaction</h4>
+                                        <p class="tab-description">Negotiate and finalize deals with verified traders</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="tab-panel" id="list-panel">
-                            <div class="video-container">
-                                <div class="video-wrapper">
-                                    <div class="video-thumbnail" style="background-image: url('https://i.vimeocdn.com/video/1643596761-652d3f2946c15a53d2bf7811949ee9ef764aabe153fb7e4aa22359cf60a2b11c-d_640?region=us');">
-                                        <div class="video-play-button" data-video="https://player.vimeo.com/video/812821869">
-                                            <svg viewBox="0 0 415.346 415.346" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M41.712,415.346c-11.763,0-21.3-9.537-21.3-21.3V21.299C20.412,9.536,29.949,0,41.712,0l346.122,191.697c0,0,15.975,15.975,0,31.951C371.859,239.622,41.712,415.346,41.712,415.346z"/>
-                                            </svg>
+                        <!-- Right Column - Video Content -->
+                        <div class="col-lg-8">
+                            <div class="tabs-content">
+                                <div class="tab-panel active" id="browse-panel">
+                                    <div class="video-container">
+                                        <div class="video-wrapper">
+                                            <div class="video-thumbnail" style="background-image: url('https://i.vimeocdn.com/video/1664678066-754eea8767593fef15e43857402c9c77e58d4a539a1493797d9b8e7e9838a7e2-d_640?region=us');">
+                                                <div class="video-play-button" data-video="https://player.vimeo.com/video/823328161">
+                                                    <svg viewBox="0 0 415.346 415.346" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M41.712,415.346c-11.763,0-21.3-9.537-21.3-21.3V21.299C20.412,9.536,29.949,0,41.712,0l346.122,191.697c0,0,15.975,15.975,0,31.951C371.859,239.622,41.712,415.346,41.712,415.346z"/>
+                                                    </svg>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="tab-panel" id="transact-panel">
-                            <div class="video-container">
-                                <div class="video-wrapper">
-                                    <div class="video-thumbnail" style="background-image: url('https://i.vimeocdn.com/video/1643597045-db908b19d116d089afdc89453d00ac2c632b58286118d87554f16bf693361db2-d_640?region=us');">
-                                        <div class="video-play-button" data-video="https://player.vimeo.com/video/812821942">
-                                            <svg viewBox="0 0 415.346 415.346" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M41.712,415.346c-11.763,0-21.3-9.537-21.3-21.3V21.299C20.412,9.536,29.949,0,41.712,0l346.122,191.697c0,0,15.975,15.975,0,31.951C371.859,239.622,41.712,415.346,41.712,415.346z"/>
-                                            </svg>
+                                <div class="tab-panel" id="list-panel">
+                                    <div class="video-container">
+                                        <div class="video-wrapper">
+                                            <div class="video-thumbnail" style="background-image: url('https://i.vimeocdn.com/video/1643596761-652d3f2946c15a53d2bf7811949ee9ef764aabe153fb7e4aa22359cf60a2b11c-d_640?region=us');">
+                                                <div class="video-play-button" data-video="https://player.vimeo.com/video/812821869">
+                                                    <svg viewBox="0 0 415.346 415.346" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M41.712,415.346c-11.763,0-21.3-9.537-21.3-21.3V21.299C20.412,9.536,29.949,0,41.712,0l346.122,191.697c0,0,15.975,15.975,0,31.951C371.859,239.622,41.712,415.346,41.712,415.346z"/>
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-panel" id="transact-panel">
+                                    <div class="video-container">
+                                        <div class="video-wrapper">
+                                            <div class="video-thumbnail" style="background-image: url('https://i.vimeocdn.com/video/1643597045-db908b19d116d089afdc89453d00ac2c632b58286118d87554f16bf693361db2-d_640?region=us');">
+                                                <div class="video-play-button" data-video="https://player.vimeo.com/video/812821942">
+                                                    <svg viewBox="0 0 415.346 415.346" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M41.712,415.346c-11.763,0-21.3-9.537-21.3-21.3V21.299C20.412,9.536,29.949,0,41.712,0l346.122,191.697c0,0,15.975,15.975,0,31.951C371.859,239.622,41.712,415.346,41.712,415.346z"/>
+                                                    </svg>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -2041,15 +2058,15 @@
                 <div class="materials-category-nav" role="tablist">
                     <button class="nav-link active" data-category="plastic" type="button" role="tab" aria-selected="true">
                         <i class="fas fa-recycle"></i>
-                        <span>Plastic Materials</span>
+                        <span>Plastic </span>
                     </button>
                     <button class="nav-link" data-category="metal" type="button" role="tab" aria-selected="false">
                         <i class="fas fa-cog"></i>
-                        <span>Metal Materials</span>
+                        <span>Metal</span>
                     </button>
                     <button class="nav-link" data-category="paper" type="button" role="tab" aria-selected="false">
                         <i class="fas fa-newspaper"></i>
-                        <span>Paper Materials</span>
+                        <span>Paper</span>
                     </button>
                 </div>
                 <!-- Material Selector -->
@@ -2235,817 +2252,1250 @@
                 <div class="material-detail">
                     <!-- PET Material -->
                     <div class="detail-content active" data-material="pet">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-blue">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                                    <polyline points="3.27,6.96 12,12.01 20.73,6.96"></polyline>
-                                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Code: 01</div>
-                                <h2 class="detail-title">PET Recycling</h2>
-                                <p class="detail-category">Beverage Containers</p>
-                            </div>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-blue">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                            <polyline points="3.27,6.96 12,12.01 20.73,6.96"></polyline>
+                                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Code: 01</div>
+                                        <h2 class="detail-title">PET Recycling</h2>
+                                        <p class="detail-category">Beverage Containers</p>
+                                    </div>
+                                </div>
 
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Clear & Transparent</span>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Clear & Transparent</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Lightweight</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Food-safe</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>100% Recyclable</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Lightweight</span>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=600&h=400&fit=crop&auto=format" alt="PET recycling materials" class="material-detail-img">
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Food-safe</span>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">
+                                        <strong>PET (Polyethylene Terephthalate)</strong> - The most widely recycled plastic, primarily used for beverage bottles and food containers. PET is formed when ethylene glycol and terephthalic acid are combined, creating a clear, strong, and lightweight material that's perfect for single-use applications.
+                                    </p>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>100% Recyclable</span>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details " style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details ">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">
-                                <strong>PET (Polyethylene Terephthalate)</strong> - The most widely recycled plastic, primarily used for beverage bottles and food containers. PET is formed when ethylene glycol and terephthalic acid are combined, creating a clear, strong, and lightweight material that's perfect for single-use applications.
-                            </p>
-                        </div>
-
-                        <div class="action-section">
-                            <button class="btn-view-details " style="margin-right: 15px;">
-                                <span>Buy PET</span>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="9,18 15,12 9,6"></polyline>
-                                </svg>
-                            </button>
-                            <button class="btn-view-details ">
-                                <span>Sell PET</span>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="9,18 15,12 9,6"></polyline>
-                                </svg>
-                            </button>
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=600&h=400&fit=crop&auto=format" alt="PET recycling materials" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- HDPE Material -->
                     <div class="detail-content" data-material="hdpe">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-green">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Code: 02</div>
-                                <h2 class="detail-title">HDPE Recycling</h2>
-                                <p class="detail-category">Milk Jugs & Bottles</p>
-                            </div>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-green">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Code: 02</div>
+                                        <h2 class="detail-title">HDPE Recycling</h2>
+                                        <p class="detail-category">Milk Jugs & Bottles</p>
+                                    </div>
+                                </div>
 
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Chemical Resistant</span>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Chemical Resistant</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Durable</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Impact Resistant</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Weather Resistant</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Durable</span>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/hdpe-piping-1.jpg" alt="HDPE recycling materials" class="material-detail-img">
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Impact Resistant</span>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">
+                                        <strong>HDPE (High-Density Polyethylene)</strong> - A versatile plastic known for its strength and chemical resistance. Commonly used for milk jugs, detergent bottles, and shopping bags. HDPE has excellent impact resistance and can withstand extreme temperatures.
+                                    </p>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Weather Resistant</span>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details " style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details ">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">
-                                <strong>HDPE (High-Density Polyethylene)</strong> - A versatile plastic known for its strength and chemical resistance. Commonly used for milk jugs, detergent bottles, and shopping bags. HDPE has excellent impact resistance and can withstand extreme temperatures.
-                            </p>
-                        </div>
-
-                        <div class="action-section">
-                            <button class="btn-view-details " style="margin-right: 15px;">
-                                <span>Buy HDPE</span>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="9,18 15,12 9,6"></polyline>
-                                </svg>
-                            </button>
-                            <button class="btn-view-details ">
-                                <span>Sell HDPE</span>
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="9,18 15,12 9,6"></polyline>
-                                </svg>
-                            </button>
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/hdpe-piping-1.jpg" alt="HDPE recycling materials" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- PVC Material -->
                     <div class="detail-content" data-material="pvc">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-purple">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                                    <polyline points="2,17 12,22 22,17"></polyline>
-                                    <polyline points="2,12 12,17 22,12"></polyline>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Code: 03</div>
-                                <h2 class="detail-title">PVC Recycling</h2>
-                                <p class="detail-category">Pipes & Construction</p>
-                            </div>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-purple">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                            <polyline points="2,17 12,22 22,17"></polyline>
+                                            <polyline points="2,12 12,17 22,12"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Code: 03</div>
+                                        <h2 class="detail-title">PVC Recycling</h2>
+                                        <p class="detail-category">Pipes & Construction</p>
+                                    </div>
+                                </div>
 
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Fire Resistant</span>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Fire Resistant</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Long-lasting</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Flexible</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Cost-effective</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Long-lasting</span>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PVC-Plastic-scaled-1-1-2.jpg" alt="PVC recycling materials" class="material-detail-img">
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Flexible</span>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">
+                                        <strong>PVC (Polyvinyl Chloride)</strong> - A durable plastic widely used in construction and healthcare applications. Known for its versatility, PVC can be rigid or flexible depending on additives. Commonly found in pipes, window frames, and medical devices.
+                                    </p>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Cost-effective</span>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">
-                                <strong>PVC (Polyvinyl Chloride)</strong> - A durable plastic widely used in construction and healthcare applications. Known for its versatility, PVC can be rigid or flexible depending on additives. Commonly found in pipes, window frames, and medical devices.
-                            </p>
-                        </div>
-
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy PVC</button>
-                            <button class="btn-view-details">Sell PVC</button>
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PVC-Plastic-scaled-1-1-2.jpg" alt="PVC recycling materials" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- LDPE Material -->
                     <div class="detail-content" data-material="ldpe">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-cyan">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Code: 04</div>
-                                <h2 class="detail-title">LDPE Recycling</h2>
-                                <p class="detail-category">Plastic Bags & Films</p>
-                            </div>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-cyan">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Code: 04</div>
+                                        <h2 class="detail-title">LDPE Recycling</h2>
+                                        <p class="detail-category">Plastic Bags & Films</p>
+                                    </div>
+                                </div>
 
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Flexible</span>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Flexible</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Transparent</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Moisture Resistant</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Low Cost</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Transparent</span>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/LDPE-on-a-roll-in-a-factory-1.jpg" alt="LDPE recycling materials" class="material-detail-img">
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Moisture Resistant</span>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">
+                                        <strong>LDPE (Low-Density Polyethylene)</strong> - A flexible plastic commonly used for shopping bags, plastic wraps, and squeezable bottles. LDPE is known for its clarity, flexibility, and resistance to moisture and chemicals.
+                                    </p>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Low Cost</span>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">
-                                <strong>LDPE (Low-Density Polyethylene)</strong> - A flexible plastic commonly used for shopping bags, plastic wraps, and squeezable bottles. LDPE is known for its clarity, flexibility, and resistance to moisture and chemicals.
-                            </p>
-                        </div>
-
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy LDPE</button>
-                            <button class="btn-view-details">Sell LDPE</button>
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/LDPE-on-a-roll-in-a-factory-1.jpg" alt="LDPE recycling materials" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- PP Material -->
                     <div class="detail-content" data-material="pp">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-orange">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Code: 05</div>
-                                <h2 class="detail-title">PP Recycling</h2>
-                                <p class="detail-category">Food Containers & Caps</p>
-                            </div>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-orange">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Code: 05</div>
+                                        <h2 class="detail-title">PP Recycling</h2>
+                                        <p class="detail-category">Food Containers & Caps</p>
+                                    </div>
+                                </div>
 
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Heat Resistant</span>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Heat Resistant</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Chemical Resistant</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Lightweight</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Fatigue Resistant</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Chemical Resistant</span>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PP1-1-1-2.jpg" alt="PP recycling materials" class="material-detail-img">
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Lightweight</span>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">
+                                        <strong>PP (Polypropylene)</strong> - A versatile thermoplastic used in food containers, bottle caps, and automotive parts. PP has excellent chemical resistance and can withstand high temperatures, making it ideal for microwave-safe containers.
+                                    </p>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Fatigue Resistant</span>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">
-                                <strong>PP (Polypropylene)</strong> - A versatile thermoplastic used in food containers, bottle caps, and automotive parts. PP has excellent chemical resistance and can withstand high temperatures, making it ideal for microwave-safe containers.
-                            </p>
-                        </div>
-
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy PP</button>
-                            <button class="btn-view-details">Sell PP</button>
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PP1-1-1-2.jpg" alt="PP recycling materials" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- PS Material -->
                     <div class="detail-content" data-material="ps">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-pink">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Code: 06</div>
-                                <h2 class="detail-title">PS Recycling</h2>
-                                <p class="detail-category">Disposable Cups & Foam</p>
-                            </div>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-pink">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Code: 06</div>
+                                        <h2 class="detail-title">PS Recycling</h2>
+                                        <p class="detail-category">Disposable Cups & Foam</p>
+                                    </div>
+                                </div>
 
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Insulating</span>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Insulating</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Lightweight</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Rigid</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Clear</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Lightweight</span>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="PS recycling materials" class="material-detail-img">
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Rigid</span>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">
+                                        <strong>PS (Polystyrene)</strong> - A lightweight plastic used in disposable cups, food containers, and packaging foam. PS provides excellent insulation properties and can be clear or foam-like depending on processing.
+                                    </p>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Clear</span>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">
-                                <strong>PS (Polystyrene)</strong> - A lightweight plastic used in disposable cups, food containers, and packaging foam. PS provides excellent insulation properties and can be clear or foam-like depending on processing.
-                            </p>
-                        </div>
-
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy PS</button>
-                            <button class="btn-view-details">Sell PS</button>
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="PS recycling materials" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- PC Material -->
                     <div class="detail-content" data-material="pc">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-indigo">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Code: 07</div>
-                                <h2 class="detail-title">PC Recycling</h2>
-                                <p class="detail-category">Water Bottles & Electronics</p>
-                            </div>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-indigo">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Code: 07</div>
+                                        <h2 class="detail-title">PC Recycling</h2>
+                                        <p class="detail-category">Water Bottles & Electronics</p>
+                                    </div>
+                                </div>
 
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Impact Resistant</span>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Impact Resistant</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Heat Resistant</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Transparent</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Durable</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Heat Resistant</span>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://images.unsplash.com/photo-1590595906931-81f04f0ccebb?w=600&h=400&fit=crop&auto=format" alt="PC recycling materials" class="material-detail-img">
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Transparent</span>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">
+                                        <strong>PC (Polycarbonate)</strong> - A strong, clear plastic used in water bottles, electronic components, and safety equipment. PC offers excellent impact resistance and can withstand high temperatures while maintaining clarity.
+                                    </p>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Durable</span>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">
-                                <strong>PC (Polycarbonate)</strong> - A strong, clear plastic used in water bottles, electronic components, and safety equipment. PC offers excellent impact resistance and can withstand high temperatures while maintaining clarity.
-                            </p>
-                        </div>
-
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy PC</button>
-                            <button class="btn-view-details">Sell PC</button>
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://images.unsplash.com/photo-1590595906931-81f04f0ccebb?w=600&h=400&fit=crop&auto=format" alt="PC recycling materials" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- ABS Material -->
                     <div class="detail-content" data-material="abs">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-red">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                                    <line x1="8" y1="21" x2="16" y2="21"></line>
-                                    <line x1="12" y1="17" x2="12" y2="21"></line>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Code: 08</div>
-                                <h2 class="detail-title">ABS Recycling</h2>
-                                <p class="detail-category">Electronics & Automotive</p>
-                            </div>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-red">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Code: 08</div>
+                                        <h2 class="detail-title">ABS Recycling</h2>
+                                        <p class="detail-category">Electronics & Automotive</p>
+                                    </div>
+                                </div>
 
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Tough</span>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Tough</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Heat Resistant</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Easy to Process</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Chemical Resistant</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Heat Resistant</span>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/ABS-Preview.jpg" alt="ABS recycling materials" class="material-detail-img">
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Easy to Process</span>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">
+                                        <strong>ABS (Acrylonitrile Butadiene Styrene)</strong> - A tough thermoplastic used in automotive parts, electronic housings, and toys. ABS combines strength, heat resistance, and ease of processing, making it ideal for durable consumer products.
+                                    </p>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Chemical Resistant</span>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">
-                                <strong>ABS (Acrylonitrile Butadiene Styrene)</strong> - A tough thermoplastic used in automotive parts, electronic housings, and toys. ABS combines strength, heat resistance, and ease of processing, making it ideal for durable consumer products.
-                            </p>
-                        </div>
-
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy ABS</button>
-                            <button class="btn-view-details">Sell ABS</button>
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/ABS-Preview.jpg" alt="ABS recycling materials" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- EPS Material -->
                     <div class="detail-content" data-material="eps">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-teal">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Code: 09</div>
-                                <h2 class="detail-title">EPS Recycling</h2>
-                                <p class="detail-category">Packaging & Insulation</p>
-                            </div>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-teal">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Code: 09</div>
+                                        <h2 class="detail-title">EPS Recycling</h2>
+                                        <p class="detail-category">Packaging & Insulation</p>
+                                    </div>
+                                </div>
 
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Lightweight</span>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Lightweight</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Insulating</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Shock Absorbing</span>
+                                        </div>
+                                        <div class="property-item">
+                                            <div class="property-dot"></div>
+                                            <span>Moisture Resistant</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Insulating</span>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="EPS recycling materials" class="material-detail-img">
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Shock Absorbing</span>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">
+                                        <strong>EPS (Expanded Polystyrene)</strong> - A lightweight foam plastic used for packaging, insulation, and disposable food containers. EPS provides excellent thermal insulation and shock absorption properties.
+                                    </p>
                                 </div>
-                                <div class="property-item">
-                                    <div class="property-dot"></div>
-                                    <span>Moisture Resistant</span>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">
-                                <strong>EPS (Expanded Polystyrene)</strong> - A lightweight foam plastic used for packaging, insulation, and disposable food containers. EPS provides excellent thermal insulation and shock absorption properties.
-                            </p>
-                        </div>
-
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy EPS</button>
-                            <button class="btn-view-details">Sell EPS</button>
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="EPS recycling materials" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Metal Materials Detail Content (moved inside material-detail) -->
                     <div class="detail-content" data-material="steel">
-                        <div class="detail-header">
-                            <div class="material-detail-icon ">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Grade: IS 2062</div>
-                                <h2 class="detail-title">Steel Scrap</h2>
-                                <p class="detail-category">Industrial & Structural</p>
-                            </div>
-                        </div>
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item"><div class="property-dot"></div><span>High tensile strength</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Magnetic</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Recyclable multiple times</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Rust-prone (ferrous)</span></div>
-                            </div>
-                        </div>
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">Steel scrap includes HMS, structural beams, plates, and turnings from fabrication. Widely recycled in foundries and steel mills for re-rolling and billet production.</p>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-blue">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Grade: IS 2062</div>
+                                        <h2 class="detail-title">Steel Scrap</h2>
+                                        <p class="detail-category">Industrial & Structural</p>
+                                    </div>
+                                </div>
 
-                        <div class="action-section">
-                            <button class="btn-view-details " style="margin-right: 15px;">Buy Steel</button>
-                            <button class="btn-view-details ">Sell Steel</button>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item"><div class="property-dot"></div><span>High tensile strength</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Magnetic</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Recyclable multiple times</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Rust-prone (ferrous)</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="Steel scrap" class="material-detail-img">
+                                </div>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">Steel scrap includes HMS, structural beams, plates, and turnings from fabrication. Widely recycled in foundries and steel mills for re-rolling and billet production.</p>
+                                </div>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details " style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details ">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="Steel scrap" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="detail-content" data-material="aluminum">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-indigo">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="14" rx="2" ry="2"></rect></svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Grade: Taint Tabor</div>
-                                <h2 class="detail-title">Aluminum Scrap</h2>
-                                <p class="detail-category">Cans, Profiles & Sheets</p>
-                            </div>
-                        </div>
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item"><div class="property-dot"></div><span>Lightweight</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Corrosion resistant</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Non-magnetic</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>High scrap value</span></div>
-                            </div>
-                        </div>
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">Includes UBC, extrusions, and litho sheet. Commonly baled and melted into ingots for automotive and architectural applications.</p>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-indigo">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="14" rx="2" ry="2"></rect></svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Grade: Taint Tabor</div>
+                                        <h2 class="detail-title">Aluminum Scrap</h2>
+                                        <p class="detail-category">Cans, Profiles & Sheets</p>
+                                    </div>
+                                </div>
 
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy Aluminum</button>
-                            <button class="btn-view-details">Sell Aluminum</button>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item"><div class="property-dot"></div><span>Lightweight</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Corrosion resistant</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Non-magnetic</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>High scrap value</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="Aluminum scrap" class="material-detail-img">
+                                </div>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">Includes UBC, extrusions, and litho sheet. Commonly baled and melted into ingots for automotive and architectural applications.</p>
+                                </div>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="Aluminum scrap" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="detail-content" data-material="copper">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-orange">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"></circle></svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Grade: Berry/Candy</div>
-                                <h2 class="detail-title">Copper Scrap</h2>
-                                <p class="detail-category">Wires & Busbars</p>
-                            </div>
-                        </div>
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item"><div class="property-dot"></div><span>Excellent conductivity</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>High market demand</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Non-ferrous</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Recyclable without quality loss</span></div>
-                            </div>
-                        </div>
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">Typically sourced from electrical cables, motors, and transformers. Clean copper fetches premium pricing in scrap markets.</p>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-orange">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"></circle></svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Grade: Berry/Candy</div>
+                                        <h2 class="detail-title">Copper Scrap</h2>
+                                        <p class="detail-category">Wires & Busbars</p>
+                                    </div>
+                                </div>
 
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy Copper</button>
-                            <button class="btn-view-details">Sell Copper</button>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item"><div class="property-dot"></div><span>Excellent conductivity</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>High market demand</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Non-ferrous</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Recyclable without quality loss</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="Copper scrap" class="material-detail-img">
+                                </div>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">Typically sourced from electrical cables, motors, and transformers. Clean copper fetches premium pricing in scrap markets.</p>
+                                </div>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="Copper scrap" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="detail-content" data-material="brass">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-teal">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 22 22 22"></polygon></svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Grade: Honey</div>
-                                <h2 class="detail-title">Brass Scrap</h2>
-                                <p class="detail-category">Fixtures & Fittings</p>
-                            </div>
-                        </div>
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item"><div class="property-dot"></div><span>Copper-Zinc alloy</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Good machinability</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Decorative finish</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>High recyclability</span></div>
-                            </div>
-                        </div>
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">Common in plumbing parts, locks, and architectural hardware. Recycled for casting and extrusion applications.</p>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-teal">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 22 22 22"></polygon></svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Grade: Honey</div>
+                                        <h2 class="detail-title">Brass Scrap</h2>
+                                        <p class="detail-category">Fixtures & Fittings</p>
+                                    </div>
+                                </div>
 
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy Brass</button>
-                            <button class="btn-view-details">Sell Brass</button>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item"><div class="property-dot"></div><span>Copper-Zinc alloy</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Good machinability</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Decorative finish</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>High recyclability</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PVC-Plastic-scaled-1-1-2.jpg" alt="Brass scrap" class="material-detail-img">
+                                </div>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">Common in plumbing parts, locks, and architectural hardware. Recycled for casting and extrusion applications.</p>
+                                </div>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PVC-Plastic-scaled-1-1-2.jpg" alt="Brass scrap" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="detail-content" data-material="iron">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-purple">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"></path></svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Grade: HMS 1/2</div>
-                                <h2 class="detail-title">Iron Scrap</h2>
-                                <p class="detail-category">Ferrous Metal</p>
-                            </div>
-                        </div>
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item"><div class="property-dot"></div><span>Magnetic</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Heavy & durable</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Suitable for furnace charging</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Prone to oxidation</span></div>
-                            </div>
-                        </div>
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">Sourced from demolition and manufacturing scrap. Used in steelmaking as feedstock for EAF and induction furnaces.</p>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-purple">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Grade: HMS 1/2</div>
+                                        <h2 class="detail-title">Iron Scrap</h2>
+                                        <p class="detail-category">Ferrous Metal</p>
+                                    </div>
+                                </div>
 
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy Iron</button>
-                            <button class="btn-view-details">Sell Iron</button>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item"><div class="property-dot"></div><span>Magnetic</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Heavy & durable</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Suitable for furnace charging</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Prone to oxidation</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="Iron scrap" class="material-detail-img">
+                                </div>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">Sourced from demolition and manufacturing scrap. Used in steelmaking as feedstock for EAF and induction furnaces.</p>
+                                </div>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="Iron scrap" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Paper Materials Detail Content (moved inside material-detail) -->
                     <div class="detail-content" data-material="cardboard">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-orange">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect><path d="M3 9h18"></path></svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Grade: OCC</div>
-                                <h2 class="detail-title">Cardboard</h2>
-                                <p class="detail-category">Corrugated Boxes</p>
-                            </div>
-                        </div>
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item"><div class="property-dot"></div><span>High fiber strength</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Brown kraft liner</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Bales preferred</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Low moisture content</span></div>
-                            </div>
-                        </div>
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">Old Corrugated Containers (OCC) from warehouses and retail. Reprocessed into linerboard and fluting.</p>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-orange">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2" ry="2"></rect><path d="M3 9h18"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Grade: OCC</div>
+                                        <h2 class="detail-title">Cardboard</h2>
+                                        <p class="detail-category">Corrugated Boxes</p>
+                                    </div>
+                                </div>
 
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy Cardboard</button>
-                            <button class="btn-view-details">Sell Cardboard</button>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item"><div class="property-dot"></div><span>High fiber strength</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Brown kraft liner</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Bales preferred</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Low moisture content</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://images.unsplash.com/photo-1516387938699-a93567ec168e?w=600&h=400&fit=crop&auto=format" alt="Cardboard bales" class="material-detail-img">
+                                </div>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">Old Corrugated Containers (OCC) from warehouses and retail. Reprocessed into linerboard and fluting.</p>
+                                </div>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://images.unsplash.com/photo-1516387938699-a93567ec168e?w=600&h=400&fit=crop&auto=format" alt="Cardboard bales" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="detail-content" data-material="office-paper">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-indigo">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Grade: SOP</div>
-                                <h2 class="detail-title">Office Paper</h2>
-                                <p class="detail-category">Sorted Office Paper</p>
-                            </div>
-                        </div>
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item"><div class="property-dot"></div><span>White & mixed ledger</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>High brightness</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Low contamination</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Ideal for tissue & writing paper</span></div>
-                            </div>
-                        </div>
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">Collected from offices and institutions. Used to produce recycled copier paper and tissue products.</p>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-indigo">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Grade: SOP</div>
+                                        <h2 class="detail-title">Office Paper</h2>
+                                        <p class="detail-category">Sorted Office Paper</p>
+                                    </div>
+                                </div>
 
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy Office Paper</button>
-                            <button class="btn-view-details">Sell Office Paper</button>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item"><div class="property-dot"></div><span>White & mixed ledger</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>High brightness</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Low contamination</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Ideal for tissue & writing paper</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&h=400&fit=crop&auto=format" alt="Office paper" class="material-detail-img">
+                                </div>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">Collected from offices and institutions. Used to produce recycled copier paper and tissue products.</p>
+                                </div>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&h=400&fit=crop&auto=format" alt="Office paper" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="detail-content" data-material="newsprint">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-cyan">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><path d="M8 8h8M8 12h8M8 16h6"></path></svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Grade: ONP</div>
-                                <h2 class="detail-title">Newsprint</h2>
-                                <p class="detail-category">Old Newspapers</p>
-                            </div>
-                        </div>
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item"><div class="property-dot"></div><span>Lightweight</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>High ink content</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Good for molded products</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Typically baled</span></div>
-                            </div>
-                        </div>
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">Comes from households and presses. Recycled into packaging and molded pulp products.</p>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-cyan">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect><path d="M8 8h8M8 12h8M8 16h6"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Grade: ONP</div>
+                                        <h2 class="detail-title">Newsprint</h2>
+                                        <p class="detail-category">Old Newspapers</p>
+                                    </div>
+                                </div>
 
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy Newsprint</button>
-                            <button class="btn-view-details">Sell Newsprint</button>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item"><div class="property-dot"></div><span>Lightweight</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>High ink content</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Good for molded products</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Typically baled</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=600&h=400&fit=crop&auto=format" alt="Newsprint" class="material-detail-img">
+                                </div>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">Comes from households and presses. Recycled into packaging and molded pulp products.</p>
+                                </div>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=600&h=400&fit=crop&auto=format" alt="Newsprint" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="detail-content" data-material="kraft">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-red">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2l6 3 6-3v14l-6 3-6-3z"></path></svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Grade: Mixed Kraft</div>
-                                <h2 class="detail-title">Kraft Paper</h2>
-                                <p class="detail-category">Sacks & Bags</p>
-                            </div>
-                        </div>
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item"><div class="property-dot"></div><span>Strong fibers</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Brown/bleached</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>High tear resistance</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Good for bags</span></div>
-                            </div>
-                        </div>
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">Used in cement and food sacks. Recycled into bag paper, cardboard cores, and liners.</p>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-red">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2l6 3 6-3v14l-6 3-6-3z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Grade: Mixed Kraft</div>
+                                        <h2 class="detail-title">Kraft Paper</h2>
+                                        <p class="detail-category">Sacks & Bags</p>
+                                    </div>
+                                </div>
 
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy Kraft</button>
-                            <button class="btn-view-details">Sell Kraft</button>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item"><div class="property-dot"></div><span>Strong fibers</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Brown/bleached</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>High tear resistance</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Good for bags</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PVC-Plastic-scaled-1-1-2.jpg" alt="Kraft paper" class="material-detail-img">
+                                </div>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">Used in cement and food sacks. Recycled into bag paper, cardboard cores, and liners.</p>
+                                </div>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PVC-Plastic-scaled-1-1-2.jpg" alt="Kraft paper" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="detail-content" data-material="mixed-paper">
-                        <div class="detail-header">
-                            <div class="material-detail-icon bg-gradient-teal">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
-                            </div>
-                            <div>
-                                <div class="detail-code">Grade: Mixed</div>
-                                <h2 class="detail-title">Mixed Paper</h2>
-                                <p class="detail-category">Assorted Grades</p>
-                            </div>
-                        </div>
-                        <div class="properties-section">
-                            <h4>Key Properties</h4>
-                            <div class="properties-grid">
-                                <div class="property-item"><div class="property-dot"></div><span>Varied fiber quality</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Common MRF output</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Lower pricing</span></div>
-                                <div class="property-item"><div class="property-dot"></div><span>Used in packaging</span></div>
-                            </div>
-                        </div>
-                        <div class="description-section">
-                            <h4>Material Description</h4>
-                            <p class="material-description">A blend of various paper grades from sorting facilities. Typically pulped for low-grade packaging products.</p>
-                        </div>
+                        <div class="detail-layout">
+                            <div class="detail-left">
+                                <div class="detail-header">
+                                    <div class="material-detail-icon bg-gradient-teal">
+                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="detail-code">Grade: Mixed</div>
+                                        <h2 class="detail-title">Mixed Paper</h2>
+                                        <p class="detail-category">Assorted Grades</p>
+                                    </div>
+                                </div>
 
-                        <div class="action-section">
-                            <button class="btn-view-details" style="margin-right: 15px;">Buy Mixed Paper</button>
-                            <button class="btn-view-details">Sell Mixed Paper</button>
+                                <div class="properties-section">
+                                    <h4>Key Properties</h4>
+                                    <div class="properties-grid">
+                                        <div class="property-item"><div class="property-dot"></div><span>Varied fiber quality</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Common MRF output</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Lower pricing</span></div>
+                                        <div class="property-item"><div class="property-dot"></div><span>Used in packaging</span></div>
+                                    </div>
+                                </div>
+
+                                <div class="detail-image-mobile">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PVC-Plastic-scaled-1-1-2.jpg" alt="Mixed paper" class="material-detail-img">
+                                </div>
+
+                                <div class="description-section">
+                                    <h4>Material Description</h4>
+                                    <p class="material-description">A blend of various paper grades from sorting facilities. Typically pulped for low-grade packaging products.</p>
+                                </div>
+
+                                <div class="action-section">
+                                    <button class="btn-view-details" style="margin-right: 15px;">
+                                        <span>Buy</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-view-details">
+                                        <span>Sell</span>
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9,18 15,12 9,6"></polyline>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="detail-right">
+                                <div class="detail-image">
+                                    <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PVC-Plastic-scaled-1-1-2.jpg" alt="Mixed paper" class="material-detail-img">
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Dynamic Image Section -->
-                    <div class="detail-image">
-                        <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=600&h=400&fit=crop&auto=format" alt="PET recycling materials" class="material-image" data-material="pet">
-                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/hdpe-piping-1.jpg" alt="HDPE recycling materials" class="material-image" data-material="hdpe" style="display: none;">
-                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PVC-Plastic-scaled-1-1-2.jpg" alt="PVC recycling materials" class="material-image" data-material="pvc" style="display: none;">
-                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/LDPE-on-a-roll-in-a-factory-1.jpg" alt="LDPE recycling materials" class="material-image" data-material="ldpe" style="display: none;">
-                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PP1-1-1-2.jpg" alt="PP recycling materials" class="material-image" data-material="pp" style="display: none;">
-                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="PS recycling materials" class="material-image" data-material="ps" style="display: none;">
-                        <img src="https://images.unsplash.com/photo-1590595906931-81f04f0ccebb?w=600&h=400&fit=crop&auto=format" alt="PC recycling materials" class="material-image" data-material="pc" style="display: none;">
-                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/ABS-Preview.jpg" alt="ABS recycling materials" class="material-image" data-material="abs" style="display: none;">
-                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="EPS recycling materials" class="material-image" data-material="eps" style="display: none;">
-                        <!-- Metal images -->
-                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="Steel scrap" class="material-image" data-material="steel" style="display: none;">
-                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="Aluminum scrap" class="material-image" data-material="aluminum" style="display: none;">
-                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="Copper scrap" class="material-image" data-material="copper" style="display: none;">
-                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PVC-Plastic-scaled-1-1-2.jpg" alt="Brass scrap" class="material-image" data-material="brass" style="display: none;">
-                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/EPS-Preview.jpg" alt="Iron scrap" class="material-image" data-material="iron" style="display: none;">
-                        <!-- Paper images -->
-                        <img src="https://images.unsplash.com/photo-1516387938699-a93567ec168e?w=600&h=400&fit=crop&auto=format" alt="Cardboard bales" class="material-image" data-material="cardboard" style="display: none;">
-                        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&h=400&fit=crop&auto=format" alt="Office paper" class="material-image" data-material="office-paper" style="display: none;">
-                        <img src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=600&h=400&fit=crop&auto=format" alt="Newsprint" class="material-image" data-material="newsprint" style="display: none;">
-                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PVC-Plastic-scaled-1-1-2.jpg" alt="Kraft paper" class="material-image" data-material="kraft" style="display: none;">
-                        <img src="https://www.wastetrade.com/wp-content/uploads/2024/07/PVC-Plastic-scaled-1-1-2.jpg" alt="Mixed paper" class="material-image" data-material="mixed-paper" style="display: none;">
-                        
-                        <div class="image-overlay">
+                    
+                        {% comment %} <div class="image-overlay">
                             <div class="overlay-badge bg-gradient-blue" data-material="pet">PET</div>
                             <div class="overlay-badge bg-gradient-green" data-material="hdpe" style="display: none;">HDPE</div>
                             <div class="overlay-badge bg-gradient-purple" data-material="pvc" style="display: none;">PVC</div>
@@ -3067,7 +3517,7 @@
                             <div class="overlay-badge bg-gradient-cyan" data-material="newsprint" style="display: none;">Newsprint</div>
                             <div class="overlay-badge bg-gradient-red" data-material="kraft" style="display: none;">Kraft</div>
                             <div class="overlay-badge bg-gradient-teal" data-material="mixed-paper" style="display: none;">Mixed Paper</div>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                 </div>
             </div>

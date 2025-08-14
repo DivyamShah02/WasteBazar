@@ -190,7 +190,8 @@ class UserDetailViewSet(viewsets.ViewSet):
                 cin_number = request.data.get("cin_number")
                 aadhar_number = request.data.get("aadhar_number")
                 gst_number = request.data.get("gst_number")
-                address = request.data.get("address")
+                addressline1 = request.data.get("addressline1")
+                addressline2 = request.data.get("addressline2")
                 city = request.data.get("city")
                 state = request.data.get("state")
                 certificate_url = request.data.get("certificate_url")
@@ -217,7 +218,8 @@ class UserDetailViewSet(viewsets.ViewSet):
                         "gst_number": gst_number,
                         "city": city,
                         "state": state,
-                        "address": address,
+                        "addressline1": addressline1,
+                        "addressline2": addressline2,
                         "certificate_url": certificate_url,
                         "requested_at": timezone.now(),
                         "is_approved": is_approved,

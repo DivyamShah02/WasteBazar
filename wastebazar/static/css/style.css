@@ -1588,6 +1588,7 @@ body {
     background: var(--bg-light);
     padding: 5rem 0;
     position: relative;
+    overflow: hidden;
 }
 
 .how-it-works::before {
@@ -1673,69 +1674,79 @@ body {
     box-shadow: var(--shadow-xl);
     overflow: hidden;
     border: 1px solid var(--border-color);
-}
-
-.tabs-navigation {
-    display: flex;
-    background: var(--bg-light);
-    border-bottom: 1px solid var(--border-color);
-}
-
-.tab-button {
-    flex: 1;
-    padding: 2rem 1rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: none;
-    background: transparent;
+    min-height: 520px;
     position: relative;
 }
 
-.tab-button::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: var(--gradient-primary);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
+.tabs-container .row {
+    height: 100%;
+    min-height: 520px;
 }
 
+
+
+.tabs-navigation {
+    padding: 1.75rem;
+    background: var(--bg-light);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.tab-button {
+    width: 100%;
+    padding: 1.5rem 2rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    background: white;
+    border-radius: 15px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+
 .tab-button.active::after {
-    transform: scaleX(1);
+    transform: scaleY(1);
 }
 
 .tab-button:hover {
     background: rgba(0, 116, 232, 0.05);
+    transform: translateX(5px);
 }
 
 .tab-button.active {
-    background: white;
-    color: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    transform: translateX(10px);
+    box-shadow: 0 8px 25px rgba(0, 116, 232, 0.3);
 }
 
 .tab-icon {
-    width: 70px;
-    height: 70px;
-    margin: 0 auto 1rem;
-    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    background: var(--border-color);
+    background: var(--bg-light);
+    flex-shrink: 0;
 }
 
 .tab-button.active .tab-icon {
-    background: var(--gradient-primary);
-    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
 }
 
 .tab-icon i {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: var(--text-muted);
     transition: color 0.3s ease;
 }
@@ -1745,23 +1756,40 @@ body {
 }
 
 .tab-title {
-    font-weight: 700;
-    font-size: 1.2rem;
+    font-weight: 600;
+    font-size: 1.1rem;
     color: var(--text-dark);
-    margin: 0;
+    margin: 0 0 0.5rem 0;
     transition: color 0.3s ease;
 }
 
 .tab-button.active .tab-title {
-    color: var(--primary-color);
+    color: white;
+}
+
+.tab-description {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0;
+    transition: color 0.3s ease;
+    line-height: 1.4;
+}
+
+.tab-button.active .tab-description {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.tab-content-text {
+    flex: 1;
 }
 
 .tabs-content {
-    padding: 3rem;
-    min-height: 400px;
+    padding: 2.5rem;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: white;
 }
 
 .tab-panel {
@@ -1788,14 +1816,13 @@ body {
 
 /* Video Styles */
 .video-container,
-.video-wrapper,
 .video-wrapper {
     position: relative;
     width: 100%;
-    height: 500px;
-    border-radius: 15px;
+    height: 380px;
+    border-radius: 20px;
     overflow: hidden;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .mobile-video-wrapper {
@@ -1857,19 +1884,21 @@ body {
     z-index: 2;
     width: 80px;
     height: 80px;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
+    border: 3px solid rgba(255, 255, 255, 0.3);
 }
 
 .video-play-button:hover {
     background: white;
-    transform: scale(1.1);
+    transform: scale(1.15);
+    box-shadow: 0 10px 30px rgba(0, 116, 232, 0.3);
 }
 
 .video-play-button svg {
@@ -1901,6 +1930,40 @@ body {
     max-width: 600px;
     margin: 0 auto;
     line-height: 1.6;
+}
+
+/* Responsive Improvements for How It Works */
+@media (max-width: 1199px) {
+    .tabs-container {
+        min-height: 460px;
+    }
+
+    .tabs-container .row {
+        min-height: 460px;
+    }
+
+    .tabs-navigation {
+        padding: 1.5rem;
+    }
+
+    .tab-button {
+        padding: 1rem 1.5rem;
+    }
+
+    .tabs-content {
+        padding: 2rem;
+    }
+
+    .video-container,
+    .video-wrapper {
+        height: 300px;
+    }
+}
+
+@media (max-width: 991px) {
+    .how-it-works {
+        padding: 4rem 0;
+    }
 }
 
 /* Legacy step styles for backward compatibility */
@@ -3649,6 +3712,10 @@ body {
     overflow: hidden;
 }
 
+.material-card .row {
+    height: 100%;
+}
+
 .material-card::before {
     content: '';
     position: absolute;
@@ -3682,6 +3749,10 @@ body {
 .card-content {
     position: relative;
     z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .card-title {
@@ -3791,6 +3862,9 @@ body {
     position: relative;
     overflow: hidden;
     border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .material-img {
@@ -3805,53 +3879,266 @@ body {
     transform: scale(1.05);
 }
 
+/* Detail Section Image Styling */
+.detail-image {
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.material-detail-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.material-detail-img:hover {
+    transform: scale(1.02);
+}
+
+/* Detail Layout Flex Styling */
+.detail-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.detail-left {
+    flex: 1;
+    min-width: 0;
+}
+
+.detail-right {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.detail-right .detail-image {
+    margin-bottom: 0;
+    height: 100%;
+    min-height: 400px;
+}
+
+.detail-right .material-detail-img {
+    height: 100%;
+    min-height: 400px;
+    border-radius: 15px;
+}
+
+.detail-image-mobile {
+    display: none;
+}
+
 /* Responsive Design for Buy Sell Material Section */
-@media (max-width: 768px) {
+
+/* Tablet and small desktop adjustments */
+@media (max-width: 991px) {
     .buy-sell-material {
-        padding: 60px 0;
-    }
-
-    .buy-sell-material .section-title {
-        font-size: 2rem;
-    }
-
-    .buy-sell-material .main-heading {
-        font-size: 1.8rem;
-        text-align: center;
-    }
-
-    .buy-sell-material .intro-description {
-        text-align: center;
-        margin-bottom: 3rem;
+        padding: 4rem 0;
     }
 
     .material-card {
-        padding: 1.5rem;
+        padding: 2rem;
         margin-bottom: 2rem;
     }
 
-    .card-title {
-        font-size: 1.5rem;
-        text-align: center;
+    /* Restructure to use separate rows instead of columns */
+    .material-card .row {
+        display: block;
     }
 
-    .features-list {
-        margin-bottom: 2rem;
-    }
-
-    .material-btn {
+    .material-card .col-md-7,
+    .material-card .col-md-5 {
         width: 100%;
-        text-align: center;
-        margin-top: 1rem;
+        max-width: 100%;
+        flex: none;
+        padding: 0;
+        margin-bottom: 1.5rem;
+    }
+
+    .material-card .col-md-5 {
+        order: -1;
+        margin-bottom: 2rem;
     }
 
     .card-image {
-        margin-top: 1.5rem;
         text-align: center;
     }
 
     .material-img {
         height: 250px;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .card-title {
+        text-align: center;
+        font-size: 1.6rem;
+    }
+
+    .features-list {
+        margin-bottom: 1.5rem;
+    }
+
+    .material-btn {
+        display: block;
+        text-align: center;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 768px) {
+    .buy-sell-material {
+        padding: 3rem 0;
+    }
+
+    .buy-sell-material .section-title {
+        font-size: 1.8rem;
+    }
+
+    .buy-sell-material .main-heading {
+        font-size: 1.6rem;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .buy-sell-material .intro-description {
+        text-align: center;
+        margin-bottom: 2.5rem;
+        font-size: 0.95rem;
+    }
+
+    /* Fix for grid spacing on mobile */
+    .buy-sell-material .row.g-4 {
+        gap: 1.5rem !important;
+    }
+
+    .buy-sell-material .col-lg-6 {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    .material-card {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-radius: 15px;
+    }
+
+    .card-title {
+        font-size: 1.4rem;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .features-list {
+        margin-bottom: 1.5rem;
+    }
+
+    .features-list li {
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .material-btn {
+        width: 100%;
+        text-align: center;
+        padding: 0.8rem 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    /* Detail images responsive styling */
+    .detail-image {
+        margin-bottom: 1rem;
+        border-radius: 8px;
+    }
+
+    .material-detail-img {
+        height: 150px;
+    }
+
+    /* Mobile detail layout */
+    .detail-layout {
+        display: block;
+        gap: 0;
+    }
+
+    .detail-left {
+        flex: none;
+    }
+
+    .detail-right {
+        display: none;
+    }
+
+    .detail-image-mobile {
+        display: block;
+        margin: 1.5rem 0;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+    }
+
+    .detail-image-mobile .material-detail-img {
+        height: 200px;
+    }
+
+    .card-image {
+        margin-bottom: 1rem;
+    }
+
+    .material-img {
+        height: 200px;
+        border-radius: 10px;
+    }
+}
+
+/* Small mobile phones */
+@media (max-width: 576px) {
+    .buy-sell-material {
+        padding: 2rem 0;
+    }
+
+    .buy-sell-material .section-title {
+        font-size: 1.5rem;
+    }
+
+    .buy-sell-material .main-heading {
+        font-size: 1.4rem;
+    }
+
+    .material-card {
+        padding: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .card-title {
+        font-size: 1.3rem;
+    }
+
+    .features-list li {
+        font-size: 0.85rem;
+        padding-left: 1.5rem;
+    }
+
+    .features-list li::before {
+        width: 16px;
+        height: 16px;
+        font-size: 0.7rem;
+    }
+
+    .material-img {
+        height: 180px;
+    }
+
+    .material-btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.9rem;
     }
 }
 
@@ -4136,7 +4423,7 @@ body {
 .materials-category-nav {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 10px;
     flex-wrap: wrap;
     margin-bottom: 2rem;
 }
@@ -4148,13 +4435,13 @@ body {
     background: white;
     border: 2px solid #e2e8f0;
     color: #64748b;
-    font-weight: 600;
+    font-weight: 700;
     padding: 15px 25px;
     border-radius: 16px;
     transition: all 0.3s ease;
     text-decoration: none;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 15px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
@@ -4209,7 +4496,7 @@ body {
 
 /* Material Detail */
 .material-detail {
-    display: grid;
+    /* display: grid; */
     grid-template-columns: 1fr 1fr;
     gap: 60px;
     background: white;

@@ -64,7 +64,7 @@ function getRedirectUrl(userRole) {
 
     if (userRole === "seller" || userRole === "seller_individual" || userRole === "seller_corporate") {
         console.log("➡️ Redirecting to seller profile");
-        return "/seller-profile";
+        return "/seller-profile/?first=1";
     } else if (userRole === "buyer" || userRole === "buyer_individual" || userRole === "buyer_corporate") {
         console.log("➡️ Redirecting to buyer profile");
         return "/buyer-profile";
@@ -529,7 +529,8 @@ async function submitUserDetails() {
                 cin_number: cinVal,
                 aadhar_number: document.getElementById("aadharNumber").value.trim(),
                 gst_number: document.getElementById("gstNumber").value.trim(),
-                address: document.getElementById("companyAddress").value.trim(),
+                addressline1: document.getElementById("companyAddressLine1").value.trim(),
+                addressline2: document.getElementById("companyAddressLine2").value.trim(),
                 city: document.getElementById("companyCity").value.trim(),
                 state: document.getElementById("companyState").value.trim(),
                 // certificate_url: document.getElementById("certificateUrl").value.trim(),

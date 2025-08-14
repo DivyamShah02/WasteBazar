@@ -74,7 +74,8 @@ class CorporateUserDetail(models.Model):
     gst_number = models.CharField(max_length=20, blank=True, null=True)
     city = models.CharField(max_length=100, blank=True, null=True)
     state = models.CharField(max_length=100, blank=True, null=True)
-    address = models.TextField()
+    addressline1 = models.TextField()
+    addressline2 = models.TextField(blank=True, null=True)
     certificate_url = models.URLField(blank=True, null=True)  # S3 link or similar
     is_approved = models.BooleanField(default=False)
     approved_at = models.DateTimeField(blank=True, null=True)
