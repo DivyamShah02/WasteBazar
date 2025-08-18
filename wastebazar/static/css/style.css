@@ -4428,6 +4428,8 @@ body {
     margin-bottom: 2rem;
 }
 
+.tab-button-home {}
+
 .materials-category-nav button {
     display: flex;
     align-items: center;

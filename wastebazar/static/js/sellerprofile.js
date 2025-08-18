@@ -659,7 +659,7 @@ function updateListingsStats(listings, meta = {}) {
  * Set up tab functionality
  */
 function setupTabFunctionality() {
-    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabButtons = document.querySelectorAll('.tab-button-home');
     const tabContents = document.querySelectorAll('.tab-content');
 
     tabButtons.forEach(button => {

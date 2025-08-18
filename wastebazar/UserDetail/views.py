@@ -169,7 +169,7 @@ class UserDetailViewSet(viewsets.ViewSet):
         # Prepare update payload; normalize empty strings to None for optional IDs
         incoming = request.data
         update_data = {}
-        for key in ['name', 'email', 'pan_number', 'aadhar_number']:
+        for key in ['name', 'email', 'pan_number', 'aadhar_number', 'addressline1', 'addressline2', 'city', 'state', 'address_pincode']:
             if key in incoming:
                 val = incoming.get(key)
                 if isinstance(val, str):
@@ -192,6 +192,7 @@ class UserDetailViewSet(viewsets.ViewSet):
                 gst_number = request.data.get("gst_number")
                 addressline1 = request.data.get("addressline1")
                 addressline2 = request.data.get("addressline2")
+                address_pincode = request.data.get("address_pincode")
                 city = request.data.get("city")
                 state = request.data.get("state")
                 certificate_url = request.data.get("certificate_url")
@@ -220,6 +221,7 @@ class UserDetailViewSet(viewsets.ViewSet):
                         "state": state,
                         "addressline1": addressline1,
                         "addressline2": addressline2,
+                        "address_pincode": address_pincode,
                         "certificate_url": certificate_url,
                         "requested_at": timezone.now(),
                         "is_approved": is_approved,
@@ -407,17 +409,19 @@ class AccountCreationViewSet(viewsets.ViewSet):
                 company_name = request.data.get("company_name")
                 pan_number = request.data.get("pan_number")
                 gst_number = request.data.get("gst_number")
-                address = request.data.get("address")
+                addressline1 = request.data.get("addressline1")
+                addressline2 = request.data.get("addressline2")
+                address_pincode = request.data.get("address_pincode")
                 certificate_url = request.data.get("certificate_url")
                 is_approved = True 
 
-                if not company_name or not pan_number or not address:
+                if not company_name or not pan_number or not addressline1:
                     return Response({
                         "success": False,
                         "user_not_logged_in": False,
                         "user_unauthorized": False,
                         "data": None,
-                        "error": "Corporate fields missing: company_name, pan_number, address are required."
+                        "error": "Corporate fields missing: company_name, pan_number, addressline1 are required."
                     }, status=status.HTTP_400_BAD_REQUEST)
 
                 # Save corporate details
@@ -430,7 +434,9 @@ class AccountCreationViewSet(viewsets.ViewSet):
                         "company_name": company_name,
                         "pan_number": pan_number,
                         "gst_number": gst_number,
-                        "address": address,
+                        "addressline1": addressline1,
+                        "addressline2": addressline2,
+                        "address_pincode": address_pincode,
                         "certificate_url": certificate_url,
                         "requested_at": timezone.now(),
                         "is_approved": is_approved,
@@ -731,7 +737,7 @@ class UpdateUserDetailsViewSet(viewsets.ViewSet):
         # Update corporate details if user is corporate
         corporate_updated = False
         if user.role in ['buyer_corporate', 'seller_corporate']:
-            corporate_fields = ['company_name', 'pan_number', 'gst_number', 'address', 'certificate_url']
+            corporate_fields = ['company_name', 'pan_number', 'gst_number', 'addressline1', 'addressline2', 'address_pincode', 'certificate_url']
             corporate_updates = {}
             
             for field in corporate_fields:

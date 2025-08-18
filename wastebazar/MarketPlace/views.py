@@ -204,6 +204,7 @@ class SellerListingViewSet(viewsets.ViewSet):
             subcategory_id=data['subcategory_id'],
             quantity=data['quantity'],
             unit=data['unit'],
+            listing_name=data['listing_name'],
             priceperunit=data['priceperunit'],
             seller_name=data.get('seller_name', ''),
             description=data.get('description', ''),

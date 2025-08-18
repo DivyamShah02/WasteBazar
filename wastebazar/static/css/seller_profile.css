@@ -226,6 +226,43 @@
     margin-bottom: 0.5rem;
 }
 
+
+.tab-button-home {
+    flex: 1;
+    padding: 2rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    background: transparent;
+    position: relative;
+}
+
+.tab-button-home::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.tab-button-home.active::after {
+    transform: scaleX(1);
+}
+
+.tab-button-home:hover {
+    background: rgba(0, 116, 232, 0.05);
+}
+
+.tab-button-home.active {
+    background: white;
+    color: var(--primary-color);
+}
+
 .listing-status {
     padding: 0.25rem 0.75rem;
     border-radius: 12px;

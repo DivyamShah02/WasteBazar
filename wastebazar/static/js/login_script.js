@@ -507,32 +507,38 @@ async function submitUserDetails() {
 
         if (selectedType === "individual") {
             const indivIdType = document.getElementById('individualIdSelect')?.value
-            const panVal = indivIdType === 'pan' ? document.getElementById("panNumber").value.trim() : ''
-            const aadharVal = indivIdType === 'aadhar' ? document.getElementById("individualAadharNumber").value.trim() : ''
+            const panVal = indivIdType === 'pan' ? document.getElementById("panNumber")?.value.trim() : ''
+            const aadharVal = indivIdType === 'aadhar' ? document.getElementById("individualAadharNumber")?.value.trim() : ''
 
             formData = {
                 name: document.getElementById("fullName").value.trim(),
                 email: document.getElementById("email").value.trim(),
                 pan_number: panVal,
-                aadhar_number: aadharVal
+                aadhar_number: aadharVal,
+                addressline1: document.getElementById("addressline1").value.trim(),
+                addressline2: document.getElementById("addressline2").value.trim(),
+                city: document.getElementById("cityname").value.trim(),
+                state: document.getElementById("statename").value.trim(),
+                address_pincode: document.getElementById("addresspincode").value.trim()
             }
         } else {
             const idType = document.getElementById('corpIdSelect')?.value
-            const panVal = idType === 'pan' ? document.getElementById("corporatepanNumber").value.trim() : ''
-            const cinVal = idType === 'cin' ? document.getElementById("cinNumber").value.trim() : ''
+            // const panVal = idType === 'pan' ? document.getElementById("corporatepanNumber").value.trim() : ''
+            // const cinVal = idType === 'cin' ? document.getElementById("cinNumber").value.trim() : ''
 
             formData = {
                 name: document.getElementById("contactName").value.trim(),
                 email: document.getElementById("corporateEmail").value.trim(),
                 company_name: document.getElementById("companyName").value.trim(),
-                pan_number: panVal,
-                cin_number: cinVal,
-                aadhar_number: document.getElementById("aadharNumber").value.trim(),
-                gst_number: document.getElementById("gstNumber").value.trim(),
+                // pan_number: panVal,
+                // cin_number: cinVal,
+                // aadhar_number: document.getElementById("aadharNumber").value.trim(),
+                // gst_number: document.getElementById("gstNumber").value.trim(),
                 addressline1: document.getElementById("companyAddressLine1").value.trim(),
                 addressline2: document.getElementById("companyAddressLine2").value.trim(),
                 city: document.getElementById("companyCity").value.trim(),
                 state: document.getElementById("companyState").value.trim(),
+                address_pincode: document.getElementById("companyPincode").value.trim(),
                 // certificate_url: document.getElementById("certificateUrl").value.trim(),
             }
         }
@@ -546,8 +552,13 @@ async function submitUserDetails() {
                 // Corporate buyer needs approval
                 setTimeout(() => {
                     alert("Your corporate account is under review. You will be notified once approved.")
-                    window.location.href = home_url
+                    window.location.href = "/buyer-profile"
                 }, 2000)
+                // Store user info in localStorage for profile pages
+                localStorage.setItem('user_id', userId);
+                localStorage.setItem('user_role', selectedRole);
+                localStorage.setItem('login_timestamp', new Date().toISOString());
+
             } else {
                 // Redirect to appropriate profile based on role
                 const redirectUrl = getRedirectUrl(selectedRole);

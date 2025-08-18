@@ -114,7 +114,7 @@ class ListingDetailApp {
     const listing = this.listingData;
 
     // Update page title
-    document.title = `${listing.category_name || 'Category'} | WasteBazar`;
+    document.title = `${listing.listing_name || listing.category_name || 'Category'} | WasteBazar`;
 
     // Update breadcrumb
     this.updateBreadcrumb(listing);
@@ -149,7 +149,7 @@ class ListingDetailApp {
     if (!breadcrumb) return;
 
     const categoryName = listing.category_name || 'Category';
-    const listingTitle = this.truncateText(listing.seller_name || 'Listing', 30);
+    const listingTitle = this.truncateText(listing.listing_name || listing.seller_name || 'Listing', 30);
 
     breadcrumb.innerHTML = `
             <li class="breadcrumb-item"><a href="/">Home</a></li>
@@ -163,8 +163,7 @@ class ListingDetailApp {
     // Update title
     const titleElement = document.getElementById('listing-title');
     if (titleElement) {
-      const title =
-        // listing.seller_name ||
+      const title = listing.listing_name ||
         `${listing.category_name || 'Category'} - ${listing.subcategory_name || 'Subcategory'}` ||
         'Listing Details';
       titleElement.textContent = title;
@@ -476,7 +475,7 @@ class ListingDetailApp {
                     </div>
                 </div>
                 <div class="related-listing-content">
-                    <h4>${listing.seller_name || listing.category_name}</h4>
+                    <h4>${listing.listing_name || listing.seller_name || listing.category_name}</h4>
                     <p class="related-price">₹${listing.priceperunit ? listing.priceperunit.toLocaleString() : 'On Request'}/${listing.unit}</p>
                     <p class="related-location">${listing.city_location}, ${listing.state_location}</p>
                 </div>
@@ -624,7 +623,7 @@ class ListingDetailApp {
   shareListing() {
     if (navigator.share && this.listingData) {
       navigator.share({
-        title: this.listingData.seller_name || 'WasteBazar Listing',
+        title: this.listingData.listing_name || this.listingData.seller_name || 'WasteBazar Listing',
         text: `Check out this ${this.listingData.category_name} listing on WasteBazar`,
         url: window.location.href
       });

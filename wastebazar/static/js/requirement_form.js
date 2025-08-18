@@ -3,6 +3,10 @@
 // Global variables for API endpoints and CSRF token
 let csrf_token = null;
 let create_requirement_api_url = null;
+let categories_api_url = "/marketplace-api/categories/"; // Categories API endpoint
+
+// Categories data
+let categoriesData = [];
 
 // Initialize app function
 async function RequirementFormApp(csrf_token_param, create_requirement_api_url_param) {
@@ -18,7 +22,7 @@ async function RequirementFormApp(csrf_token_param, create_requirement_api_url_p
         return;
     }
 
-    initializeForm();
+    await initializeForm();
 }
 
 function getCsrfToken() {
@@ -26,11 +30,32 @@ function getCsrfToken() {
 }
 
 // Initialize form functionality
-function initializeForm() {
+async function initializeForm() {
     console.log("🔧 Initializing form components...");
 
+    // Check if user is logged in and is a buyer
+    const user_id = localStorage.getItem('user_id');
+    const user_role = localStorage.getItem('user_role');
+
+    if (!user_id) {
+        console.error("❌ No user ID found in localStorage");
+        showError('Please log in to create a requirement.');
+        return;
+    }
+
+    if (!user_role || (!user_role.includes('buyer'))) {
+        console.error("❌ User is not a buyer");
+        showError('Only buyers can create requirements. Please log in with a buyer account.');
+        return;
+    }
+
+    console.log("✅ User authenticated as buyer:", user_id);
+
+    // Load categories first
+    await loadCategories();
+
     initializeFormSubmission();
-    initializeCategorySubcategory();
+    await initializeCategorySubcategory();
     initializeStateDropdown();
 
     console.log("✅ Form initialization complete");
@@ -79,8 +104,8 @@ async function handleFormSubmission() {
         // Create form data object with user_id included
         const formData = {
             user_id: currentUserId,
-            category: document.getElementById('category').value,
-            subcategory: document.getElementById('subcategory').value,
+            category_id: document.getElementById('category').value,
+            subcategory_id: document.getElementById('subcategory').value,
             quantity: document.getElementById('quantity').value,
             unit: document.getElementById('unit').value,
             description: document.getElementById('description').value,
@@ -187,8 +212,41 @@ function validateFormFields() {
     return true;
 }
 
+// Load categories from API
+async function loadCategories() {
+    try {
+        console.log("📥 Loading categories from API...");
+
+        const response = await fetch(`${categories_api_url}with_subcategories/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrf_token
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.success) {
+            categoriesData = result.data;
+            console.log("✅ Categories loaded successfully:", categoriesData.length, "categories");
+        } else {
+            throw new Error(result.error || 'Failed to load categories');
+        }
+    } catch (error) {
+        console.error("❌ Error loading categories:", error);
+        showError('Failed to load categories. Please refresh the page.');
+        // Fallback to empty categories
+        categoriesData = [];
+    }
+}
+
 // Initialize category-subcategory functionality
-function initializeCategorySubcategory() {
+async function initializeCategorySubcategory() {
     const categorySelect = document.getElementById('category');
     const subcategorySelect = document.getElementById('subcategory');
 
@@ -197,29 +255,57 @@ function initializeCategorySubcategory() {
         return;
     }
 
-    // Subcategory data
-    const subcategoryData = {
-        plastic: ['PET Bottles', 'HDPE Containers', 'PVC Pipes', 'Polystyrene', 'Mixed Plastic'],
-        metal: ['Aluminum Cans', 'Copper Wire', 'Steel Scrap', 'Iron Scraps', 'Brass Items'],
-        paper: ['Newspaper', 'Cardboard', 'Office Paper', 'Books/Magazines', 'Mixed Paper'],
-        electronic: ['Mobile Phones', 'Computers', 'TVs/Monitors', 'Circuit Boards', 'Cables'],
-        textile: ['Cotton Fabric', 'Synthetic Fabric', 'Used Clothing', 'Yarn Waste', 'Mixed Textiles'],
-        glass: ['Clear Glass', 'Colored Glass', 'Bottles', 'Window Glass', 'Mixed Glass']
-    };
+    // Populate categories
+    populateCategories(categorySelect);
 
+    // Category change event listener
     categorySelect.addEventListener('change', function () {
-        const selectedCategory = this.value;
-        subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
-
-        if (selectedCategory && subcategoryData[selectedCategory]) {
-            subcategoryData[selectedCategory].forEach(subcategory => {
-                const option = document.createElement('option');
-                option.value = subcategory.toLowerCase().replace(/\s+/g, '_');
-                option.textContent = subcategory;
-                subcategorySelect.appendChild(option);
-            });
-        }
+        const selectedCategoryId = this.value;
+        populateSubcategories(subcategorySelect, selectedCategoryId);
     });
+}
+
+// Populate categories dropdown
+function populateCategories(categorySelect) {
+    // Clear existing options except the first one
+    categorySelect.innerHTML = '<option value="">Select Category</option>';
+
+    if (categoriesData && categoriesData.length > 0) {
+        categoriesData.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category.category_id;
+            option.textContent = category.title;
+            categorySelect.appendChild(option);
+        });
+        console.log("✅ Categories populated:", categoriesData.length, "categories");
+    } else {
+        console.warn("⚠️ No categories available");
+    }
+}
+
+// Populate subcategories dropdown based on selected category
+function populateSubcategories(subcategorySelect, categoryId) {
+    // Clear existing subcategories
+    subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+
+    if (!categoryId) {
+        return;
+    }
+
+    // Find the selected category
+    const selectedCategory = categoriesData.find(cat => cat.category_id == categoryId);
+
+    if (selectedCategory && selectedCategory.subcategories && selectedCategory.subcategories.length > 0) {
+        selectedCategory.subcategories.forEach(subcategory => {
+            const option = document.createElement('option');
+            option.value = subcategory.sub_category_id;
+            option.textContent = subcategory.title;
+            subcategorySelect.appendChild(option);
+        });
+        console.log("✅ Subcategories populated for category", selectedCategory.title, ":", selectedCategory.subcategories.length, "subcategories");
+    } else {
+        console.warn("⚠️ No subcategories found for category ID:", categoryId);
+    }
 }
 
 // Initialize state dropdown

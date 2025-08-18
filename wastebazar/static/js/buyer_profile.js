@@ -10,7 +10,6 @@ let requirementsApiUrl = null;
 let buyerDetailApiUrl = "/user-api/buyer-detail-api/";
 let currentUserId = null;
 let buyerData = null;
-let isLoggingOut = false; // Flag to prevent multiple logout calls
 
 /**
  * Main function to initialize buyer profile app
@@ -44,7 +43,7 @@ async function initializeApp() {
         setupTabs();
 
         // Initialize logout button
-        initializeLogoutButton();
+        initializeSimpleLogout();
 
         // Load all data
         await loadAllData();
@@ -125,6 +124,8 @@ function renderProfileData() {
     // Update profile header
     updateProfileHeader(userDetails, corporateDetails);
 
+
+
     // Update contact information
     updateContactInfo(userDetails, corporateDetails);
 
@@ -133,6 +134,11 @@ function renderProfileData() {
 
     // Update wallet information
     updateWalletInfo(walletDetails);
+
+    // Update verification status (only for corporate users)
+    if (userDetails.role === 'buyer_corporate') {
+        updateVerificationStatus(userDetails, corporateDetails);
+    }
 }
 
 /**
@@ -379,13 +385,14 @@ function updatePostRequirementButton(totalCredits) {
             // Disable button and update styling
             postRequirementBtn.disabled = true;
             postRequirementBtn.classList.add('disabled');
-            postRequirementBtn.innerHTML = '<i class="fas fa-plus me-2"></i>Insufficient Credits';
+            postRequirementBtn.innerHTML = '<i class="fas fa-plus me-2 post-requirement-btn"></i>Insufficient Credits';
             postRequirementBtn.title = 'You need more than 1 credit to post a requirement';
             postRequirementBtn.style.opacity = '0.6';
             postRequirementBtn.style.cursor = 'not-allowed';
         } else {
             // Enable button and restore styling
             postRequirementBtn.disabled = false;
+            postRequirementBtn.classList.add('post-requirement-btn');
             postRequirementBtn.classList.remove('disabled');
             postRequirementBtn.innerHTML = '<i class="fas fa-plus me-2"></i>Post New Requirement';
             postRequirementBtn.title = '';
@@ -456,14 +463,14 @@ function renderRequirements(requirements) {
                 `;
             } else {
                 buttonHtml = `
-                    <button class="btn btn-primary" onclick="postNewRequirement()">
+                    <button class="btn btn-primary post-requirement-btn" onclick="postNewRequirement()">
                         <i class="fas fa-plus me-2"></i>Post First Requirement
                     </button>
                 `;
             }
         } else {
             buttonHtml = `
-                <button class="btn btn-primary" onclick="postNewRequirement()">
+                <button class="btn btn-primary post-requirement-btn" onclick="postNewRequirement()">
                     <i class="fas fa-plus me-2"></i>Post First Requirement
                 </button>
             `;
@@ -476,7 +483,7 @@ function renderRequirements(requirements) {
                 </div>
                 <h4>No Requirements Yet</h4>
                 ${messageHtml}
-                ${buttonHtml}
+              
             </div>
         `;
         return;
@@ -627,7 +634,7 @@ function renderPurchaseHistory(purchases) {
 }
 
 function setupTabs() {
-    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabButtons = document.querySelectorAll('.tab-button-home');
     const tabContents = document.querySelectorAll('.tab-content');
 
     tabButtons.forEach(button => {
@@ -738,6 +745,13 @@ function showSuccess(message) {
 // Global action functions for requirement and purchase actions
 function postNewRequirement() {
     console.log('📝 Post new requirement clicked');
+
+    // Check if account is verified first
+    if (buyerData && buyerData.corporate_details &&
+        (buyerData.corporate_details.is_approved === false || buyerData.corporate_details.is_approved === 'false')) {
+        showError('Your account is under verification. Please wait for approval before posting requirements.');
+        return;
+    }
 
     // Check if user has sufficient credits
     if (buyerData && buyerData.wallet_details && !buyerData.wallet_details.message) {
@@ -1099,109 +1113,85 @@ function deactivateAccount() {
     }
 }
 
-/**
- * Logout functionality
- */
-async function logout() {
-    console.log('🔐 Logout initiated');
 
-    // Prevent multiple logout calls
-    if (isLoggingOut) {
-        console.log('⚠️ Logout already in progress, ignoring duplicate call');
+
+/**
+ * Update verification status display
+ */
+function updateVerificationStatus(userDetails, corporateDetails) {
+    const verificationStatusEl = document.getElementById('verificationStatus');
+
+    if (!verificationStatusEl) {
+        console.log('⚠️ Verification status element not found');
         return;
     }
 
-    if (confirm('Are you sure you want to logout?')) {
-        try {
-            isLoggingOut = true; // Set flag to prevent multiple calls
+    // Check if user is approved
+    if (corporateDetails.is_approved === false || corporateDetails.is_approved === 'false') {
+        console.log('🔍 User is not approved - showing verification status and disabling post requirement buttons');
+        verificationStatusEl.style.display = 'block';
 
-            // Show loading state
-            const logoutBtn = document.querySelector('.btn-outline-danger');
-            if (logoutBtn) {
-                logoutBtn.disabled = true;
-                logoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Logging out...';
-            }
-
-            // Try to call logout API if available (optional)
-            try {
-                const [success, response] = await callApi('POST', '/user-api/logout/', {}, csrf_token);
-                if (success) {
-                    console.log('✅ Server logout successful');
-                } else {
-                    console.log('⚠️ Server logout failed, continuing with client logout');
-                }
-            } catch (apiError) {
-                console.log('⚠️ Logout API not available, continuing with client logout');
-            }
-
-            // Clear user data from localStorage
-            localStorage.removeItem('user_id');
-            localStorage.removeItem('user_token');
-            localStorage.removeItem('user_role');
-            localStorage.removeItem('user_name');
-            localStorage.removeItem('login_time');
-
-            // Clear any other stored user data
-            localStorage.removeItem('buyer_data');
-            localStorage.removeItem('auth_token');
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('refresh_token');
-
-            // Clear session storage as well
-            sessionStorage.clear();
-
-            // Reset global variables
-            currentUserId = null;
-            buyerData = null;
-            csrf_token = null;
-
-            console.log('✅ User data cleared successfully');
-
-            // Show logout success message
-            showSuccess('Logged out successfully! Redirecting to login page...');
-
-            // Redirect to login page after a short delay
-            setTimeout(() => {
-                window.location.href = '/directlogin/';
-            }, 1500);
-
-        } catch (error) {
-            console.error('❌ Error during logout:', error);
-            showError('Error occurred during logout. Redirecting anyway...');
-
-            // Even if there's an error, still redirect after clearing local data
-            setTimeout(() => {
-                window.location.href = '/directlogin/';
-            }, 2000);
-        } finally {
-            // Reset flag when logout process is complete
-            isLoggingOut = false;
-        }
+        // Disable all post requirement buttons
+        disablePostRequirementButtons(true);
     } else {
-        // User cancelled logout, reset flag
-        isLoggingOut = false;
+        console.log('✅ User is approved - hiding verification status and enabling post requirement buttons');
+        verificationStatusEl.style.display = 'none';
+
+        // Enable all post requirement buttons
+
     }
 }
 
 /**
- * Initialize logout button functionality
+ * Enable or disable all post requirement buttons
  */
-function initializeLogoutButton() {
-    const logoutBtn = document.querySelector('.btn-outline-danger');
+function disablePostRequirementButtons(disable) {
+    const postRequirementButtons = document.querySelectorAll('.post-requirement-btn');
+    const postRequirementButtons2 = document.getElementById('postRequirementBtn2');
+
+
+
+    postRequirementButtons.forEach(button => {
+        button.disabled = disable;
+
+        button.disabled = true;
+        button.style.opacity = '0.6';
+        button.style.cursor = 'not-allowed';
+        button.title = 'Account verification required to post requirements';
+        console.log('🚫 Post requirement button disabled:', button);
+
+    });
+
+    console.log(`${disable ? '🚫 Disabled' : '✅ Enabled'} ${postRequirementButtons.length} post requirement buttons`);
+}
+
+
+/**
+ * Simple logout functionality
+ */
+function logout() {
+    console.log('🔐 Logout initiated');
+
+    // Clear all localStorage data
+    localStorage.clear();
+
+    // Clear sessionStorage as well
+    sessionStorage.clear();
+
+    console.log('✅ User data cleared successfully');
+
+    // Redirect to direct login page
+    window.location.href = '/directlogin/';
+}
+
+/**
+ * Initialize simple logout button functionality
+ */
+function initializeSimpleLogout() {
+    const logoutBtn = document.getElementById('logoutBtn');
     if (logoutBtn) {
-        // Remove any existing onclick to avoid conflicts
-        logoutBtn.removeAttribute('onclick');
-
-        // Remove any existing event listeners
-        logoutBtn.replaceWith(logoutBtn.cloneNode(true));
-
-        // Get the new button reference after cloning
-        const newLogoutBtn = document.querySelector('.btn-outline-danger');
-        if (newLogoutBtn) {
-            newLogoutBtn.addEventListener('click', logout);
-            newLogoutBtn.style.cursor = 'pointer';
-            console.log('🔐 Logout button initialized');
-        }
+        logoutBtn.addEventListener('click', logout);
+        console.log('🔐 Simple logout button initialized');
     }
 }
 
@@ -1226,21 +1216,14 @@ window.addEventListener('focus', function () {
 
 console.log('🔐 WasteBazar Buyer Profile System Loaded');
 
-// Reset logout flag on page load/reload
-isLoggingOut = false;
-
 // Initialize the buyer profile when page loads
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function () {
         console.log('🚀 DOM loaded, initializing buyer profile...');
-        isLoggingOut = false; // Reset flag
-        initializeUserData();
-        initializeLogoutButton();
+        initializeSimpleLogout();
     });
 } else {
     // DOM already loaded
     console.log('🚀 DOM already loaded, initializing buyer profile...');
-    isLoggingOut = false; // Reset flag
-    initializeUserData();
-    initializeLogoutButton();
+    initializeSimpleLogout();
 }

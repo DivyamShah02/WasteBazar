@@ -118,16 +118,16 @@
 
         <!-- Center Content -->
         <div class="center-content">
-            <div class="container">
+            <div class="container flex row">
                 
                 <!-- Search and Filters -->
-                    <div class="search-filters-section">
-                        <div class="results-header">
-                        <div class="results-info">
+                <div class="search-filters-section col-md-3 col-sm-12">
+                    <div class="results-header gap-2 row">
+                        <div class="results-info col-12 ">
                             <h4 id="resultsCount">Showing 1-20 of 1,247 listings</h4>
                             <p id="resultsDescription">Premium scrap materials from verified sellers</p>
                         </div>
-                        <div class="view-toggle">
+                        <div class="view-toggle justify-content-center col-12">
                             <button class="view-btn active" data-view="grid" id="gridView">
                                 <i class="fas fa-th-large"></i>
                             </button>
@@ -140,12 +140,14 @@
                         </div>
                     </div>
 
-                    <div class="search-bar-container">
-                        <div class="search-input-group">
+                    <div class="search-bar-container ">
+                        <div class="search-input-group row">
                             <input type="text" class=" search-input" placeholder="Search listings..." id="searchInput">
                             <button class="search-btn" id="searchBtn">
                                 <i class="fas fa-search"></i>
                             </button>
+                            
+                            
                         </div>
                     </div>
 
@@ -226,7 +228,7 @@
                 
 
                 <!-- Listings Grid -->
-                <div class="listings-container" id="listingsContainer">
+                <div class="listings-container col-md-9 col-sm-12" id="listingsContainer">
                     <!-- Listings will be dynamically loaded here -->
                 </div>
 

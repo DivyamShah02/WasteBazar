@@ -92,7 +92,7 @@ class SellerListing(models.Model):
     listing_id = models.CharField(max_length=15)
     category_id = models.BigIntegerField(null=True)  # Reference to Category.category_id
     subcategory_id = models.BigIntegerField(null=True)  # Reference to SubCategory.sub_category_id
-    listing_name = models.CharField(max_length=255)
+    listing_name = models.CharField(max_length=255, blank=True, null=True)  # Optional listing name field
     seller_user_id = models.CharField(max_length=15)
     seller_name= models.CharField(max_length=255, blank=True, null=True)  # Optional seller name field
     quantity = models.FloatField()

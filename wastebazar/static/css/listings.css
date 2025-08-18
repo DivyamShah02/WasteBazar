@@ -216,7 +216,8 @@
 .search-filters-section {
   background: white;
   border-radius: 24px;
-  padding: 2rem;
+  padding: 1rem;
+  height: fit-content;
   margin-bottom: 2rem;
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border-color);
@@ -402,6 +403,7 @@
 
 /* Listings Container */
 .listings-container {
+  height: fit-content;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 2rem;
@@ -725,7 +727,7 @@
 
   .search-filters-section {
     padding: 1.5rem;
-    margin: 1rem;
+    /* margin: 1rem; */
     border-radius: 16px;
   }
 
@@ -767,19 +769,8 @@
     font-size: 2rem;
   }
 
-  .search-input-group {
-    flex-direction: column;
-  }
 
-  .search-input {
-    border-radius: 25px;
-    border-right: 2px solid var(--border-color);
-    margin-bottom: 1rem;
-  }
 
-  .search-btn {
-    border-radius: 25px;
-  }
 
   .listing-details {
     grid-template-columns: 1fr;

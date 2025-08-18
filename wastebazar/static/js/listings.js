@@ -8,7 +8,7 @@ const bootstrap = window.bootstrap // Declare bootstrap variable
 let csrf_token = null;
 let all_listings_api_url = null;
 let categories_api_url = "/marketplace-api/categories/"; // Categories API endpoint
-
+let ads_enabled = "false";
 // Categories data
 let categoriesData = [];
 
@@ -281,6 +281,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function initializePage() {
   console.log("🔧 Initializing page...");
+  console.log("🔧 ads_enabled value:", ads_enabled, "Type:", typeof ads_enabled);
+
+  // Handle ads display based on ads_enabled setting
+  if (ads_enabled === "false" || ads_enabled === false) {
+    console.log("🚫 Ads disabled - hiding ad containers and adjusting main content layout");
+
+    // Wait for DOM to be ready, then hide ads
+    setTimeout(() => {
+      // Hide left sidebar ads
+      const leftSidebarAds = document.querySelector('.left-sidebar-ads');
+      console.log("🔍 Left sidebar ads element:", leftSidebarAds);
+      if (leftSidebarAds) {
+        leftSidebarAds.style.setProperty('display', 'none', 'important');
+        console.log("✅ Left sidebar ads hidden");
+      } else {
+        console.log("⚠️ Left sidebar ads element not found");
+      }
+
+      // Hide right sidebar ads
+      const rightSidebarAds = document.querySelector('.right-sidebar-ads');
+      console.log("🔍 Right sidebar ads element:", rightSidebarAds);
+      if (rightSidebarAds) {
+        rightSidebarAds.style.setProperty('display', 'none', 'important');
+        console.log("✅ Right sidebar ads hidden");
+      } else {
+        console.log("⚠️ Right sidebar ads element not found");
+      }
+
+      const topAd = document.querySelector('.top-ad-banner');
+      if (topAd) {
+        topAd.style.setProperty('display', 'none', 'important');
+      }
+
+      // Remove display grid from main-content to center the content
+      const mainContent = document.querySelector('.main-content');
+      console.log("🔍 Main content element:", mainContent);
+      if (mainContent) {
+        mainContent.style.setProperty('display', 'block', 'important');
+        mainContent.style.setProperty('justify-content', 'center', 'important');
+        console.log("✅ Main content layout adjusted");
+      } else {
+        console.log("⚠️ Main content element not found");
+      }
+    }, 100);
+  } else {
+    console.log("✅ Ads enabled - keeping default layout");
+  }
 
   // Load categories first (this will also trigger loadListingsFromAPI after categories are loaded)
   loadCategories();

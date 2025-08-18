@@ -149,7 +149,7 @@
                                 <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
                             </div>
                         </div>
-                        <div class="form-row">
+                        {% comment %} <div class="form-row">
                             <div class="form-group" style="width:100%">
                                 <label class="form-label" for="individualIdSelect">Select ID Type</label>
                                 <div class="select-wrapper">
@@ -169,7 +169,34 @@
                                     <input type="text" class="form-control" id="individualAadharNumber" name="individualAadharNumber" placeholder="Enter Aadhar number" maxlength="12">
                                 </div>
                             </div>
+                        </div> {% endcomment %}
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="addressline1">Address Line 1</label>
+                                <input type="text" class="form-control" id="addressline1" name="addressline1" placeholder="Enter your address" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="addressline2">Address Line 2</label>
+                                <input type="text" class="form-control" id="addressline2" name="addressline2" placeholder="Enter your address" required>
+                            </div>
                         </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="cityname">City</label>
+                                <input type="text" class="form-control" id="cityname" name="cityname" placeholder="Enter your city" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="statename">State</label>
+                                <input type="text" class="form-control" id="statename" name="statename" placeholder="Enter your state" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label" for="addresspincode">Address Pincode</label>
+                                <input type="text" class="form-control" id="addresspincode" name="addresspincode" placeholder="Enter your address pincode" required>
+                            </div>
+                        </div>
+                        
                     </div>
                     
                     <!-- Corporate Fields -->
@@ -189,14 +216,14 @@
                                 <label class="form-label" for="companyName">Company Name</label>
                                 <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Enter company name" required>
                             </div>
-                            <div class="form-group">
+                            {% comment %} <div class="form-group">
                                 <label class="form-label" for="aadharNumber">Aadhar Number (Optional)</label>
                                 <input type="text" class="form-control" id="aadharNumber" name="aadharNumber" placeholder="Enter Aadhar number" maxlength="12">
-                            </div>
+                            </div> {% endcomment %}
                             
                         </div>
                         <!-- PAN/CIN selection dropdown -->
-                        <div class="form-row">
+                        {% comment %} <div class="form-row">
                             <div class="form-group" style="width:100%">
                                 <label class="form-label" for="corpIdSelect">Select ID Type</label>
                                 <div class="select-wrapper">
@@ -216,7 +243,7 @@
                                     <input type="text" class="form-control" id="cinNumber" name="cinNumber" placeholder="Enter CIN number">
                                 </div>
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                         <div class = "form-row">
                             <div class="form-group">
                                 <label class="form-label" for="companyAddressLine1">Company Address Line 1</label>
@@ -234,16 +261,19 @@
                                 <input type="text" class="form-control" id="companyCity" name="companyCity" placeholder="Enter company city">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="companyState">Company State</label>
+                            <label class="form-label" for="companyState">Company State</label>
                                 <input type="text" class="form-control" id="companyState" name="companyState" placeholder="Enter company state">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
+                                <label class="form-label" for="companyPincode">Pincode</label>
+                                <input type="text" class="form-control" id="companyPincode" name="companyPincode" placeholder="Enter pincode" maxlength="6" pattern="[0-9]{6}">
+                            </div>
+                            {% comment %} <div class="form-group">
                                 <label class="form-label" for="gstNumber">GST Number</label>
                                 <input type="text" class="form-control" id="gstNumber" name="gstNumber" placeholder="Enter GST number" required>
-                            </div>
-                            
+                            </div> {% endcomment %}
                         </div>
                         {% comment %} <div class="form-group">
                             <label class="form-label" for="certificateUrl">Business Certificate URL (Optional)</label>

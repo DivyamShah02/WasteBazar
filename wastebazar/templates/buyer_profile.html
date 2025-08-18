@@ -18,7 +18,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg" id="navbar">
         <div class="container">
-            <a class="navbar-brand" href="index.html">WasteBazar</a>
+            <a class="navbar-brand" href="/">WasteBazar</a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -47,10 +47,10 @@
                 </ul>
                 
                 <div class="d-flex gap-2">
-                    <button class="btn btn-outline-danger text-danger">
+                    <button id="logoutBtn" class="btn btn-outline-danger text-danger">
                         <i class="fas fa-sign-out-alt me-1"></i>Logout
                     </button>
-                    <button class="btn btn-primary">Post Requirement</button>
+                    <button class="btn btn-primary post-requirement-btn2" id="postRequirementBtn2" onclick="postNewRequirement()">Post Requirement</button>
                 </div>
             </div>
         </div>
@@ -92,6 +92,25 @@
                 </div>
             </div>
 
+            <!-- Account Verification Status -->
+            <div class="verification-status-container" id="verificationStatus" style="display: none;">
+                <div class="alert alert-warning rounded-4 d-flex align-items-center" role="alert">
+                    <div class="me-3">
+                        <i class="fas fa-clock fa-2x text-warning"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h5 class="alert-heading mb-1">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            Account Under Verification
+                        </h5>
+                        <p class="mb-0">
+                            Your account is currently under verification. Please wait for a while as our team reviews your information. 
+                            You will be notified once the verification process is complete.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Statistics Cards -->
             <div class="stats-grid">
                 <div class="stat-card">
@@ -129,13 +148,13 @@
                 <!-- Main Content -->
                 <div class="main-content">
                     <div class="content-tab mb-1 row">
-                        <button class="tab-button active col-4" data-tab="requirements">
+                        <button class="tab-button-home active col-4" data-tab="requirements">
                             <i class="fas fa-list me-2"></i>My Requirements
                         </button>
-                        <button class="tab-button col-4" data-tab="history">
+                        <button class="tab-button-home col-4" data-tab="history">
                             <i class="fas fa-history me-2"></i>Enquiry History
                         </button>
-                        <button class="tab-button col-4" data-tab="settings">
+                        <button class="tab-button-home col-4" data-tab="settings">
                             <i class="fas fa-cog me-2"></i>Settings
                         </button>
                     </div>
@@ -145,7 +164,7 @@
                     <div class="tab-content active" id="requirements-tab">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h3>My Requirements</h3>
-                            <button class="btn-primary-custom" style="width: auto;" onclick="postNewRequirement()">
+                            <button class="btn-primary-custom post-requirement-btn" style="width: auto;" onclick="postNewRequirement()">
                                 <i class="fas fa-plus me-2"></i>Post New Requirement
                             </button>
                         </div>
@@ -611,9 +630,9 @@
                                 <div class="contact-value" id="profileAddress">Andheri East, Mumbai, MH</div>
                             </div>
                         </div>
-                        <button class="btn-primary-custom mt-3" onclick="editProfile()">
+                        {% comment %} <button class="btn-primary-custom mt-3" onclick="editProfile()">
                             <i class="fas fa-edit me-2"></i>Edit Company Information
-                        </button>
+                        </button> {% endcomment %}
                     </div>
 
                     
