@@ -1002,6 +1002,7 @@
 }
 
 .contact-label {
+  text-align: left;
   font-size: 0.9rem;
   color: var(--text-light);
   margin-bottom: 0.25rem;
@@ -1022,7 +1023,7 @@
   background: var(--primary-color);
   color: white;
   text-decoration: none;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 0.5rem;
   border-radius: 12px;
   font-weight: 600;
   display: flex;

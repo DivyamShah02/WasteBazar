@@ -64,6 +64,22 @@
 
                 <!-- Form -->
                 <form id="listingForm">
+                    <!-- Listing Name -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="listing_name" class="form-label">
+                                    Listing Title <span class="required">*</span>
+                                </label>
+                                <input type="text" id="listing_name" name="listing_name" class="form-control" 
+                                       placeholder="Ex : Scrap Copper wires" required>
+                                <div class="form-help">
+                                    Provide a clear and descriptive title that highlights the key features of your material
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Category and Subcategory -->
                     <div class="row mb-4">
                         <div class="col-md-6">
@@ -130,7 +146,7 @@
     
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="pricePerUnit" class="form-label">
+                                <label for="pricePerUnit" class="form-label" id="pricePerUnitLabel">
                                     Price Per Unit <span class="required">*</span>
                                 </label>
                                 <div class="input-group">
@@ -138,7 +154,7 @@
                                     <input type="number" id="pricePerUnit" name="pricePerUnit" class="form-control" 
                                            placeholder="0.00" min="0" step="0.01" required>
                                 </div>
-                                <div class="form-help">Price per unit selected above (e.g., per KG, per piece)</div>
+                                <div class="form-help" id="pricePerUnitHelp">Price per unit selected above (e.g., per KG, per piece)</div>
                             </div>
                         </div>
                     </div>
@@ -263,12 +279,12 @@
                     <!-- Address -->
                     <div class="form-group mb-4">
                         <label for="address" class="form-label">
-                            Complete Address <span class="required">*</span>
+                            One line Address <span class="required">*</span>
                         </label>
                         <textarea id="address" name="address" class="form-control" 
-                                  placeholder="Enter complete address including landmark if any..." 
+                                  placeholder="Enter one line address eg. Andheri west" 
                                   rows="3" required></textarea>
-                        <div class="form-help">Provide complete address with landmarks for easy location identification</div>
+                        <div class="form-help">Provide one line address with landmarks for easy location identification</div>
                     </div>
 
                     <!-- Form Buttons -->

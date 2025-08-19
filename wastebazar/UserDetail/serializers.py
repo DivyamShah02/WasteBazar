@@ -13,6 +13,11 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'pan_number',
             'aadhar_number',
+            'addressline1',
+            'addressline2',
+            'city',
+            'state',
+            'address_pincode',
             'username',
             'is_deleted',
         ]

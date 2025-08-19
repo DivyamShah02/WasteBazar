@@ -25,21 +25,23 @@
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav mx-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown">
                             Categories
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="listings.html?category=plastic">Plastic Waste</a></li>
-                            <li><a class="dropdown-item" href="listings.html?category=metal">Metal Scrap</a></li>
-                            <li><a class="dropdown-item" href="listings.html?category=paper">Paper Waste</a></li>
-                            <li><a class="dropdown-item" href="listings.html?category=electronic">Electronic Waste</a></li>
-                            <li><a class="dropdown-item" href="listings.html?category=textile">Textile Waste</a></li>
+                            <li><a class="dropdown-item" href="#">Plastic Waste</a></li>
+                            <li><a class="dropdown-item" href="#">Metal Scrap</a></li>
+                            <li><a class="dropdown-item" href="#">Paper Waste</a></li>
+                            <li><a class="dropdown-item" href="#">Electronic Waste</a></li>
+                            <li><a class="dropdown-item" href="#">Textile Waste</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="listings.html">Marketplace</a>
+                        <a class="nav-link" href="/marketplace/">
+                            <i class="fas fa-store me-1"></i>Marketplace
+                        </a>
                     </li>
                     {% comment %} <li class="nav-item">
                         <a class="nav-link" href="index.html#market-insights">Market Insights</a>
@@ -67,9 +69,7 @@
                     <div class="profile-details">
                         <h1 id="profileName">Rajesh Kumar</h1>
                         <div class="profile-badges">
-                            <span class="profile-badge">
-                                <i class="fas fa-shield-check me-1"></i>Verified Buyer
-                            </span>
+                           
                             {% comment %} <span class="profile-badge">
                                 <i class="fas fa-star me-1"></i>Premium Member
                             </span> {% endcomment %}
@@ -78,10 +78,7 @@
                             </span>
                         </div>
                         <div class="profile-meta">
-                            <div class="meta-item">
-                                <i class="fas fa-calendar-alt"></i>
-                                <span>Member since March 2023</span>
-                            </div>
+                        
                             <div class="meta-item">
                                 <i class="fas fa-map-marker-alt"></i>
                                 <span id="profileLocation">Mumbai, Maharashtra</span>
@@ -141,6 +138,34 @@
                     <div class="stat-value" id="totalSpent">0</div>
                     <div class="stat-label">Available Credits</div>
                 </div> 
+            </div>
+
+            <!-- Profile Completion Status -->
+            <div class="profile-completion-card" id="profileCompletionCard" style="display: none;">
+                <div class="completion-content">
+                    <div class="completion-info">
+                        <h6 class="completion-title profile-completion-title">Complete Your Profile</h6>
+                        <p class="completion-text profile-completion-text">Complete your profile to get better recommendations</p>
+                        <div class="progress-container-profile">
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped " 
+                                     role="progressbar" 
+                                     id="profileProgressBar" 
+                                     style="width: 0%" 
+                                     aria-valuenow="0" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                </div>
+                            </div>
+                            <span class="progress-percentage" id="profileProgressText">0%</span>
+                        </div>
+                    </div>
+                    <div class="completion-action">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="completeProfile()">
+                            <i class="fas fa-user-edit me-2"></i>Complete Profile
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- Main Content Grid -->
@@ -303,6 +328,7 @@
                                     </div>
                                     <div class="card-body">
                                         <form id="profileForm">
+                                            <!-- Basic Profile Fields (Common for both Individual and Corporate) -->
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
                                                     <label for="fullName" class="form-label">Full Name</label>
@@ -329,10 +355,64 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="address" class="form-label">Address</label>
-                                                <textarea class="form-control" id="address" rows="3" readonly placeholder="Enter your complete address">Andheri East, Mumbai, Maharashtra, India</textarea>
+                                            
+                                            <!-- Individual User Specific Fields (Hidden for Corporate Users) -->
+                                            <div id="individualFields">
+                                                <!-- ID Type Selection -->
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="individualIdSelect" class="form-label">Select ID Type</label>
+                                                        <div class="select-wrapper">
+                                                            <select class="form-select" id="individualIdSelect" name="individualIdSelect" readonly disabled>
+                                                                <option value="pan" selected>PAN Number</option>
+                                                                <option value="aadhar">Aadhar Card</option>
+                                                            </select>
+                                                            <i class="fas fa-chevron-down select-arrow"></i>
+                                                        </div>
+                                                    </div>
+                                                    <!-- PAN/Aadhar Fields -->
+                                                    <div class="col-6">
+                                                        <div class=" mb-3" id="individualPanGroup">
+                                                            <label for="panNumber" class="form-label">PAN Number</label>
+                                                            <input type="text" class="form-control" id="panNumber" name="panNumber" placeholder="Enter PAN number" readonly>
+                                                        </div>
+                                                        <div class=" mb-3" id="individualAadharGroup" style="display:none">
+                                                            <label for="individualAadharNumber" class="form-label">Aadhar Number</label>
+                                                            <input type="text" class="form-control" id="individualAadharNumber" name="individualAadharNumber" placeholder="Enter Aadhar number" maxlength="12" readonly>
+                                                        </div>
+                                                    </div>
+                                                
+                                                </div>
+                                                
+                                                
+                                                <!-- Address Fields for Individual Users -->
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="addressline1" class="form-label">Address Line 1</label>
+                                                        <input type="text" class="form-control" id="addressline1" name="addressline1" placeholder="Enter your address line 1" readonly>
+                                                    </div>
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="addressline2" class="form-label">Address Line 2</label>
+                                                        <input type="text" class="form-control" id="addressline2" name="addressline2" placeholder="Enter your address line 2" readonly>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="row">
+                                                    <div class="col-md-4 mb-3">
+                                                        <label for="cityname" class="form-label">City</label>
+                                                        <input type="text" class="form-control" id="cityname" name="cityname" placeholder="Enter your city" readonly>
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label for="statename" class="form-label">State</label>
+                                                        <input type="text" class="form-control" id="statename" name="statename" placeholder="Enter your state" readonly>
+                                                    </div>
+                                                    <div class="col-md-4 mb-3">
+                                                        <label for="addresspincode" class="form-label">Pincode</label>
+                                                        <input type="text" class="form-control" id="addresspincode" name="addresspincode" placeholder="Enter your pincode" readonly>
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <!-- End of Individual Fields -->
                                         </form>
                                     </div>
                                     <!-- Profile Action Button -->
@@ -344,7 +424,7 @@
                                 </div>
 
                                 <!-- Company Information Form (for Corporate Users) -->
-                                <div class="card mb-4" id="companyInfoCard">
+                                <div class="card mb-4" id="companyInfoCard" style="display: none;">
                                     <div class="card-header">
                                         <h5 class="card-title mb-0">
                                             <i class="fas fa-building me-2"></i>Company Information
@@ -353,42 +433,75 @@
                                     <div class="card-body">
                                         <form id="companyForm">
                                             <div class="row">
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-12 mb-3">
                                                     <label for="companyName" class="form-label">Company Name</label>
-                                                    <input type="text" class="form-control" id="companyName" value="XYZ Pvt Ltd" readonly required>
+                                                    <input type="text" class="form-control" id="companyName" readonly required>
                                                 </div>
+                                            </div>
+                                            
+                                            <!-- ID Type Selection for Company -->
+                                            <div class="row">
                                                 <div class="col-md-6 mb-3">
-                                                    <label for="industry" class="form-label">Industry</label>
-                                                    <select class="form-select" id="industry" readonly disabled>
-                                                        <option value="">Select Industry</option>
-                                                        <option value="manufacturing" selected>Manufacturing</option>
-                                                        <option value="recycling">Recycling</option>
-                                                        <option value="trading">Trading</option>
-                                                        <option value="construction">Construction</option>
-                                                        <option value="textile">Textile</option>
-                                                        <option value="automotive">Automotive</option>
-                                                        <option value="electronics">Electronics</option>
-                                                        <option value="other">Other</option>
-                                                    </select>
+                                                    <label for="companyIdSelect" class="form-label">Select ID Type</label>
+                                                    <div class="select-wrapper">
+                                                        <select class="form-select" id="companyIdSelect" name="companyIdSelect" readonly disabled>
+                                                            <option value="pan" selected>PAN Number</option>
+                                                            <option value="cin">CIN Number</option>
+                                                        </select>
+                                                        <i class="fas fa-chevron-down select-arrow"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 mb-3" id="companyPanGroup">
+                                                    <label for="companyPanNumber" class="form-label">Company PAN Number</label>
+                                                    <input type="text" class="form-control" id="companyPanNumber" readonly placeholder="Enter PAN Number">
+                                                </div>
+                                                <div class="col-md-6 mb-3" id="companyCinGroup" style="display:none">
+                                                    <label for="companyCinNumber" class="form-label">CIN Number</label>
+                                                    <input type="text" class="form-control" id="companyCinNumber" readonly placeholder="Enter CIN Number">
+                                                </div>
+
+                                            </div>
+                                            
+                                            <!-- PAN/CIN Fields -->
+                                            <div class="row">
+                                                
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="gstNumber" class="form-label">GST Number</label>
+                                                    <input type="text" class="form-control" id="gstNumber" readonly placeholder="Enter GST Number">
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">
-                                                    <label for="gstNumber" class="form-label">GST Number</label>
-                                                    <input type="text" class="form-control" id="gstNumber" value="27AABCU9603R1ZX" readonly placeholder="Enter GST Number">
+                                                    <label for="companyAddressLine1" class="form-label">Address Line 1</label>
+                                                    <input type="text" class="form-control" id="companyAddressLine1" readonly placeholder="Enter address line 1">
                                                 </div>
                                                 <div class="col-md-6 mb-3">
-                                                    <label for="panNumber" class="form-label">PAN Number</label>
-                                                    <input type="text" class="form-control" id="panNumber" value="AABCU9603R" readonly placeholder="Enter PAN Number">
+                                                    <label for="companyAddressLine2" class="form-label">Address Line 2</label>
+                                                    <input type="text" class="form-control" id="companyAddressLine2" readonly placeholder="Enter address line 2 (optional)">
                                                 </div>
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="companyAddress" class="form-label">Company Address</label>
-                                                <textarea class="form-control" id="companyAddress" rows="3" readonly placeholder="Enter company address">456 Business Park, Andheri East, Mumbai, Maharashtra 400069</textarea>
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="companyCity" class="form-label">City</label>
+                                                    <input type="text" class="form-control" id="companyCity" readonly placeholder="Enter city">
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="companyState" class="form-label">State</label>
+                                                    <input type="text" class="form-control" id="companyState" readonly placeholder="Enter state">
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="companyPincode" class="form-label">Pincode</label>
+                                                    <input type="text" class="form-control" id="companyPincode" readonly placeholder="Enter pincode">
+                                                </div>
                                             </div>
                                         </form>
                                     </div>
-                                    
+                                    <!-- Company Action Button -->
+                                    <div class="card-footer">
+                                        <button type="button" class="btn btn-primary" id="editCompanyBtn" onclick="editCompanyInfo()">
+                                            <i class="fas fa-edit me-2"></i>Edit Company Info
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <!-- Preferences -->
@@ -438,17 +551,7 @@
                                     </div>
                                 </div> {% endcomment %}
 
-                                <!-- Action Buttons -->
-                                <div class="d-flex gap-3 mb-4">
-                                    <button type="button" class="btn btn-primary-custom" onclick="saveProfileSettings()">
-                                        <i class="fas fa-edit me-2"></i>Edit Profile
-                                    </button>
-                                  
-                                    <button type="button" class="btn btn-outline-danger" style="border-radius: 12px;" onclick="deactivateAccount()">
-                                        <i class="fas fa-user-times me-2"></i>Deactivate Account
-                                    </button>
-
-                                </div>
+                          
                             </div>
 
                             {% comment %} <div class="col-lg-4">
@@ -589,9 +692,9 @@
                         </button>
                     </div> 
 
-                    <div class="sidebar-card">
-                        <h4 class="sidebar-title">
-                            <i class="fas fa-address-card"></i>Company Information
+                    <div class="sidebar-card" id="contactInfoCard">
+                        <h4 class="sidebar-title" id="contactInfoTitle">
+                            <i class="fas fa-address-card" id="contactInfoIcon"></i><span id="contactInfoTitleText">Company Information</span>
                         </h4>
                         {% comment %} <div class="contact-item">
                             <div class="contact-icon">
@@ -605,11 +708,11 @@
 
                         <div class="contact-item">
                             <div class="contact-icon">
-                                <i class="fas fa-building"></i>
+                                <i class="fas fa-building" id="companyNameIcon"></i>
                             </div>
                             <div class="contact-info">
-                                <div class="contact-label">Company Name</div>
-                                <div class="contact-value" id="profileEmail">XYZ Pvt Ltd</div>
+                                <div class="contact-label" id="companyNameLabel">Company Name</div>
+                                <div class="contact-value" id="companyNameValue">XYZ Pvt Ltd</div>
                             </div>
                         </div>
                         <div class="contact-item">
@@ -621,7 +724,7 @@
                                 <div class="contact-value" id="profileEmail">rajesh@company.com</div>
                             </div>
                         </div>
-                        <div class="contact-item">
+                        {% comment %} <div class="contact-item">
                             <div class="contact-icon">
                                 <i class="fas fa-map-marker-alt"></i>
                             </div>
@@ -629,7 +732,7 @@
                                 <div class="contact-label">Address</div>
                                 <div class="contact-value" id="profileAddress">Andheri East, Mumbai, MH</div>
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                         {% comment %} <button class="btn-primary-custom mt-3" onclick="editProfile()">
                             <i class="fas fa-edit me-2"></i>Edit Company Information
                         </button> {% endcomment %}

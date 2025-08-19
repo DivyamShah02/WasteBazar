@@ -66,6 +66,7 @@ async function initializeForm() {
     initializeFormSubmission();
     await initializeCategorySubcategory();
     initializeStateDropdown();
+    initializeUnitPriceUpdater();
 
     // Initialize image previews
     updateFeaturedImagePreview();
@@ -355,6 +356,7 @@ async function handleFormSubmission() {
         formData.append('user_id', user_id);
 
         // Add form fields
+        formData.append('listing_name', document.getElementById('listing_name').value);
         formData.append('category_id', document.getElementById('category').value);
         formData.append('subcategory_id', document.getElementById('subcategory').value);
         formData.append('quantity', document.getElementById('quantity').value);
@@ -423,6 +425,7 @@ async function handleFormSubmission() {
 // Validate form fields
 function validateFormFields() {
     const requiredFields = [
+        { id: 'listing_name', name: 'Listing Title' },
         { id: 'category', name: 'Category' },
         { id: 'subcategory', name: 'Subcategory' },
         { id: 'quantity', name: 'Quantity' },
@@ -591,6 +594,75 @@ function initializeStateDropdown() {
         option.textContent = state;
         stateSelect.appendChild(option);
     });
+}
+
+// Initialize unit price updater
+function initializeUnitPriceUpdater() {
+    const unitSelect = document.getElementById('unit');
+    const priceLabel = document.getElementById('pricePerUnitLabel');
+    const priceHelp = document.getElementById('pricePerUnitHelp');
+
+    if (!unitSelect || !priceLabel || !priceHelp) {
+        console.error("❌ Unit price updater elements not found");
+        return;
+    }
+
+    // Unit change event listener
+    unitSelect.addEventListener('change', function () {
+        const selectedUnit = this.value;
+        updatePricePerUnitLabel(selectedUnit, priceLabel, priceHelp);
+    });
+}
+
+// Update price per unit label based on selected unit
+function updatePricePerUnitLabel(unit, labelElement, helpElement) {
+    let labelText = 'Price Per Unit';
+    let helpText = 'Price per unit selected above';
+
+    if (unit) {
+        // Create unit-specific labels
+        const unitLowerCase = unit.toLowerCase();
+
+        switch (unitLowerCase) {
+            case 'kilograms':
+                labelText = 'Price Per Kilogram';
+                helpText = 'Price per kilogram (₹/KG)';
+                break;
+            case 'tons':
+                labelText = 'Price Per Ton';
+                helpText = 'Price per ton (₹/Ton)';
+                break;
+            case 'pieces':
+                labelText = 'Price Per Piece';
+                helpText = 'Price per individual piece (₹/Piece)';
+                break;
+            case 'bundles':
+                labelText = 'Price Per Bundle';
+                helpText = 'Price per bundle (₹/Bundle)';
+                break;
+            case 'bales':
+                labelText = 'Price Per Bale';
+                helpText = 'Price per bale (₹/Bale)';
+                break;
+            case 'containers':
+                labelText = 'Price Per Container';
+                helpText = 'Price per container (₹/Container)';
+                break;
+            case 'cubic meters':
+                labelText = 'Price Per Cubic Meter';
+                helpText = 'Price per cubic meter (₹/m³)';
+                break;
+            default:
+                labelText = `Price Per ${unit}`;
+                helpText = `Price per ${unit.toLowerCase()}`;
+        }
+    }
+
+    // Update the label and help text
+    labelElement.innerHTML = `${labelText} <span class="required">*</span>`;
+    helpElement.textContent = helpText;
+
+    console.log(`✅ Updated price label to: ${labelText}`);
 }
 
 // Error handling functions

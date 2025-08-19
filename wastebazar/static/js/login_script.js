@@ -551,7 +551,7 @@ async function submitUserDetails() {
             if (selectedType === "corporate" && selectedRole === "buyer") {
                 // Corporate buyer needs approval
                 setTimeout(() => {
-                    alert("Your corporate account is under review. You will be notified once approved.")
+                    // alert("Your corporate account is under review. You will be notified once approved.")
                     window.location.href = "/buyer-profile"
                 }, 2000)
                 // Store user info in localStorage for profile pages

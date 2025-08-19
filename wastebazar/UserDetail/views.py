@@ -710,13 +710,32 @@ class UpdateUserDetailsViewSet(viewsets.ViewSet):
         
         # Update basic user details
         user_fields_to_update = {}
-        basic_user_fields = ['name', 'email']  # Removed contact_number to make phone non-editable
-        
-        for field in basic_user_fields:
-            if field in request.data and request.data[field] is not None:
-                user_fields_to_update[field] = request.data[field]
-                updated_fields.append(field)
+        basic_user_fields = ['name', 'email', 'addressline1', 'addressline2', 'city', 'state', 'address_pincode', 'pan_number', 'aadhar_number']  # Removed contact_number to make phone non-editable
 
+        # Map frontend field names to model field names
+        field_mapping = {
+            'cityname': 'city',
+            'statename': 'state', 
+            'addresspincode': 'address_pincode'
+        }
+
+        for field in basic_user_fields:
+            # Check if field exists in request data directly
+            if field in request.data:
+                # Allow empty strings for ID fields to clear them
+                if field in ['pan_number', 'aadhar_number']:
+                    user_fields_to_update[field] = request.data[field] if request.data[field] else None
+                    updated_fields.append(field)
+                elif request.data[field] is not None:
+                    user_fields_to_update[field] = request.data[field]
+                    updated_fields.append(field)
+        
+        # Also check for mapped field names
+        for frontend_field, model_field in field_mapping.items():
+            if frontend_field in request.data and request.data[frontend_field] is not None:
+                user_fields_to_update[model_field] = request.data[frontend_field]
+                updated_fields.append(model_field)
+        
         # Contact number is now non-editable through this API
         # Removed the contact number validation and update logic
 
@@ -737,13 +756,22 @@ class UpdateUserDetailsViewSet(viewsets.ViewSet):
         # Update corporate details if user is corporate
         corporate_updated = False
         if user.role in ['buyer_corporate', 'seller_corporate']:
-            corporate_fields = ['company_name', 'pan_number', 'gst_number', 'addressline1', 'addressline2', 'address_pincode', 'certificate_url']
+            corporate_fields = [
+                'company_name', 'contact_number', 'email', 'pan_number', 'aadhar_number', 
+                'cin_number', 'gst_number', 'city', 'state', 'addressline1', 
+                'addressline2', 'address_pincode', 'certificate_url'
+            ]
             corporate_updates = {}
             
             for field in corporate_fields:
-                if field in request.data and request.data[field] is not None:
-                    corporate_updates[field] = request.data[field]
-                    updated_fields.append(f'corporate_{field}')
+                if field in request.data:
+                    # Allow empty strings for some fields to clear them
+                    if field in ['pan_number', 'aadhar_number', 'cin_number']:
+                        corporate_updates[field] = request.data[field] if request.data[field] else None
+                        updated_fields.append(f'corporate_{field}')
+                    elif request.data[field] is not None:
+                        corporate_updates[field] = request.data[field]
+                        updated_fields.append(f'corporate_{field}')
             
             if corporate_updates:
                 try:

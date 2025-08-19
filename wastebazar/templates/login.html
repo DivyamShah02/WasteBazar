@@ -141,11 +141,11 @@
                     <div id="individualFields">
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="fullName">Full Name</label>
+                                <label class="form-label" for="fullName">Full Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Enter your full name" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="email">Email Address</label>
+                                <label class="form-label" for="email">Email Address <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
                             </div>
                         </div>
@@ -172,27 +172,27 @@
                         </div> {% endcomment %}
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="addressline1">Address Line 1</label>
+                                <label class="form-label" for="addressline1">Address Line 1 <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="addressline1" name="addressline1" placeholder="Enter your address" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="addressline2">Address Line 2</label>
+                                <label class="form-label" for="addressline2">Address Line 2 <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="addressline2" name="addressline2" placeholder="Enter your address" required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="cityname">City</label>
+                                <label class="form-label" for="cityname">City <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="cityname" name="cityname" placeholder="Enter your city" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="statename">State</label>
+                                <label class="form-label" for="statename">State <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="statename" name="statename" placeholder="Enter your state" required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="addresspincode">Address Pincode</label>
+                                <label class="form-label" for="addresspincode">Address Pincode <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="addresspincode" name="addresspincode" placeholder="Enter your address pincode" required>
                             </div>
                         </div>
@@ -203,17 +203,17 @@
                     <div id="corporateFields" style="display: none;">
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="contactName">Contact Person Name</label>
+                                <label class="form-label" for="contactName">Contact Person Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="contactName" name="contactName" placeholder="Enter contact person name" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="corporateEmail">Email Address</label>
+                                <label class="form-label" for="corporateEmail">Email Address <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" id="corporateEmail" name="corporateEmail" placeholder="Enter email address" required>
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label" for="companyName">Company Name</label>
+                        <div class="row">
+                            <div class="form-group col-12">
+                                <label class="form-label" for="companyName">Company Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Enter company name" required>
                             </div>
                             {% comment %} <div class="form-group">
@@ -246,28 +246,28 @@
                         </div> {% endcomment %}
                         <div class = "form-row">
                             <div class="form-group">
-                                <label class="form-label" for="companyAddressLine1">Company Address Line 1</label>
+                                <label class="form-label" for="companyAddressLine1">Company Address Line 1 <span class="text-danger">*</span></label>
                                 <textarea class="form-control" id="companyAddressLine1" name="companyAddressLine1" placeholder="Enter company address" rows="2" required></textarea>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" for="companyAddressLine2">Company Address Line 2</label>
+                                <label class="form-label" for="companyAddressLine2">Company Address Line 2 <span class="text-danger">*</span></label>
                                 <textarea class="form-control" id="companyAddressLine2" name="companyAddressLine2" placeholder="Enter company address line 2" rows="2"></textarea>
                             </div>
 
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="companyCity">Company City</label>
+                                <label class="form-label" for="companyCity">Company City <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="companyCity" name="companyCity" placeholder="Enter company city">
                             </div>
                             <div class="form-group">
-                            <label class="form-label" for="companyState">Company State</label>
+                            <label class="form-label" for="companyState">Company State <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="companyState" name="companyState" placeholder="Enter company state">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label" for="companyPincode">Pincode</label>
+                                <label class="form-label" for="companyPincode">Pincode <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="companyPincode" name="companyPincode" placeholder="Enter pincode" maxlength="6" pattern="[0-9]{6}">
                             </div>
                             {% comment %} <div class="form-group">
@@ -282,8 +282,8 @@
                     </div>
                     
                     <button type="submit" class="btn-login">
-                        <span class="submit-text">Complete Registration</span>
-                        <i class="fas fa-check ms-2"></i>
+                        <span class="submit-text">Submit</span>
+                        
                     </button>
                 </form>
             </div>

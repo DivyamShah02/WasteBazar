@@ -247,7 +247,7 @@ class ListingDetailApp {
                         </button>
                     ` : ''}
                     <img src="${images[0]}" 
-                         alt="${listing.seller_name || 'Listing image'}" 
+                         alt="${listing.listing_name || listing.seller_name || 'Listing image'}" 
                          class="main-image" 
                          id="main-image"
                          onclick="openImageModal('${images[0]}')"
@@ -400,17 +400,7 @@ class ListingDetailApp {
                 </div>
             </div>
             
-            <div class="seller-specs">
-                <div class="spec-row">
-                    <div class="spec-label"><i class="fas fa-phone"></i> Phone</div>
-                    <div class="spec-value">${listing.seller_phone || 'Not provided'}</div>
-                </div>
-                <div class="spec-row">
-                    <div class="spec-label"><i class="fas fa-envelope"></i> Email</div>
-                    <div class="spec-value">${listing.seller_email || 'Not provided'}</div>
-                </div>
-               
-            </div>
+           
         `;
 
     // if (sellerStats) {
@@ -467,7 +457,7 @@ class ListingDetailApp {
             <div class="related-listing-card" onclick="viewListing('${listing.listing_id}')">
                 <div class="related-listing-image">
                     ${listing.featured_image_url ?
-        `<img src="${listing.featured_image_url}" alt="${listing.seller_name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` :
+        `<img src="${listing.featured_image_url}" alt="${listing.listing_name || listing.seller_name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` :
         ''
       }
                     <div class="listing-icon-fallback" style="${listing.featured_image_url ? 'display: none;' : 'display: flex;'}">

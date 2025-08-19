@@ -1018,3 +1018,185 @@
 #requirementsList .card:focus-within {
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
+
+/* Profile Completion Styles */
+.profile-completion-card {
+    background: var(--gradient-primary);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    color: white;
+    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+
+
+.completion-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.completion-info {
+    flex: 1;
+}
+
+.completion-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.completion-text {
+    margin-bottom: 1rem;
+    opacity: 0.9;
+    font-size: 0.95rem;
+}
+
+.progress-container-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.progress {
+    flex: 1;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    transition: width 0.6s ease;
+}
+
+.progress-percentage {
+    font-weight: 600;
+    font-size: 1rem;
+    min-width: 45px;
+    text-align: right;
+}
+
+.completion-action .btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.completion-action .btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.completion-action .btn:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+/* Select wrapper with dropdown arrow */
+.select-wrapper {
+    position: relative;
+}
+
+.select-arrow {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #6c757d;
+    font-size: 0.875rem;
+    z-index: 1;
+}
+
+.select-wrapper .form-select {
+    background-image: none;
+    padding-right: 2.5rem;
+}
+
+.select-wrapper .form-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.select-wrapper .form-select:disabled {
+    background-color: #e9ecef;
+    opacity: 1;
+}
+
+.select-wrapper .select-arrow {
+    transition: color 0.15s ease-in-out;
+}
+
+.select-wrapper .form-select:focus+.select-arrow {
+    color: var(--primary-color);
+}
+
+/* PAN Validation Error Styles */
+.pan-validation-error {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.form-control.is-invalid:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+/* Not Verified Badge */
+.badge-not-verified {
+    background: rgba(255, 191, 0, 0.7) !important;
+    color: white !important;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+
+/* Required field asterisk */
+.required {
+    color: #dc3545;
+    font-weight: bold;
+    margin-left: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .completion-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .progress-container {
+        justify-content: center;
+    }
+}

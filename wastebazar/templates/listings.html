@@ -27,24 +27,23 @@
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav mx-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown">
                             Categories
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" data-category="plastic">Plastic Waste</a></li>
-                            <li><a class="dropdown-item" href="#" data-category="metal">Metal Scrap</a></li>
-                            <li><a class="dropdown-item" href="#" data-category="paper">Paper Waste</a></li>
-                            <li><a class="dropdown-item" href="#" data-category="electronic">Electronic Waste</a></li>
-                            <li><a class="dropdown-item" href="#" data-category="textile">Textile Waste</a></li>
+                            <li><a class="dropdown-item" href="#">Plastic Waste</a></li>
+                            <li><a class="dropdown-item" href="#">Metal Scrap</a></li>
+                            <li><a class="dropdown-item" href="#">Paper Waste</a></li>
+                            <li><a class="dropdown-item" href="#">Electronic Waste</a></li>
+                            <li><a class="dropdown-item" href="#">Textile Waste</a></li>
                         </ul>
                     </li>
-                    {% comment %} <li class="nav-item">
-                        <a class="nav-link active" href="listings.html">Browse Listings</a>
-                    </li> {% endcomment %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/marketplace">Marketplace</a>
+                        <a class="nav-link" href="/marketplace/">
+                            <i class="fas fa-store me-1"></i>Marketplace
+                        </a>
                     </li>
                     {% comment %} <li class="nav-item">
                         <a class="nav-link" href="index.html#how-it-works">How It Works</a>
@@ -118,7 +117,7 @@
 
         <!-- Center Content -->
         <div class="center-content">
-            <div class="container flex row">
+            <div class="container-center flex row">
                 
                 <!-- Search and Filters -->
                 <div class="search-filters-section col-md-3 col-sm-12">
@@ -134,7 +133,7 @@
                             <button class="view-btn" data-view="list" id="listView">
                                 <i class="fas fa-list"></i>
                             </button>
-                            <button class="view-btn" data-view="filtersview" id="filtersView">
+                            <button class="view-btn active" data-view="filtersview" id="filtersView">
                                 <i class="fas fa-tools"></i>
                             </button>
                         </div>
@@ -151,7 +150,7 @@
                         </div>
                     </div>
 
-                    <div class="filters-container">
+                    <div class="filters-container active">
                         <div class="filters-header">
                             <h3>Filters</h3>
                             <button class="btn-clear-filters" id="clearFilters">Clear All</button>

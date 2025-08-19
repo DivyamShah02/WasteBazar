@@ -8,7 +8,7 @@ const bootstrap = window.bootstrap // Declare bootstrap variable
 let csrf_token = null;
 let all_listings_api_url = null;
 let categories_api_url = "/marketplace-api/categories/"; // Categories API endpoint
-let ads_enabled = "false";
+let ads_enabled = "true";
 // Categories data
 let categoriesData = [];
 

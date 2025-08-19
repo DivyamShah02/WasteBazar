@@ -240,13 +240,13 @@ function updateProfileHeader(userDetails, corporateDetails) {
     if (sellerEmailEl) sellerEmailEl.textContent = userDetails.email || 'Email not provided';
     if (sellerPhoneEl) sellerPhoneEl.textContent = userDetails.contact_number || 'Phone not provided';
 
-    if (sellerAddressEl) {
-        if (corporateDetails && corporateDetails.address) {
-            sellerAddressEl.textContent = corporateDetails.address;
-        } else {
-            sellerAddressEl.textContent = 'Address not provided';
-        }
-    }
+    // if (sellerAddressEl) {
+    //     if (corporateDetails && corporateDetails.address) {
+    //         sellerAddressEl.textContent = corporateDetails.address;
+    //     } else {
+    //         sellerAddressEl.textContent = 'Address not provided';
+    //     }
+    // }
 }
 
 /**

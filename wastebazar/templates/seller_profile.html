@@ -25,7 +25,20 @@
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+                
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Plastic Waste</a></li>
+                            <li><a class="dropdown-item" href="#">Metal Scrap</a></li>
+                            <li><a class="dropdown-item" href="#">Paper Waste</a></li>
+                            <li><a class="dropdown-item" href="#">Electronic Waste</a></li>
+                            <li><a class="dropdown-item" href="#">Textile Waste</a></li>
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/marketplace/">
                             <i class="fas fa-store me-1"></i>Marketplace
@@ -80,10 +93,10 @@
                                 <i class="fas fa-phone me-1"></i>
                                 <span id="sellerPhone">Seller Phone</span>
                             </div>
-                            <div class="meta-item">
+                            {% comment %} <div class="meta-item">
                                 <i class="fas fa-map-marker-alt me-1"></i>
                                 <span id="sellerAddress">Seller Address</span>
-                            </div>
+                            </div> {% endcomment %}
                         </div>
                     </div>
                 </div>
