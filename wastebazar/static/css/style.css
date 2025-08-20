@@ -585,7 +585,7 @@ body {
 .form-select {
     border: 2px solid var(--border-color);
     border-radius: 16px;
-    padding: 1.2rem;
+    padding: 0.879rem;
     font-weight: 500;
     transition: all 0.3s ease;
     background: var(--bg-light);

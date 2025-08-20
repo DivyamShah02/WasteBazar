@@ -191,6 +191,9 @@ function renderProfileData() {
 
     // Update wallet information
     // updateWalletInfo(walletDetails);
+
+    // Update profile completion status
+    updateProfileCompletion(userDetails, corporateDetails);
 }
 
 /**
@@ -198,7 +201,7 @@ function renderProfileData() {
  */
 function updateProfileHeader(userDetails, corporateDetails) {
     const sellerNameEl = document.getElementById('sellerName');
-    const companyNameEl = document.getElementById('companyName');
+    const headerCompanyNameEl = document.getElementById('headerCompanyName');
     const sellerTypeEl = document.getElementById('sellerType');
     const verificationBadgeEl = document.getElementById('verificationBadge');
     const sellerEmailEl = document.getElementById('sellerEmail');
@@ -212,12 +215,12 @@ function updateProfileHeader(userDetails, corporateDetails) {
     // Update elements if they exist
     if (sellerNameEl) sellerNameEl.textContent = displayName;
 
-    if (companyNameEl) {
+    if (headerCompanyNameEl) {
         if (companyName) {
-            companyNameEl.textContent = companyName;
-            companyNameEl.style.display = 'block';
+            headerCompanyNameEl.textContent = companyName;
+            headerCompanyNameEl.style.display = 'block';
         } else {
-            companyNameEl.style.display = 'none';
+            headerCompanyNameEl.style.display = 'none';
         }
     }
 
@@ -310,52 +313,221 @@ function updateContactInfo(userDetails, corporateDetails) {
  * Update settings information
  */
 function updateSettingsInfo(userDetails, corporateDetails) {
-    // Update profile information fields
-    const settingsNameEl = document.getElementById('settingsName');
-    const settingsEmailEl = document.getElementById('settingsEmail');
-    const settingsPhoneEl = document.getElementById('settingsPhone');
-    const settingsAccountTypeEl = document.getElementById('settingsAccountType');
+    console.log('📋 Updating settings info with:');
+    console.log('👤 User Details:', userDetails);
+    console.log('🏢 Corporate Details:', corporateDetails);
 
-    if (settingsNameEl) settingsNameEl.value = userDetails.name || '';
-    if (settingsEmailEl) settingsEmailEl.value = userDetails.email || '';
-    if (settingsPhoneEl) settingsPhoneEl.value = userDetails.contact_number || '';
-    if (settingsAccountTypeEl) {
-        const isIndividual = userDetails.role === 'seller_individual';
-        settingsAccountTypeEl.value = isIndividual ? 'Individual Seller' : 'Corporate Seller';
+    // Update profile information fields with values and placeholders
+    const fullNameEl = document.getElementById('fullName');
+    const emailEl = document.getElementById('email');
+    const phoneEl = document.getElementById('phone');
+    const userTypeEl = document.getElementById('userType');
+
+    if (fullNameEl) {
+        fullNameEl.value = userDetails.name || '';
+        fullNameEl.placeholder = userDetails.name || 'Enter your full name';
+    }
+    if (emailEl) {
+        emailEl.value = userDetails.email || '';
+        emailEl.placeholder = userDetails.email || 'Enter your email address';
+    }
+    if (phoneEl) {
+        phoneEl.value = userDetails.contact_number || '';
+        phoneEl.placeholder = userDetails.contact_number || 'Enter your phone number';
+    }
+    if (userTypeEl) {
+        userTypeEl.value = userDetails.role || 'seller_individual';
+    }
+
+    // Update new address fields with values and placeholders
+    const addressLine1El = document.getElementById('addressline1');
+    const addressLine2El = document.getElementById('addressline2');
+    const cityEl = document.getElementById('cityname');
+    const stateEl = document.getElementById('statename');
+    const pincodeEl = document.getElementById('addresspincode');
+
+    if (addressLine1El) {
+        addressLine1El.value = userDetails.addressline1 || '';
+        addressLine1El.placeholder = userDetails.addressline1 || 'Enter address line 1';
+    }
+    if (addressLine2El) {
+        addressLine2El.value = userDetails.addressline2 || '';
+        addressLine2El.placeholder = userDetails.addressline2 || 'Enter address line 2 (optional)';
+    }
+    if (cityEl) {
+        cityEl.value = userDetails.city || '';
+        cityEl.placeholder = userDetails.city || 'Enter city name';
+    }
+    if (stateEl) {
+        stateEl.value = userDetails.state || '';
+        stateEl.placeholder = userDetails.state || 'Enter state name';
+    }
+    if (pincodeEl) {
+        pincodeEl.value = userDetails.address_pincode || '';
+        pincodeEl.placeholder = userDetails.address_pincode || 'Enter pincode';
+    }
+
+    // Update ID fields based on available data
+    const idSelectEl = document.getElementById('individualIdSelect');
+    const panNumberEl = document.getElementById('panNumber');
+    const aadharNumberEl = document.getElementById('individualAadharNumber');
+
+    if (userDetails.pan_number) {
+        if (idSelectEl) idSelectEl.value = 'pan';
+        if (panNumberEl) {
+            panNumberEl.value = userDetails.pan_number;
+        }
+        toggleIdFields('pan');
+    } else if (userDetails.aadhar_number) {
+        if (idSelectEl) idSelectEl.value = 'aadhar';
+        if (aadharNumberEl) {
+            aadharNumberEl.value = userDetails.aadhar_number;
+        }
+        toggleIdFields('aadhar');
+    } else {
+        toggleIdFields('pan'); // Default to PAN
+    }
+
+    // Show/hide individual fields based on user type
+    const individualFields = document.getElementById('individualFields');
+    const isCorporate = userDetails.role === 'seller_corporate';
+    console.log('🔍 User role detection:', userDetails.role, '| Is Corporate:', isCorporate);
+
+    if (individualFields) {
+        if (isCorporate) {
+            individualFields.style.display = 'none';
+        } else {
+            individualFields.style.display = 'block';
+        }
     }
 
     // Show/hide and populate company information card
     const companyInfoCard = document.getElementById('companyInfoCard');
-    const isCorporate = userDetails.role === 'seller_corporate';
+    console.log('🏢 Company Info Card Element:', companyInfoCard);
+    console.log('🏢 Is Corporate:', isCorporate);
+    console.log('🏢 Corporate Details:', corporateDetails);
+    console.log('🏢 Corporate Details Message:', corporateDetails ? corporateDetails.message : 'No corporate details');
 
     if (companyInfoCard) {
-        if (isCorporate && corporateDetails) {
+        // Temporarily always show company card for testing
+        if (isCorporate) {
+            console.log('✅ Showing company info card for corporate user');
             companyInfoCard.style.display = 'block';
-            updateCompanySettings(corporateDetails);
+
+            // Create dummy corporate details if none exist
+            const corporateData = corporateDetails || {
+                company_name: '',
+                pan_number: '',
+                cin_number: '',
+                gst_number: '',
+                addressline1: '',
+                addressline2: '',
+                city: '',
+                state: '',
+                address_pincode: '',
+                is_approved: false
+            };
+
+            updateCompanySettings(corporateData);
         } else {
+            console.log('❌ Hiding company info card - Not a corporate user');
             companyInfoCard.style.display = 'none';
         }
+    } else {
+        console.error('❌ Company Info Card element not found with ID: companyInfoCard');
     }
+
+    // Set up PAN validation for individual and corporate PAN fields
+    setupPanValidation('panNumber');           // Individual PAN field
+    setupPanValidation('companyPanNumber');    // Company PAN field
 }
 
 /**
  * Update company settings information
  */
 function updateCompanySettings(corporateDetails) {
-    const settingsCompanyNameEl = document.getElementById('settingsCompanyName');
-    const settingsPanNumberEl = document.getElementById('settingsPanNumber');
-    const settingsGstNumberEl = document.getElementById('settingsGstNumber');
-    const settingsCompanyAddressEl = document.getElementById('settingsCompanyAddress');
-    const settingsVerificationStatusEl = document.getElementById('settingsVerificationStatus');
-    const settingsVerificationDateEl = document.getElementById('settingsVerificationDate');
-    // const downloadCertificateBtn = document.getElementById('downloadCertificateBtn');
+    console.log('🏢 Updating company settings with:', corporateDetails);
 
-    if (settingsCompanyNameEl) settingsCompanyNameEl.value = corporateDetails.company_name || '';
-    if (settingsPanNumberEl) settingsPanNumberEl.value = corporateDetails.pan_number || '';
-    if (settingsGstNumberEl) settingsGstNumberEl.value = corporateDetails.gst_number || '';
-    if (settingsCompanyAddressEl) settingsCompanyAddressEl.value = corporateDetails.address || '';
+    // Update basic company information
+    const companyNameEl = document.getElementById('companyName');
+    console.log('🔍 Company Name Element:', companyNameEl);
+    console.log('🏢 Company Name from data:', corporateDetails.company_name);
+
+    if (companyNameEl) {
+        const companyName = corporateDetails.company_name || '';
+        companyNameEl.value = companyName;
+        companyNameEl.placeholder = companyName || 'Enter company name';
+        console.log('✅ Set company name value:', companyNameEl.value);
+        console.log('✅ Set company name placeholder:', companyNameEl.placeholder);
+
+        // Force visibility for testing
+        if (companyNameEl.style.display === 'none') {
+            companyNameEl.style.display = 'block';
+        }
+    } else {
+        console.error('❌ Company Name Element not found with ID: companyName');
+    }
+
+    // Handle company ID type selection and fields
+    const companyIdSelectEl = document.getElementById('companyIdSelect');
+    const companyPanEl = document.getElementById('companyPanNumber');
+    const companyCinEl = document.getElementById('companyCinNumber');
+    const gstNumberEl = document.getElementById('gstNumber');
+
+    // Determine which ID type to show based on available data
+    if (corporateDetails.pan_number) {
+        if (companyIdSelectEl) companyIdSelectEl.value = 'pan';
+        if (companyPanEl) {
+            companyPanEl.value = corporateDetails.pan_number;
+        }
+        toggleCompanyIdFields('pan');
+    } else if (corporateDetails.cin_number) {
+        if (companyIdSelectEl) companyIdSelectEl.value = 'cin';
+        if (companyCinEl) {
+            companyCinEl.value = corporateDetails.cin_number;
+        }
+        toggleCompanyIdFields('cin');
+    } else {
+        toggleCompanyIdFields('pan'); // Default to PAN
+    }
+
+    if (gstNumberEl) {
+        gstNumberEl.value = corporateDetails.gst_number || '';
+        gstNumberEl.placeholder = corporateDetails.gst_number || 'Enter GST number';
+    }
+
+    // Update company address
+    const addressLine1El = document.getElementById('companyAddressLine1');
+    const addressLine2El = document.getElementById('companyAddressLine2');
+    const companyCityEl = document.getElementById('companyCity');
+    const companyStateEl = document.getElementById('companyState');
+    const companyPincodeEl = document.getElementById('companyPincode');
+
+    if (addressLine1El) {
+        addressLine1El.value = corporateDetails.addressline1 || '';
+        addressLine1El.placeholder = corporateDetails.addressline1 || 'Enter address line 1';
+    }
+    if (addressLine2El) {
+        addressLine2El.value = corporateDetails.addressline2 || '';
+        addressLine2El.placeholder = corporateDetails.addressline2 || 'Enter address line 2 (optional)';
+    }
+    if (companyCityEl) {
+        companyCityEl.value = corporateDetails.city || '';
+        companyCityEl.placeholder = corporateDetails.city || 'Enter city';
+    }
+    if (companyStateEl) {
+        companyStateEl.value = corporateDetails.state || '';
+        companyStateEl.placeholder = corporateDetails.state || 'Enter state';
+    }
+    if (companyPincodeEl) {
+        companyPincodeEl.value = corporateDetails.address_pincode || '';
+        companyPincodeEl.placeholder = corporateDetails.address_pincode || 'Enter pincode';
+    }
 
     // Update verification status
+    const settingsVerificationStatusEl = document.getElementById('settingsVerificationStatus');
+    const settingsVerificationDateEl = document.getElementById('settingsVerificationDate');
+
     if (settingsVerificationStatusEl) {
         if (corporateDetails.is_approved) {
             settingsVerificationStatusEl.innerHTML = '<i class="fas fa-check-circle me-1"></i>Verified';
@@ -904,18 +1076,31 @@ window.logout = function () {
  * Profile editing functions
  */
 window.editProfile = function () {
+    console.log('👤 Edit profile clicked (global)');
     toggleProfileEdit(true);
 };
 
 window.editCompanyInfo = function () {
+    console.log('🏢 Edit company info clicked (global)');
     toggleCompanyEdit(true);
 };
 
 function toggleProfileEdit(enable) {
-    const profileFields = ['settingsName', 'settingsEmail']; // Removed settingsPhone to make it non-editable
-    const editBtn = document.querySelector('#settings-tab .btn-primary');
+    // Get user type to determine which fields to enable
+    const userTypeEl = document.getElementById('userType');
+    const isCorporate = userTypeEl && userTypeEl.value === 'seller_corporate';
 
-    profileFields.forEach(fieldId => {
+    // Basic fields for all users
+    const basicFields = ['fullName', 'email'];
+
+    // Individual-specific fields (only for non-corporate users)
+    const individualFields = ['addressline1', 'addressline2', 'cityname', 'statename', 'addresspincode', 'panNumber', 'individualAadharNumber'];
+    const individualSelectFields = ['individualIdSelect'];
+
+    const editBtn = document.querySelector('#profileForm').closest('.card').querySelector('.btn');
+
+    // Handle basic fields (always editable)
+    basicFields.forEach(fieldId => {
         const field = document.getElementById(fieldId);
         if (field) {
             field.readOnly = !enable;
@@ -926,6 +1111,44 @@ function toggleProfileEdit(enable) {
             }
         }
     });
+
+    // Handle individual-specific fields (only for non-corporate users)
+    if (!isCorporate) {
+        individualFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.readOnly = !enable;
+                if (enable) {
+                    field.classList.add('editable');
+                } else {
+                    field.classList.remove('editable');
+                }
+            }
+        });
+
+        // Handle select fields for individual users
+        individualSelectFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.disabled = !enable;
+                if (enable) {
+                    field.classList.add('editable');
+                } else {
+                    field.classList.remove('editable');
+                }
+            }
+        });
+
+        // Add change event listener for ID type selection when in edit mode
+        if (enable) {
+            const individualIdSelectField = document.getElementById('individualIdSelect');
+            if (individualIdSelectField) {
+                individualIdSelectField.onchange = function () {
+                    toggleIdFields(this.value);
+                };
+            }
+        }
+    }
 
     if (enable) {
         editBtn.innerHTML = '<i class="fas fa-save me-2"></i>Save Profile';
@@ -937,10 +1160,15 @@ function toggleProfileEdit(enable) {
 }
 
 function toggleCompanyEdit(enable) {
-    const companyFields = ['settingsCompanyName', 'settingsPanNumber', 'settingsGstNumber', 'settingsCompanyAddress'];
-    const editBtn = document.querySelector('#companyInfoCard .btn-primary');
+    const companyTextFields = [
+        'companyName', 'companyPanNumber', 'companyCinNumber', 'gstNumber',
+        'companyAddressLine1', 'companyAddressLine2', 'companyCity', 'companyState', 'companyPincode'
+    ];
+    const companySelectFields = ['companyIdSelect'];
+    const editBtn = document.getElementById('editCompanyBtn');
 
-    companyFields.forEach(fieldId => {
+    // Handle text fields
+    companyTextFields.forEach(fieldId => {
         const field = document.getElementById(fieldId);
         if (field) {
             field.readOnly = !enable;
@@ -952,6 +1180,30 @@ function toggleCompanyEdit(enable) {
         }
     });
 
+    // Handle select fields
+    companySelectFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.disabled = !enable;
+            if (enable) {
+                field.classList.add('editable');
+            } else {
+                field.classList.remove('editable');
+            }
+        }
+    });
+
+    // Add change event listener for company ID type selection when in edit mode
+    if (enable) {
+        const companyIdSelectField = document.getElementById('companyIdSelect');
+        if (companyIdSelectField) {
+            companyIdSelectField.onchange = function () {
+                toggleCompanyIdFields(this.value);
+            };
+        }
+    }
+
+    // Toggle button text and functionality
     if (enable) {
         editBtn.innerHTML = '<i class="fas fa-save me-2"></i>Save Company Info';
         editBtn.onclick = saveCompanyInfo;
@@ -963,16 +1215,64 @@ function toggleCompanyEdit(enable) {
 
 async function saveProfile() {
     try {
-        const formData = {
-            name: document.getElementById('settingsName').value,
-            email: document.getElementById('settingsEmail').value
-            // Removed contact_number to make phone non-editable
+        console.log('💾 Saving profile changes...');
+
+        // Get user type to determine which fields to save
+        const userTypeEl = document.getElementById('userType');
+        const isCorporate = userTypeEl && userTypeEl.value === 'seller_corporate';
+
+        // Prepare basic profile data (common for all users)
+        const profileData = {
+            name: document.getElementById('fullName').value,
+            email: document.getElementById('email').value
         };
 
+        // Add individual-specific fields only for non-corporate users
+        if (!isCorporate) {
+            // Address fields
+            const addressLine1 = document.getElementById('addressline1').value;
+            const addressLine2 = document.getElementById('addressline2').value;
+            const city = document.getElementById('cityname').value;
+            const state = document.getElementById('statename').value;
+            const pincode = document.getElementById('addresspincode').value;
+
+            if (addressLine1) profileData.addressline1 = addressLine1;
+            if (addressLine2) profileData.addressline2 = addressLine2;
+            if (city) profileData.city = city;
+            if (state) profileData.state = state;
+            if (pincode) profileData.address_pincode = pincode;
+
+            // ID fields - only send the selected ID type
+            const idType = document.getElementById('individualIdSelect').value;
+            if (idType === 'pan') {
+                const panNumber = document.getElementById('panNumber').value;
+                if (panNumber) {
+                    // Validate PAN format before saving
+                    if (!validatePanCard(panNumber)) {
+                        showError('Please enter a valid PAN number (AAAPA1234A format)');
+                        return;
+                    }
+                    profileData.pan_number = panNumber.toUpperCase();
+                    // Clear Aadhar if PAN is selected
+                    profileData.aadhar_number = '';
+                }
+            } else if (idType === 'aadhar') {
+                const aadharNumber = document.getElementById('individualAadharNumber').value;
+                if (aadharNumber) {
+                    profileData.aadhar_number = aadharNumber;
+                    // Clear PAN if Aadhar is selected
+                    profileData.pan_number = '';
+                }
+            }
+        }
+
+        console.log('📤 Profile data to be sent:', profileData);
+
+        // Call the update API
         const [success, response] = await callApi(
             'PUT',
             `/user-api/update-user-details-api/${current_user_id}/`,
-            formData,
+            profileData,
             csrf_token
         );
 
@@ -980,30 +1280,69 @@ async function saveProfile() {
             showSuccess('Profile updated successfully!');
             toggleProfileEdit(false);
 
+            // Update field values and placeholders after successful save
+            updateFieldsAfterSave(profileData);
+
             // Refresh profile data
             await loadSellerProfile();
         } else {
-            throw new Error(response.error || 'Failed to update profile');
+            console.error('❌ Failed to update profile:', response.error);
+            showError(response.error || 'Failed to update profile');
         }
     } catch (error) {
-        console.error('Error updating profile:', error);
+        console.error('❌ Error updating profile:', error);
         showError('Failed to update profile: ' + error.message);
     }
 }
 
 async function saveCompanyInfo() {
     try {
-        const formData = {
-            company_name: document.getElementById('settingsCompanyName').value,
-            pan_number: document.getElementById('settingsPanNumber').value,
-            gst_number: document.getElementById('settingsGstNumber').value,
-            address: document.getElementById('settingsCompanyAddress').value
+        console.log('🏢 Saving company information...');
+
+        // Prepare basic company data
+        const companyData = {
+            company_name: document.getElementById('companyName').value,
+            gst_number: document.getElementById('gstNumber').value,
+            addressline1: document.getElementById('companyAddressLine1').value,
+            addressline2: document.getElementById('companyAddressLine2').value,
+            city: document.getElementById('companyCity').value,
+            state: document.getElementById('companyState').value,
+            address_pincode: document.getElementById('companyPincode').value
         };
 
+        // Handle ID type selection (PAN or CIN)
+        const companyIdTypeEl = document.getElementById('companyIdSelect');
+        if (companyIdTypeEl) {
+            const idType = companyIdTypeEl.value;
+            if (idType === 'pan') {
+                const panNumber = document.getElementById('companyPanNumber').value;
+                if (panNumber) {
+                    // Validate PAN format before saving
+                    if (!validatePanCard(panNumber)) {
+                        showError('Please enter a valid PAN number (AAAPA1234A format)');
+                        return;
+                    }
+                    companyData.pan_number = panNumber.toUpperCase();
+                    // Clear CIN if PAN is selected
+                    companyData.cin_number = '';
+                }
+            } else if (idType === 'cin') {
+                const cinNumber = document.getElementById('companyCinNumber').value;
+                if (cinNumber) {
+                    companyData.cin_number = cinNumber.toUpperCase();
+                    // Clear PAN if CIN is selected
+                    companyData.pan_number = '';
+                }
+            }
+        }
+
+        console.log('📤 Company data to be sent:', companyData);
+
+        // Call the update API
         const [success, response] = await callApi(
             'PUT',
             `/user-api/update-user-details-api/${current_user_id}/`,
-            formData,
+            companyData,
             csrf_token
         );
 
@@ -1014,10 +1353,11 @@ async function saveCompanyInfo() {
             // Refresh profile data
             await loadSellerProfile();
         } else {
-            throw new Error(response.error || 'Failed to update company information');
+            console.error('❌ Failed to update company info:', response.error);
+            showError(response.error || 'Failed to update company information');
         }
     } catch (error) {
-        console.error('Error updating company info:', error);
+        console.error('❌ Error updating company info:', error);
         showError('Failed to update company information: ' + error.message);
     }
 }
@@ -1086,6 +1426,414 @@ function truncateText(text, maxLength) {
     return text.substring(0, maxLength) + '...';
 }
 
+/**
+ * Update field values and placeholders after successful save
+ */
+function updateFieldsAfterSave(profileData) {
+    console.log('🔄 Updating fields after save with data:', profileData);
+
+    // Update basic profile fields
+    if (profileData.name) {
+        const fullNameEl = document.getElementById('fullName');
+        if (fullNameEl) {
+            fullNameEl.placeholder = profileData.name;
+        }
+    }
+
+    if (profileData.email) {
+        const emailEl = document.getElementById('email');
+        if (emailEl) {
+            emailEl.placeholder = profileData.email;
+        }
+    }
+
+    // Update address fields
+    if (profileData.addressline1) {
+        const addressLine1El = document.getElementById('addressline1');
+        if (addressLine1El) {
+            addressLine1El.placeholder = profileData.addressline1;
+        }
+    }
+
+    if (profileData.addressline2) {
+        const addressLine2El = document.getElementById('addressline2');
+        if (addressLine2El) {
+            addressLine2El.placeholder = profileData.addressline2;
+        }
+    }
+
+    // Handle both frontend and backend field names for city, state, pincode
+    const cityValue = profileData.cityname || profileData.city;
+    if (cityValue) {
+        const cityEl = document.getElementById('cityname');
+        if (cityEl) {
+            cityEl.placeholder = cityValue;
+        }
+    }
+
+    const stateValue = profileData.statename || profileData.state;
+    if (stateValue) {
+        const stateEl = document.getElementById('statename');
+        if (stateEl) {
+            stateEl.placeholder = stateValue;
+        }
+    }
+
+    const pincodeValue = profileData.addresspincode || profileData.address_pincode;
+    if (pincodeValue) {
+        const pincodeEl = document.getElementById('addresspincode');
+        if (pincodeEl) {
+            pincodeEl.placeholder = pincodeValue;
+        }
+    }
+
+    // Update ID fields
+    if (profileData.pan_number) {
+        const panEl = document.getElementById('panNumber');
+        if (panEl) {
+            panEl.placeholder = profileData.pan_number;
+        }
+    }
+
+    if (profileData.aadhar_number) {
+        const aadharEl = document.getElementById('individualAadharNumber');
+        if (aadharEl) {
+            aadharEl.placeholder = profileData.aadhar_number;
+        }
+    }
+}
+
+/**
+ * Toggle between PAN and Aadhar fields based on selection
+ */
+function toggleIdFields(selectedType) {
+    const panGroup = document.getElementById('individualPanGroup');
+    const aadharGroup = document.getElementById('individualAadharGroup');
+    const panInput = document.getElementById('panNumber');
+    const aadharInput = document.getElementById('individualAadharNumber');
+
+    if (selectedType === 'pan') {
+        if (panGroup) panGroup.style.display = 'block';
+        if (aadharGroup) aadharGroup.style.display = 'none';
+        // Clear Aadhar value when switching to PAN
+        if (aadharInput) aadharInput.value = '';
+    } else if (selectedType === 'aadhar') {
+        if (panGroup) panGroup.style.display = 'none';
+        if (aadharGroup) aadharGroup.style.display = 'block';
+        // Clear PAN value when switching to Aadhar
+        if (panInput) panInput.value = '';
+    }
+}
+
+/**
+ * Toggle company ID fields (PAN/CIN) based on selection
+ */
+function toggleCompanyIdFields(selectedType) {
+    const companyPanGroup = document.getElementById('companyPanGroup');
+    const companyCinGroup = document.getElementById('companyCinGroup');
+    const companyPanInput = document.getElementById('companyPanNumber');
+    const companyCinInput = document.getElementById('companyCinNumber');
+
+    if (selectedType === 'pan') {
+        if (companyPanGroup) companyPanGroup.style.display = 'block';
+        if (companyCinGroup) companyCinGroup.style.display = 'none';
+        // Clear CIN value when switching to PAN
+        if (companyCinInput) companyCinInput.value = '';
+    } else if (selectedType === 'cin') {
+        if (companyPanGroup) companyPanGroup.style.display = 'none';
+        if (companyCinGroup) companyCinGroup.style.display = 'block';
+        // Clear PAN value when switching to CIN
+        if (companyPanInput) companyPanInput.value = '';
+    }
+}
+
+/**
+ * Validate PAN card format (AAAPA1234A)
+ * @param {string} panNumber - PAN number to validate
+ * @returns {boolean} - true if valid, false if invalid
+ */
+function validatePanCard(panNumber) {
+    if (!panNumber) return false;
+
+    // PAN format: AAAPA1234A (5 letters, 4 numbers, 1 letter)
+    const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+    return panRegex.test(panNumber.toUpperCase());
+}
+
+/**
+ * Show validation error for PAN field
+ * @param {string} fieldId - ID of the PAN input field
+ * @param {string} message - Error message to display
+ */
+function showPanValidationError(fieldId, message) {
+    // Remove any existing error
+    removePanValidationError(fieldId);
+
+    const field = document.getElementById(fieldId);
+    if (!field) return;
+
+    // Create error element
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'pan-validation-error';
+    errorDiv.id = fieldId + '-error';
+    errorDiv.innerHTML = `<i class="fas fa-exclamation-circle me-1"></i>${message}`;
+
+    // Insert error after the field
+    field.parentNode.insertBefore(errorDiv, field.nextSibling);
+
+    // Add error styling to field
+    field.classList.add('is-invalid');
+}
+
+/**
+ * Remove validation error for PAN field
+ * @param {string} fieldId - ID of the PAN input field
+ */
+function removePanValidationError(fieldId) {
+    const errorDiv = document.getElementById(fieldId + '-error');
+    if (errorDiv) {
+        errorDiv.remove();
+    }
+
+    const field = document.getElementById(fieldId);
+    if (field) {
+        field.classList.remove('is-invalid');
+    }
+}
+
+/**
+ * Set up PAN validation for a field
+ * @param {string} fieldId - ID of the PAN input field
+ */
+function setupPanValidation(fieldId) {
+    const field = document.getElementById(fieldId);
+    if (!field) return;
+
+    // Add event listeners for validation
+    field.addEventListener('blur', function () {
+        const panValue = this.value.trim();
+        if (panValue && !validatePanCard(panValue)) {
+            showPanValidationError(fieldId, 'Invalid PAN format. Use AAAPA1234A format.');
+        } else {
+            removePanValidationError(fieldId);
+        }
+    });
+
+    field.addEventListener('input', function () {
+        // Convert to uppercase
+        this.value = this.value.toUpperCase();
+
+        // Remove error on input if field becomes valid
+        const panValue = this.value.trim();
+        if (panValue && validatePanCard(panValue)) {
+            removePanValidationError(fieldId);
+        }
+    });
+}
+
+/**
+ * Calculate profile completion percentage for seller users
+ */
+function calculateProfileCompletion(userDetails, corporateDetails) {
+    if (!userDetails) return 0;
+
+    const isCorporate = userDetails.role === 'seller_corporate';
+    let totalFields = 0;
+    let completedFields = 0;
+
+    if (isCorporate) {
+        // Corporate seller fields
+        const userFields = ['name', 'email', 'contact_number'];
+        const corporateFields = ['company_name', 'gst_number', 'addressline1', 'addressline2', 'city', 'state', 'address_pincode'];
+
+        // Total fields = user fields + corporate fields + 1 for ID field (PAN/CIN)
+        totalFields = userFields.length + corporateFields.length + 1;
+
+        // Check user fields
+        userFields.forEach(field => {
+            if (userDetails[field] && userDetails[field].toString().trim()) {
+                completedFields++;
+            }
+        });
+
+        // Check corporate fields (excluding PAN/CIN which we handle separately)
+        if (corporateDetails) {
+            corporateFields.forEach(field => {
+                if (corporateDetails[field] && corporateDetails[field].toString().trim()) {
+                    completedFields++;
+                }
+            });
+
+            // Check for PAN or CIN (count as one field - either is acceptable)
+            if ((corporateDetails.pan_number && corporateDetails.pan_number.trim()) ||
+                (corporateDetails.cin_number && corporateDetails.cin_number.trim())) {
+                completedFields++;
+            }
+        }
+    } else {
+        // Individual seller fields
+        const individualFields = ['name', 'email', 'contact_number', 'addressline1', 'addressline2', 'city', 'state', 'address_pincode'];
+
+        // Total fields = individual fields + 1 for ID field (PAN/Aadhar)
+        totalFields = individualFields.length + 1;
+
+        individualFields.forEach(field => {
+            if (userDetails[field] && userDetails[field].toString().trim()) {
+                completedFields++;
+            }
+        });
+
+        // Check for PAN or Aadhar (count as one field - either is acceptable)
+        if ((userDetails.pan_number && userDetails.pan_number.trim()) ||
+            (userDetails.aadhar_number && userDetails.aadhar_number.trim())) {
+            completedFields++;
+        }
+    }
+
+    const percentage = Math.round((completedFields / totalFields) * 100);
+    return Math.min(percentage, 100);
+}
+
+/**
+ * Update profile completion UI
+ */
+function updateProfileCompletion(userDetails, corporateDetails) {
+    const completionCard = document.getElementById('profileCompletionCard');
+    const progressBar = document.getElementById('profileProgressBar');
+    const progressText = document.getElementById('profileProgressText');
+
+    if (!completionCard || !progressBar || !progressText) {
+        console.log('⚠️ Profile completion elements not found');
+        return;
+    }
+
+    const completionPercentage = calculateProfileCompletion(userDetails, corporateDetails);
+
+    // Update progress bar
+    progressBar.style.width = `${completionPercentage}%`;
+    progressBar.setAttribute('aria-valuenow', completionPercentage);
+    progressText.textContent = `${completionPercentage}%`;
+
+    // Show/hide completion card based on completion percentage
+    if (completionPercentage < 100) {
+        completionCard.style.display = 'block';
+
+        // Update progress bar color based on completion
+        progressBar.classList.remove('bg-danger', 'bg-warning', 'bg-success');
+        if (completionPercentage < 30) {
+            progressBar.classList.add('bg-danger');
+        } else if (completionPercentage < 70) {
+            progressBar.classList.add('bg-warning');
+        } else {
+            progressBar.classList.add('bg-success');
+        }
+    } else {
+        completionCard.style.display = 'none';
+    }
+
+    console.log(`✅ Profile completion updated: ${completionPercentage}%`);
+}
+
+/**
+ * Handle complete profile button click
+ */
+function completeProfile() {
+    // Switch to settings tab
+    const settingsTab = document.querySelector('[data-tab="settings"]');
+    const settingsTabContent = document.getElementById('settings-tab');
+
+    if (settingsTab && settingsTabContent) {
+        // Remove active class from all tabs
+        document.querySelectorAll('.tab-button-home').forEach(tab => {
+            tab.classList.remove('active');
+        });
+
+        // Remove active class from all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+
+        // Add active class to settings tab
+        settingsTab.classList.add('active');
+        settingsTabContent.classList.add('active');
+
+        // Scroll to settings section
+        settingsTabContent.scrollIntoView({ behavior: 'smooth' });
+
+        console.log('📝 Switched to settings tab for profile completion');
+    } else {
+        console.error('❌ Settings tab not found');
+    }
+}
+
+// Make completeProfile function globally available
+window.completeProfile = completeProfile;
+
 console.log('🔐 WasteBazar Seller Profile System Loaded');
+
+// Test functions for debugging
+function testCorporateUser() {
+    console.log('🧪 Testing Corporate User');
+    const testData = {
+        user_info: {
+            id: 1,
+            name: 'Test Corporate User',
+            email: 'test@company.com',
+            contact_number: '9876543210',
+            role: 'seller_corporate',
+            addressline1: '123 Business Street',
+            addressline2: 'Business District',
+            city: 'Mumbai',
+            state: 'Maharashtra',
+            address_pincode: '400001',
+            is_verified: true
+        },
+        corporate_info: {
+            company_name: 'Test Company Pvt Ltd',
+            pan_number: 'ABCDE1234F',
+            cin_number: 'U12345MH2020PTC123456',
+            gst_number: '27ABCDE1234F1Z5',
+            addressline1: '456 Corporate Park',
+            addressline2: 'IT District',
+            city: 'Pune',
+            state: 'Maharashtra',
+            address_pincode: '411001',
+            is_approved: false
+        },
+        statistics: {
+            total_listings: 5,
+            active_listings: 3,
+            total_sold_items: 2
+        }
+    };
+
+    updateSettingsInfo(testData);
+}
+
+function testIndividualUser() {
+    console.log('🧪 Testing Individual User');
+    const testData = {
+        user_info: {
+            id: 2,
+            name: 'Test Individual User',
+            email: 'individual@test.com',
+            contact_number: '9876543211',
+            role: 'seller_individual',
+            addressline1: '789 Home Street',
+            addressline2: 'Residential Area',
+            city: 'Delhi',
+            state: 'Delhi',
+            address_pincode: '110001',
+            is_verified: true
+        },
+        statistics: {
+            total_listings: 2,
+            active_listings: 1,
+            total_sold_items: 1
+        }
+    };
+
+    updateSettingsInfo(testData);
+}
 
 
