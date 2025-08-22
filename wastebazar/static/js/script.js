@@ -2,7 +2,7 @@
 // How It Works Section - Tab functionality
 document.addEventListener('DOMContentLoaded', function () {
     // Check for existing user login and redirect if authenticated
-    // checkUserAuthentication();
+    updateNavbarAuth();
 
     // Tab switching functionality
     const tabButtons = document.querySelectorAll('.tab-button');
@@ -349,19 +349,19 @@ window.addEventListener('scroll', function () {
 });
 
 // Add loading states to buttons
-document.querySelectorAll('button').forEach(button => {
-    button.addEventListener('click', function () {
-        if (!this.disabled && !this.classList.contains('no-loading')) {
-            const originalText = this.innerHTML;
-            this.style.position = 'relative';
+// document.querySelectorAll('button').forEach(button => {
+//     button.addEventListener('click', function () {
+//         if (!this.disabled && !this.classList.contains('no-loading')) {
+//             const originalText = this.innerHTML;
+//             this.style.position = 'relative';
 
-            // Add subtle loading effect
-            setTimeout(() => {
-                this.style.position = '';
-            }, 200);
-        }
-    });
-});
+//             // Add subtle loading effect
+//             setTimeout(() => {
+//                 this.style.position = '';
+//             }, 200);
+//         }
+//     });
+// });
 
 // Intersection Observer for animations
 const animatedElements = document.querySelectorAll('[data-aos]');
@@ -666,13 +666,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Top-level materials category tabs (Plastic, Metal, Paper)
-    const categoryNavButtons = document.querySelectorAll('.materials-category-nav .nav-link');
+    // Top-level materials category tabs (Plastic, Metal, Paper) - Updated for Swiffy Slider
+    // Top-level materials category tabs (Bootstrap Scrollable)
+    const categoryNavButtons = document.querySelectorAll('#materialsScrollContainer .nav-link');
     const categoryPanels = document.querySelectorAll('.category-panel');
 
     categoryNavButtons.forEach(btn => {
         btn.addEventListener('click', function () {
-            // activate button
+            // activate button - remove active from all buttons in container
             categoryNavButtons.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
 
@@ -695,6 +696,46 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Horizontal scroll functionality
+    const scrollContainer = document.getElementById('materialsScroller');
+    const scrollPrevBtn = document.getElementById('scrollPrev');
+    const scrollNextBtn = document.getElementById('scrollNext');
+
+    if (scrollContainer && scrollPrevBtn && scrollNextBtn) {
+        const scrollAmount = 200; // Amount to scroll per click
+
+        function updateScrollButtons() {
+            const scrollLeft = scrollContainer.scrollLeft;
+            const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+
+            // Update button states
+            scrollPrevBtn.disabled = scrollLeft <= 0;
+            scrollNextBtn.disabled = scrollLeft >= maxScroll;
+        }
+
+        scrollPrevBtn.addEventListener('click', () => {
+            scrollContainer.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth'
+            });
+        });
+
+        scrollNextBtn.addEventListener('click', () => {
+            scrollContainer.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+        });
+
+        // Update button states on scroll
+        scrollContainer.addEventListener('scroll', updateScrollButtons);
+
+        // Initial button state update
+        updateScrollButtons();
+
+        // Update on window resize
+        window.addEventListener('resize', updateScrollButtons);
+    }
     // WasteBazar Materials Section - Mobile Tab functionality (Bootstrap)
     const mobileTabTriggers = document.querySelectorAll('#materials-mobile-tabs button[data-bs-toggle="pill"]');
 
@@ -734,6 +775,96 @@ document.addEventListener('DOMContentLoaded', function () {
         materialImages.forEach(img => img.style.display = (img.dataset.material === materialId) ? 'block' : 'none');
         overlayBadges.forEach(badge => badge.style.display = (badge.dataset.material === materialId) ? 'block' : 'none');
     });
+});
+
+// Mega Dropdown Enhancement - Click Only
+document.addEventListener('DOMContentLoaded', function () {
+    const megaDropdown = document.querySelector('.mega-dropdown');
+    const megaDropdownMenu = document.querySelector('.mega-dropdown-menu');
+    const categoriesDropdown = document.getElementById('categoriesDropdown');
+
+    if (megaDropdown && megaDropdownMenu && categoriesDropdown) {
+        // Function to show dropdown
+        function showDropdown() {
+            categoriesDropdown.classList.add('show');
+            categoriesDropdown.setAttribute('aria-expanded', 'true');
+            megaDropdownMenu.classList.add('show');
+
+            // Add entrance animation stagger effect
+            const items = megaDropdownMenu.querySelectorAll('.mega-dropdown-item');
+            items.forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.03}s`;
+                item.classList.add('fade-in-up');
+            });
+        }
+
+        // Function to hide dropdown
+        function hideDropdown() {
+            categoriesDropdown.classList.remove('show');
+            categoriesDropdown.setAttribute('aria-expanded', 'false');
+            megaDropdownMenu.classList.remove('show');
+
+            // Remove animation classes
+            const items = megaDropdownMenu.querySelectorAll('.mega-dropdown-item');
+            items.forEach(item => {
+                item.classList.remove('fade-in-up');
+                item.style.animationDelay = '';
+            });
+        }
+
+        // Click Toggle Behavior Only
+        categoriesDropdown.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Simple toggle logic
+            if (categoriesDropdown.classList.contains('show') || megaDropdownMenu.classList.contains('show')) {
+                // Currently open - close it
+                hideDropdown();
+                console.log('Dropdown closed by click');
+            } else {
+                // Currently closed - open it
+                showDropdown();
+                console.log('Dropdown opened by click');
+            }
+        });
+
+        // Close on outside click
+        document.addEventListener('click', function (e) {
+            if (!megaDropdown.contains(e.target)) {
+                hideDropdown();
+            }
+        });
+
+        // Prevent dropdown menu clicks from closing the dropdown
+        megaDropdownMenu.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+
+        // Add ripple effect to dropdown items
+        const dropdownItems = megaDropdownMenu.querySelectorAll('.mega-dropdown-item');
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', function (e) {
+                // Create ripple effect
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+
+                this.appendChild(ripple);
+
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+    }
 });
 
 // Initialize platform

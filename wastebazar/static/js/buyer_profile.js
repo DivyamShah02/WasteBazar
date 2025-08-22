@@ -229,12 +229,12 @@ function updateContactInfo(userDetails, corporateDetails) {
                 : 'Not provided';
         }
     } else {
-        // Individual user - show seller information
-        if (contactInfoTitleText) contactInfoTitleText.textContent = 'Seller Information';
+        // Individual user - show buyer information
+        if (contactInfoTitleText) contactInfoTitleText.textContent = 'Buyer Information';
         if (contactInfoIcon) {
             contactInfoIcon.className = 'fas fa-user';
         }
-        if (companyNameLabel) companyNameLabel.textContent = 'Seller Name';
+        if (companyNameLabel) companyNameLabel.textContent = 'Buyer Name';
         if (companyNameIcon) companyNameIcon.className = 'fas fa-user';
         if (companyNameValue) {
             companyNameValue.textContent = userDetails.name || 'Not provided';

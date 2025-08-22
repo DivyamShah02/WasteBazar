@@ -690,11 +690,6 @@
     transition: all 0.3s ease;
 }
 
-#settings-tab .card:hover {
-    border-color: var(--primary-color);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-}
 
 #settings-tab .card-header {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -1268,4 +1263,69 @@
     .completion-action .btn {
         width: 100%;
     }
+}
+
+/* Missing Field Highlighting Styles */
+.missing-field {
+    border-color: #dc3545 !important;
+    background-color: #fff5f5 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+    transition: all 0.3s ease;
+}
+
+.missing-field:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.5) !important;
+}
+
+.missing-card-header {
+    background-color: #fff5f5 !important;
+    border-color: #dc3545 !important;
+    transition: all 0.3s ease;
+}
+
+.missing-card-header h5 {
+    color: #dc3545 !important;
+}
+
+/* Enhanced form field styles for better UX */
+.form-control.editable {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    transition: all 0.3s ease;
+}
+
+.form-control.editable:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.5);
+}
+
+.form-select.editable {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    transition: all 0.3s ease;
+}
+
+.form-select.editable:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.5);
+}
+
+/* Animation for field highlighting */
+@keyframes highlightPulse {
+    0% {
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+
+    50% {
+        box-shadow: 0 0 0 0.4rem rgba(220, 53, 69, 0.4);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+}
+
+.missing-field.pulse {
+    animation: highlightPulse 2s ease-in-out infinite;
 }

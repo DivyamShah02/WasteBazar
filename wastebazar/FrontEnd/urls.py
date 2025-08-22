@@ -14,6 +14,8 @@ router.register(r'directlogin', directloginViewSet, basename='directlogin')
 router.register(r'listing-form', ListingFormViewSet, basename='listing_form')
 router.register(r'listing-edit', ListingEditViewSet, basename='listing_edit')
 router.register(r'requirement-form', RequirementFormViewSet, basename='requirement_form')
+router.register(r'dashboard', DashboardViewSet, basename='dashboard')
+
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -8,7 +8,8 @@ const bootstrap = window.bootstrap // Declare bootstrap variable
 let csrf_token = null;
 let all_listings_api_url = null;
 let categories_api_url = "/marketplace-api/categories/"; // Categories API endpoint
-let ads_enabled = "true";
+let ads_enabled_top = "true";
+let ads_enabled_sidebar = "false";
 // Categories data.
 let categoriesData = [];
 
@@ -280,11 +281,21 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 function initializePage() {
-  console.log("🔧 Initializing page...");
-  console.log("🔧 ads_enabled value:", ads_enabled, "Type:", typeof ads_enabled);
+
+  if (ads_enabled_top === "false" || ads_enabled_top === false) {
+    console.log("🚫 Ads disabled - hiding ad containers");
+    setTimeout(() => {
+
+
+      const topAd = document.querySelector('.top-ad-banner');
+      if (topAd) {
+        topAd.style.setProperty('display', 'none', 'important');
+      }
+    }, 100);
+  }
 
   // Handle ads display based on ads_enabled setting
-  if (ads_enabled === "false" || ads_enabled === false) {
+  if (ads_enabled_sidebar === "false" || ads_enabled_sidebar === false) {
     console.log("🚫 Ads disabled - hiding ad containers and adjusting main content layout");
 
     // Wait for DOM to be ready, then hide ads
@@ -309,10 +320,7 @@ function initializePage() {
         console.log("⚠️ Right sidebar ads element not found");
       }
 
-      const topAd = document.querySelector('.top-ad-banner');
-      if (topAd) {
-        topAd.style.setProperty('display', 'none', 'important');
-      }
+
 
       // Remove display grid from main-content to center the content
       const mainContent = document.querySelector('.main-content');
@@ -331,6 +339,9 @@ function initializePage() {
 
   // Load categories first (this will also trigger loadListingsFromAPI after categories are loaded)
   loadCategories();
+
+  // Check authentication status and update navbar
+  updateNavbarAuth();
 
   // Navbar scroll effect
   window.addEventListener("scroll", () => {

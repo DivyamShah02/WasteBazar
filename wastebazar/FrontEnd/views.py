@@ -106,3 +106,10 @@ class RequirementFormViewSet(viewsets.ViewSet):
             'requirement_id': pk
         }
         return render(request, "requirement_form.html", context)
+
+class DashboardViewSet(viewsets.ViewSet):
+
+    def list(self, request):
+        """Render the admin dashboard"""
+        return render(request, "dashboard.html")
+    

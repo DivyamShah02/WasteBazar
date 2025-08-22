@@ -1099,6 +1099,11 @@ function toggleProfileEdit(enable) {
 
     const editBtn = document.querySelector('#profileForm').closest('.card').querySelector('.btn');
 
+    // Clean up any missing field classes from fields that have values
+    if (enable) {
+        cleanupMissingFieldClasses();
+    }
+
     // Handle basic fields (always editable)
     basicFields.forEach(fieldId => {
         const field = document.getElementById(fieldId);
@@ -1166,6 +1171,11 @@ function toggleCompanyEdit(enable) {
     ];
     const companySelectFields = ['companyIdSelect'];
     const editBtn = document.getElementById('editCompanyBtn');
+
+    // Clean up any missing field classes from fields that have values
+    if (enable) {
+        cleanupMissingFieldClasses();
+    }
 
     // Handle text fields
     companyTextFields.forEach(fieldId => {
@@ -1760,10 +1770,180 @@ function completeProfile() {
         // Scroll to settings section
         settingsTabContent.scrollIntoView({ behavior: 'smooth' });
 
+        // Enable edit mode for both profile and company info
+        setTimeout(() => {
+            enableEditModeAndHighlightMissing();
+        }, 500); // Small delay to ensure tab switch is complete
+
         console.log('📝 Switched to settings tab for profile completion');
     } else {
         console.error('❌ Settings tab not found');
     }
+}
+
+/**
+ * Enable edit mode and highlight missing fields
+ */
+function enableEditModeAndHighlightMissing() {
+    const userTypeEl = document.getElementById('userType');
+    const isCorporate = userTypeEl && userTypeEl.value === 'seller_corporate';
+
+    // Enable edit mode for profile
+    toggleProfileEdit(true);
+
+    // If corporate user, also enable company edit mode
+    if (isCorporate) {
+        toggleCompanyEdit(true);
+    }
+
+    // Highlight missing fields after a short delay to ensure edit mode is active
+    setTimeout(() => {
+        highlightMissingFields();
+    }, 200);
+}
+
+/**
+ * Highlight missing fields in red
+ */
+function highlightMissingFields() {
+    const userTypeEl = document.getElementById('userType');
+    const isCorporate = userTypeEl && userTypeEl.value === 'seller_corporate';
+
+    // Remove existing highlighting first
+    removeFieldHighlighting();
+
+    // Define required fields based on user type
+    let requiredFields = [];
+
+    if (isCorporate) {
+        // Corporate user required fields
+        requiredFields = [
+            { id: 'fullName', label: 'Full Name', card: 'profile' },
+            { id: 'email', label: 'Email Address', card: 'profile' },
+            { id: 'companyName', label: 'Company Name', card: 'company' },
+            { id: 'companyPanNumber', label: 'Company PAN Number', card: 'company' },
+            { id: 'gstNumber', label: 'GST Number', card: 'company' },
+            { id: 'companyAddressLine1', label: 'Company Address Line 1', card: 'company' },
+            { id: 'companyCity', label: 'Company City', card: 'company' },
+            { id: 'companyState', label: 'Company State', card: 'company' },
+            { id: 'companyPincode', label: 'Company Pincode', card: 'company' }
+        ];
+    } else {
+        // Individual user required fields
+        requiredFields = [
+            { id: 'fullName', label: 'Full Name', card: 'profile' },
+            { id: 'email', label: 'Email Address', card: 'profile' },
+            { id: 'panNumber', label: 'PAN Number', card: 'profile' },
+            { id: 'addressline1', label: 'Address Line 1', card: 'profile' },
+            { id: 'cityname', label: 'City', card: 'profile' },
+            { id: 'statename', label: 'State', card: 'profile' },
+            { id: 'addresspincode', label: 'Pincode', card: 'profile' }
+        ];
+    }
+
+    let missingFields = [];
+
+    // Check each required field
+    requiredFields.forEach(field => {
+        const element = document.getElementById(field.id);
+        if (element) {
+            const value = element.value ? element.value.trim() : '';
+            if (!value) {
+                // Add red border and background to highlight missing field
+                element.classList.remove('editable');
+                element.classList.add('missing-field', 'pulse');
+
+                missingFields.push(field.label);
+
+                // Add event listener to remove highlighting when field is filled
+                const inputHandler = function () {
+                    if (this.value.trim()) {
+                        removeFieldHighlight(this);
+                        // Remove the event listener to avoid memory leaks
+                        this.removeEventListener('input', inputHandler);
+                        this.removeEventListener('change', inputHandler);
+                    }
+                };
+
+                // Add both input and change event listeners for better coverage
+                element.addEventListener('input', inputHandler);
+                element.addEventListener('change', inputHandler);
+
+                // Add focus event to remove pulse animation
+                element.addEventListener('focus', function () {
+                    this.classList.remove('pulse');
+                }, { once: true });
+            } else {
+                // If field has value but still has missing-field class, remove it
+                if (element.classList.contains('missing-field')) {
+                    removeFieldHighlight(element);
+                }
+            }
+        }
+    });
+
+    // Don't highlight card headers - only highlight specific input fields
+
+    // Show notification about missing fields
+    if (missingFields.length > 0) {
+
+        // Auto-scroll to first missing field after a short delay
+        setTimeout(() => {
+            const firstMissingField = document.querySelector('.missing-field');
+            if (firstMissingField) {
+                firstMissingField.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                // Focus on the first missing field
+                setTimeout(() => {
+                    firstMissingField.focus();
+                }, 500);
+            }
+        }, 1000);
+    } else {
+        showSuccess('✅ All required fields are completed!');
+        console.log('✅ All required fields are completed');
+    }
+}
+
+/**
+ * Remove highlighting from a specific field
+ */
+function removeFieldHighlight(element) {
+    // Remove all missing field related classes and styles
+    element.classList.remove('missing-field', 'pulse');
+    element.style.borderColor = '';
+    element.style.backgroundColor = '';
+    element.style.boxShadow = '';
+
+    // Also remove any Bootstrap validation classes that might interfere
+    element.classList.remove('is-invalid');
+}
+
+/**
+ * Remove all field highlighting
+ */
+function removeFieldHighlighting() {
+    // Remove field highlighting only - no card header highlighting
+    document.querySelectorAll('.missing-field').forEach(field => {
+        removeFieldHighlight(field);
+    });
+}
+
+/**
+ * Check all fields and remove missing-field class from fields that have values
+ */
+function cleanupMissingFieldClasses() {
+    // Get all elements with missing-field class
+    document.querySelectorAll('.missing-field').forEach(element => {
+        const value = element.value ? element.value.trim() : '';
+        if (value) {
+            // Field has value but still has missing-field class, remove it
+            removeFieldHighlight(element);
+            console.log('🧹 Cleaned up missing-field class from filled field:', element.id);
+        }
+    });
 }
 
 // Make completeProfile function globally available
@@ -1771,69 +1951,6 @@ window.completeProfile = completeProfile;
 
 console.log('🔐 WasteBazar Seller Profile System Loaded');
 
-// Test functions for debugging
-function testCorporateUser() {
-    console.log('🧪 Testing Corporate User');
-    const testData = {
-        user_info: {
-            id: 1,
-            name: 'Test Corporate User',
-            email: 'test@company.com',
-            contact_number: '9876543210',
-            role: 'seller_corporate',
-            addressline1: '123 Business Street',
-            addressline2: 'Business District',
-            city: 'Mumbai',
-            state: 'Maharashtra',
-            address_pincode: '400001',
-            is_verified: true
-        },
-        corporate_info: {
-            company_name: 'Test Company Pvt Ltd',
-            pan_number: 'ABCDE1234F',
-            cin_number: 'U12345MH2020PTC123456',
-            gst_number: '27ABCDE1234F1Z5',
-            addressline1: '456 Corporate Park',
-            addressline2: 'IT District',
-            city: 'Pune',
-            state: 'Maharashtra',
-            address_pincode: '411001',
-            is_approved: false
-        },
-        statistics: {
-            total_listings: 5,
-            active_listings: 3,
-            total_sold_items: 2
-        }
-    };
 
-    updateSettingsInfo(testData);
-}
-
-function testIndividualUser() {
-    console.log('🧪 Testing Individual User');
-    const testData = {
-        user_info: {
-            id: 2,
-            name: 'Test Individual User',
-            email: 'individual@test.com',
-            contact_number: '9876543211',
-            role: 'seller_individual',
-            addressline1: '789 Home Street',
-            addressline2: 'Residential Area',
-            city: 'Delhi',
-            state: 'Delhi',
-            address_pincode: '110001',
-            is_verified: true
-        },
-        statistics: {
-            total_listings: 2,
-            active_listings: 1,
-            total_sold_items: 1
-        }
-    };
-
-    updateSettingsInfo(testData);
-}
 
 
