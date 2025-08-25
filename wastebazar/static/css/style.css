@@ -123,36 +123,42 @@ body {
 
 /* Mega Dropdown Styles */
 .mega-dropdown {
-    position: static;
+    position: relative;
 }
 
 .mega-dropdown-menu {
     position: absolute;
     top: 100%;
-    left: 0;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-5px);
     background: white;
     border: none;
     border-radius: 12px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
     padding: 2rem 0;
-    margin-top: 0.5rem;
-    width: 100vw;
-    max-width: 100%;
+    margin-top: 0;
+    width: max-content;
+    max-width: 90vw;
     z-index: 1050;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Hover functionality */
+.mega-dropdown:hover .mega-dropdown-menu,
 .mega-dropdown.show .mega-dropdown-menu,
 .mega-dropdown-menu.show {
     opacity: 1;
-    top: 5rem;
-    /* width: max-content; */
     visibility: visible;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Keep dropdown open when hovering over the menu itself */
+.mega-dropdown-menu:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
 }
 
 .mega-dropdown-column {
@@ -162,14 +168,15 @@ body {
 .mega-dropdown-header {
     color: var(--text-primary);
     font-weight: 600;
-    font-size: 0.875rem;
+    /* font-size: 0.875rem; */
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--primary-color);
+    /* border-bottom: 2px solid var(--primary-color); */
     display: flex;
     align-items: center;
+    text-decoration: none;
 }
 
 .mega-dropdown-header i {
@@ -220,7 +227,7 @@ body {
 }
 
 .mega-dropdown-footer {
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
     padding-top: 1.5rem;
     border-top: 1px solid #e5e7eb;
 }
@@ -4845,7 +4852,7 @@ body {
 
 /* Materials item responsive sizing - 3 breakpoints */
 .materials-item {
-    width: calc(33.66% - 12px);
+    width: calc(15.66% - 12px);
     /* Large screens: Show 6 items */
     min-width: 180px;
 }

@@ -15,7 +15,7 @@
     border: 1px solid var(--border-color);
     max-width: 1000px;
     width: 100%;
-    margin: 0 1rem;
+    margin: 5rem 1rem;
     position: relative;
     overflow: hidden;
 }

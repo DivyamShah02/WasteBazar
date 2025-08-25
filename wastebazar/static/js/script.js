@@ -2,7 +2,7 @@
 // How It Works Section - Tab functionality
 document.addEventListener('DOMContentLoaded', function () {
     // Check for existing user login and redirect if authenticated
-    updateNavbarAuth();
+
 
     // Tab switching functionality
     const tabButtons = document.querySelectorAll('.tab-button');
@@ -183,30 +183,30 @@ document.querySelectorAll('.faq-question').forEach(question => {
 });
 
 // Newsletter form
-document.querySelector('.newsletter-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const email = this.querySelector('.newsletter-input').value;
-    const btn = this.querySelector('.newsletter-btn');
+// document.querySelector('.newsletter-form').addEventListener('submit', function (e) {
+//     e.preventDefault();
+//     const email = this.querySelector('.newsletter-input').value;
+//     const btn = this.querySelector('.newsletter-btn');
 
-    // Show loading state
-    btn.innerHTML = '<div class="loading"></div>';
-    btn.disabled = true;
+//     // Show loading state
+//     btn.innerHTML = '<div class="loading"></div>';
+//     btn.disabled = true;
 
-    // Simulate subscription
-    setTimeout(() => {
-        btn.innerHTML = 'Subscribed!';
-        btn.style.background = 'var(--success-color)';
-        this.querySelector('.newsletter-input').value = '';
+//     // Simulate subscription
+//     setTimeout(() => {
+//         btn.innerHTML = 'Subscribed!';
+//         btn.style.background = 'var(--success-color)';
+//         this.querySelector('.newsletter-input').value = '';
 
-        setTimeout(() => {
-            btn.innerHTML = 'Subscribe';
-            btn.style.background = '';
-            btn.disabled = false;
-        }, 2000);
-    }, 1000);
+//         setTimeout(() => {
+//             btn.innerHTML = 'Subscribe';
+//             btn.style.background = '';
+//             btn.disabled = false;
+//         }, 2000);
+//     }, 1000);
 
-    console.log('Newsletter subscription:', email);
-});
+//     console.log('Newsletter subscription:', email);
+// });
 
 // Smooth scrolling for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -777,15 +777,18 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Mega Dropdown Enhancement - Click Only
+// Mega Dropdown Enhancement - Click and Hover
 document.addEventListener('DOMContentLoaded', function () {
     const megaDropdown = document.querySelector('.mega-dropdown');
     const megaDropdownMenu = document.querySelector('.mega-dropdown-menu');
     const categoriesDropdown = document.getElementById('categoriesDropdown');
 
     if (megaDropdown && megaDropdownMenu && categoriesDropdown) {
+        let hoverTimeout;
+
         // Function to show dropdown
         function showDropdown() {
+            clearTimeout(hoverTimeout);
             categoriesDropdown.classList.add('show');
             categoriesDropdown.setAttribute('aria-expanded', 'true');
             megaDropdownMenu.classList.add('show');
@@ -798,8 +801,18 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        // Function to hide dropdown
-        function hideDropdown() {
+        // Function to hide dropdown with delay
+        function hideDropdown(immediate = false) {
+            if (immediate) {
+                clearTimeout(hoverTimeout);
+                hideDropdownNow();
+            } else {
+                hoverTimeout = setTimeout(hideDropdownNow, 150);
+            }
+        }
+
+        // Function to immediately hide dropdown
+        function hideDropdownNow() {
             categoriesDropdown.classList.remove('show');
             categoriesDropdown.setAttribute('aria-expanded', 'false');
             megaDropdownMenu.classList.remove('show');
@@ -812,7 +825,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        // Click Toggle Behavior Only
+        // Click Toggle Behavior
         categoriesDropdown.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
@@ -820,7 +833,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // Simple toggle logic
             if (categoriesDropdown.classList.contains('show') || megaDropdownMenu.classList.contains('show')) {
                 // Currently open - close it
-                hideDropdown();
+                hideDropdown(true);
                 console.log('Dropdown closed by click');
             } else {
                 // Currently closed - open it
@@ -829,10 +842,30 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+        // Hover Behavior
+        megaDropdown.addEventListener('mouseenter', function () {
+            showDropdown();
+            console.log('Dropdown opened by hover');
+        });
+
+        megaDropdown.addEventListener('mouseleave', function () {
+            hideDropdown();
+            console.log('Dropdown hiding by hover leave');
+        });
+
+        // Keep dropdown open when hovering over the menu
+        megaDropdownMenu.addEventListener('mouseenter', function () {
+            clearTimeout(hoverTimeout);
+        });
+
+        megaDropdownMenu.addEventListener('mouseleave', function () {
+            hideDropdown();
+        });
+
         // Close on outside click
         document.addEventListener('click', function (e) {
             if (!megaDropdown.contains(e.target)) {
-                hideDropdown();
+                hideDropdown(true);
             }
         });
 

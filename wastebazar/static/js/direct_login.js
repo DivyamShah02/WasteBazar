@@ -232,6 +232,7 @@ class DirectLoginHandler {
                     const userId = result.data.user_id;
                     const userRole = result.data.user_role;
                     const userDetailsExist = result.data.user_details;
+                    const loggedin = 'true';
 
                     console.log('✅ OTP verified successfully');
                     console.log('👤 User ID:', userId);
@@ -242,6 +243,13 @@ class DirectLoginHandler {
                     localStorage.setItem('user_id', userId);
                     localStorage.setItem('user_role', userRole);
                     localStorage.setItem('login_timestamp', new Date().toISOString());
+                    localStorage.setItem('is_logged_in', loggedin);
+
+                    // Debug: Confirm values are stored
+                    console.log('✅ Stored in localStorage:');
+                    console.log('  - user_id:', localStorage.getItem('user_id'));
+                    console.log('  - user_role:', localStorage.getItem('user_role'));
+                    console.log('  - is_logged_in:', localStorage.getItem('is_logged_in'));
 
                     if (userDetailsExist) {
                         // User has completed profile, redirect based on role
