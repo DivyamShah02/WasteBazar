@@ -10,11 +10,12 @@ router.register(r'listing-detail', ListingDetailViewSet, basename='listing_detai
 router.register(r'register', LoginViewSet, basename='login')
 router.register(r'buyer-profile', BuyerProfileViewSet, basename='buyer_profile')
 router.register(r'seller-profile', SellerProfileViewSet, basename='seller_profile')
+router.register(r'profile', ProfilePageViewSet, basename='profile')
 router.register(r'directlogin', directloginViewSet, basename='directlogin')
 router.register(r'listing-form', ListingFormViewSet, basename='listing_form')
 router.register(r'listing-edit', ListingEditViewSet, basename='listing_edit')
 router.register(r'requirement-form', RequirementFormViewSet, basename='requirement_form')
-router.register(r'dashboard', DashboardViewSet, basename='dashboard')
+router.register(r'admin-dashboard', AdminDashboardViewSet, basename='dashboard')
 
 
 urlpatterns = [

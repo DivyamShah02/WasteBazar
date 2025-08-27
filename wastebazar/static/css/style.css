@@ -226,6 +226,10 @@ body {
     line-height: 1.4;
 }
 
+#navbarNav {
+    justify-content: end;
+}
+
 .mega-dropdown-footer {
     /* margin-top: 2rem; */
     padding-top: 1.5rem;
@@ -456,6 +460,28 @@ body {
     font-size: 0.95rem;
 }
 
+/* Navbar centering for medium and large screens */
+@media (min-width: 992px) {
+    .navbar-nav.mx-auto {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .navbar .container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    /* Position auth section at the right end */
+    #auth-section {
+        margin-left: auto;
+        position: relative;
+        z-index: 10;
+    }
+}
 
 .nav-link:hover {
     color: var(--primary-color) !important;

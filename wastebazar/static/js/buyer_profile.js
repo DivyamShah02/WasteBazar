@@ -97,7 +97,6 @@ async function loadBuyerProfile() {
         if (success && response.success) {
             buyerData = response.data;
             console.log('✅ Buyer profile loaded:', buyerData);
-
             // Render profile data
             renderProfileData();
 

@@ -943,15 +943,36 @@ function loadListings() {
   const endIndex = startIndex + itemsPerPage
   const pageListings = currentListings.slice(startIndex, endIndex)
 
-  // Show loading state
-  container.innerHTML = createLoadingSkeletons()
+  // CTA banner to add at the top of listings container
+  const cta = `<div class="cta-banner col-12">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-8 col-md-7">
+            <h3 style="color: white; margin: 0; font-weight: 600; font-size: 1.5rem;">
+              Not finding what you need?
+            </h3>
+            <p style="color: rgba(255,255,255,0.9); margin: 5px 0 0 0; font-size: 1rem;">
+              Click the button to list a required material
+            </p>
+          </div>
+          <div class="col-lg-4 col-md-5 text-end">
+            <a href="/requirement-form/" class="btn" style="background: white; color: #1577ffff; font-weight: 600; padding: 12px 30px; border-radius: 8px; text-decoration: none; border: none; font-size: 1rem; transition: all 0.3s ease;">
+              LIST REQUIRED MATERIAL
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>`
+
+  // Show loading state with CTA banner
+  container.innerHTML = cta + createLoadingSkeletons()
 
   // Simulate loading delay
   setTimeout(() => {
     if (pageListings.length === 0) {
-      container.innerHTML = createNoResultsMessage()
+      container.innerHTML = cta + createNoResultsMessage()
     } else {
-      container.innerHTML = pageListings.map((listing) => createListingCard(listing)).join("")
+      container.innerHTML = cta + pageListings.map((listing) => createListingCard(listing)).join("")
     }
 
     updateResultsInfo()
@@ -1204,10 +1225,13 @@ function viewListingDetails(listingId) {
 function closeAd(adId) {
   const adElement = document.getElementById(adId)
   if (adElement) {
-    adElement.style.transform = "translateX(-100%)"
-    adElement.style.opacity = "0"
+    // adElement.style.transform = "translateX(-100%)"
+    // adElement.style.opacity = 
+    // "0"
     setTimeout(() => {
+      adElement.style.removeProperty("display")
       adElement.style.display = "none"
+
     }, 300)
   }
 

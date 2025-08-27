@@ -201,8 +201,7 @@ class UserDetailViewSet(viewsets.ViewSet):
                 email = request.data.get('email')
 
                 is_approved = False
-                if role == "seller_corporate":
-                    is_approved = True 
+                
 
 
                 # Save corporate details

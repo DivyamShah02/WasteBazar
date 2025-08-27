@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 
 from django.utils import timezone
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from utils.decorators import handle_exceptions, check_authentication
 
@@ -107,9 +107,36 @@ class RequirementFormViewSet(viewsets.ViewSet):
         }
         return render(request, "requirement_form.html", context)
 
-class DashboardViewSet(viewsets.ViewSet):
 
-    def list(self, request):
+class ProfilePageViewSet(viewsets.ViewSet):
+
+    @handle_exceptions
+    def retrieve(self, request, pk=None):
+        """Redirect user to appropriate profile page based on their role"""
+        user_role = pk  # pk contains the user role
+        
+        # Redirect based on user role
+        if user_role in ['buyer_individual', 'buyer_corporate']:
+            # Redirect buyers to buyer profile page
+            return redirect('/buyer-profile/')
+        elif user_role in ['seller_individual', 'seller_corporate']:
+            # Redirect sellers to seller profile page
+            return redirect('/seller-profile/')
+        elif user_role == 'admin':
+            # Redirect admin to admin dashboard
+            return redirect('/admin-dashboard/')
+        else:
+            # Fallback for unknown roles - render generic profile page
+            context = {
+                'user_role': user_role,
+                'error': 'Unknown user role'
+            }
+            return render(request, "profile.html", context)
+
+
+class AdminDashboardViewSet(viewsets.ViewSet):
+
+    def retrive(self, request):
         """Render the admin dashboard"""
         return render(request, "dashboard.html")
     

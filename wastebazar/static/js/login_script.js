@@ -214,24 +214,55 @@ function setupUserDetailsForm() {
 
 // Add form validation function
 function validateUserDetailsForm() {
-    const requiredFields = document.querySelectorAll('#userDetailsForm input[required], #userDetailsForm textarea[required]')
-    let isValid = true
+    if (selectedType === "corporate") {
+        // For corporate users, only validate contact name and email
+        const contactName = document.getElementById('contactName')
+        const corporateEmail = document.getElementById('corporateEmail')
 
-    requiredFields.forEach(field => {
-        // Only validate visible fields
-        if (field.offsetParent !== null && field.value.trim() === '') {
-            field.classList.add('is-invalid')
+        let isValid = true
+
+        // Validate contact name
+        if (!contactName || contactName.value.trim() === '') {
+            if (contactName) contactName.classList.add('is-invalid')
             isValid = false
         } else {
-            field.classList.remove('is-invalid')
+            if (contactName) contactName.classList.remove('is-invalid')
         }
-    })
 
-    if (!isValid) {
-        showError("Please fill in all required fields")
+        // Validate email
+        if (!corporateEmail || corporateEmail.value.trim() === '' ||
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(corporateEmail.value.trim())) {
+            if (corporateEmail) corporateEmail.classList.add('is-invalid')
+            isValid = false
+        } else {
+            if (corporateEmail) corporateEmail.classList.remove('is-invalid')
+        }
+
+        if (!isValid) {
+            showError("Please fill in contact name and valid email address")
+        }
+
+        return isValid
+    } else {
+        // For individual users, validate all required fields
+        const requiredFields = document.querySelectorAll('#individualFields input[required]')
+        let isValid = true
+
+        requiredFields.forEach(field => {
+            if (field.offsetParent !== null && field.value.trim() === '') {
+                field.classList.add('is-invalid')
+                isValid = false
+            } else {
+                field.classList.remove('is-invalid')
+            }
+        })
+
+        if (!isValid) {
+            showError("Please fill in all required fields")
+        }
+
+        return isValid
     }
-
-    return isValid
 }
 
 // Navigation buttons
@@ -316,17 +347,67 @@ function setupUserDetailsFields() {
             field.removeAttribute('required')
         })
 
-        // Add required attribute to corporate fields
+        // For corporate users, only contact name and email are required
         corporateFields.querySelectorAll('input, textarea').forEach(field => {
-            // certificateUrl is optional; PAN/CIN handled by toggle logic
-            if (field.id !== 'corporatepanNumber' && field.id !== 'cinNumber') {
-                field.setAttribute('required', 'required')
-            }
+            field.removeAttribute('required')
         })
+
+        // Add required attribute only to contact name and email
+        const contactName = document.getElementById('contactName')
+        const corporateEmail = document.getElementById('corporateEmail')
+        if (contactName) contactName.setAttribute('required', 'required')
+        if (corporateEmail) corporateEmail.setAttribute('required', 'required')
 
         // Initialize PAN/CIN selector
         setupCorporateIdSelector()
+
+        // Setup real-time validation for corporate form
+        setupCorporateFormValidation()
     }
+}
+
+// Setup real-time validation for corporate form
+function setupCorporateFormValidation() {
+    const contactName = document.getElementById('contactName')
+    const corporateEmail = document.getElementById('corporateEmail')
+    const submitBtn = document.querySelector('#userDetailsForm button[type="submit"]')
+
+    function validateCorporateForm() {
+        const nameValid = contactName && contactName.value.trim().length > 0
+        const emailValid = corporateEmail && corporateEmail.value.trim().length > 0 &&
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(corporateEmail.value.trim())
+
+        const isValid = nameValid && emailValid
+
+        if (submitBtn) {
+            submitBtn.disabled = !isValid
+
+            // Visual feedback
+            if (isValid) {
+                submitBtn.style.opacity = '1'
+                submitBtn.style.cursor = 'pointer'
+            } else {
+                submitBtn.style.opacity = '0.6'
+                submitBtn.style.cursor = 'not-allowed'
+            }
+        }
+
+        return isValid
+    }
+
+    // Add event listeners for real-time validation
+    if (contactName) {
+        contactName.addEventListener('input', validateCorporateForm)
+        contactName.addEventListener('blur', validateCorporateForm)
+    }
+
+    if (corporateEmail) {
+        corporateEmail.addEventListener('input', validateCorporateForm)
+        corporateEmail.addEventListener('blur', validateCorporateForm)
+    }
+
+    // Initial validation
+    validateCorporateForm()
 }
 
 // PAN/CIN selector for corporate users (dropdown based)
@@ -455,6 +536,9 @@ async function verifyOtp(otp) {
                 if (result.data.user_details) {
                     // User details already filled, redirect to appropriate profile
                     const userRole = result.data.user_role || selectedRole;
+                    const is_approved = result.data.is_approved;
+                    const profile_complete = result.data.profile_completed;
+                    const loggedin = 'true';
 
                     const redirectUrl = getRedirectUrl(userRole);
 
@@ -464,6 +548,9 @@ async function verifyOtp(otp) {
                     localStorage.setItem('user_id', userId);
                     localStorage.setItem('user_role', userRole);
                     localStorage.setItem('login_timestamp', new Date().toISOString());
+                    localStorage.setItem('is_logged_in', loggedin);
+                    localStorage.setItem('is_approved', is_approved);
+                    localStorage.setItem('profile_complete', profile_complete);
 
                     setTimeout(() => {
                         window.location.href = redirectUrl
@@ -529,17 +616,13 @@ async function submitUserDetails() {
             formData = {
                 name: document.getElementById("contactName").value.trim(),
                 email: document.getElementById("corporateEmail").value.trim(),
-                company_name: document.getElementById("companyName").value.trim(),
-                // pan_number: panVal,
-                // cin_number: cinVal,
-                // aadhar_number: document.getElementById("aadharNumber").value.trim(),
-                // gst_number: document.getElementById("gstNumber").value.trim(),
-                addressline1: document.getElementById("companyAddressLine1").value.trim(),
-                addressline2: document.getElementById("companyAddressLine2").value.trim(),
-                city: document.getElementById("companyCity").value.trim(),
-                state: document.getElementById("companyState").value.trim(),
-                address_pincode: document.getElementById("companyPincode").value.trim(),
-                // certificate_url: document.getElementById("certificateUrl").value.trim(),
+                // Only include company details if they are filled
+                company_name: document.getElementById("companyName")?.value.trim() || '',
+                addressline1: document.getElementById("companyAddressLine1")?.value.trim() || '',
+                addressline2: document.getElementById("companyAddressLine2")?.value.trim() || '',
+                city: document.getElementById("companyCity")?.value.trim() || '',
+                state: document.getElementById("companyState")?.value.trim() || '',
+                address_pincode: document.getElementById("companyPincode")?.value.trim() || '',
             }
         }
 
@@ -558,6 +641,9 @@ async function submitUserDetails() {
                 localStorage.setItem('user_id', userId);
                 localStorage.setItem('user_role', selectedRole);
                 localStorage.setItem('login_timestamp', new Date().toISOString());
+                localStorage.setItem('is_logged_in', 'true');
+                localStorage.setItem('is_approved', 'false'); // Corporate buyer needs approval
+                localStorage.setItem('profile_complete', 'true');
 
             } else {
                 // Redirect to appropriate profile based on role
@@ -567,6 +653,9 @@ async function submitUserDetails() {
                 localStorage.setItem('user_id', userId);
                 localStorage.setItem('user_role', selectedRole);
                 localStorage.setItem('login_timestamp', new Date().toISOString());
+                localStorage.setItem('is_logged_in', 'true');
+                localStorage.setItem('is_approved', 'true'); // Other users are auto-approved
+                localStorage.setItem('profile_complete', 'true');
 
                 setTimeout(() => {
                     window.location.href = redirectUrl

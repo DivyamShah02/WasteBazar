@@ -15,6 +15,7 @@ router.register(r'all-buyer-requirements', AllBuyerRequirementsViewset, basename
 router.register(r'categories', CategoriesViewSet, basename='categories')
 
 
+
 urlpatterns = [
     path('', include(router.urls)),
 ]

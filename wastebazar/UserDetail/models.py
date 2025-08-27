@@ -47,6 +47,7 @@ class User(AbstractUser):
     state = models.CharField(max_length=100, blank=True, null=True)
     address_pincode = models.CharField(max_length=10, blank=True, null=True)
     is_approved = models.BooleanField(default=False)
+    profile_completed = models.BooleanField(default=False)
     is_deleted = models.BooleanField(default=False)
 
     # Override save to assign user_id automatically
@@ -57,8 +58,8 @@ class User(AbstractUser):
             self.username = new_user_id
 
         # if self.role in ['buyer_corporate', 'seller_corporate']:
-        if self.role != 'buyer_corporate':
-            self.is_approved = True
+        # if self.role != 'buyer_corporate':
+        #     self.is_approved = True
 
         super().save(*args, **kwargs)
 

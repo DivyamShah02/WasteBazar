@@ -1,0 +1,157 @@
+<!-- Status Bar Component -->
+<div id="statusbar" class="alert alert-dismissible mb-0 text-center" style="display: none;">
+    <div class="w-100">
+        <div class="row align-items-center">
+            <div class="col-12">
+                <i id="statusbar-icon" class="fas fa-exclamation-circle me-2"></i>
+                <span id="statusbar-message">Complete your account</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #statusbar {
+        position: fixed;
+        top: 90px; /* Account for navbar height */
+        left: 0;
+        right: 0;
+        z-index: 500; /* Much lower to ensure all dropdowns appear above */
+        border-radius: 0;
+        border: none;
+        font-weight: 500;
+        padding: 12px 0;
+        margin: 0;
+        width: 100%;
+    }
+
+    /* Complete Account Status - Red */
+    #statusbar.alert-danger {
+        background-color: #dc5860;
+        color: white;
+    }
+
+    /* Account Being Verified Status - Orange */
+    #statusbar.alert-warning {
+        background-color: #ff9500;
+        color: white;
+    }
+
+    #statusbar .container {
+        max-width: 100%;
+    }
+
+    #statusbar-icon {
+        font-size: 16px;
+    }
+
+    #statusbar-message {
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        #statusbar {
+            padding: 10px 0;
+        }
+        
+        #statusbar-icon,
+        #statusbar-message {
+            font-size: 14px;
+        }
+    }
+
+    /* Ensure all dropdown menus appear above status bar */
+    .dropdown-menu,
+    .mega-dropdown-menu,
+    .navbar .dropdown-menu {
+        z-index: 1500 !important;
+    }
+
+    /* Ensure navbar itself has high z-index */
+    .navbar {
+        z-index: 1000 !important;
+    }
+</style>
+
+<script>
+    class StatusBarHandler {
+        constructor() {
+            this.statusbar = document.getElementById('statusbar');
+            this.statusbarIcon = document.getElementById('statusbar-icon');
+            this.statusbarMessage = document.getElementById('statusbar-message');
+            
+            this.init();
+        }
+
+        init() {
+            // Check status on page load
+            this.updateStatusBar();
+            
+            // Listen for storage changes (when localStorage is updated from other tabs/windows)
+            window.addEventListener('storage', () => {
+                this.updateStatusBar();
+            });
+
+            // Also check periodically in case localStorage changes in same tab
+            setInterval(() => {
+                this.updateStatusBar();
+            }, 1000);
+        }
+
+        updateStatusBar() {
+            const isLoggedIn = localStorage.getItem('is_logged_in') === 'true';
+            const isApproved = localStorage.getItem('is_approved') === 'true';
+            const profileComplete = localStorage.getItem('profile_complete') === 'true';
+            
+            // Hide status bar if user is not logged in
+            if (!isLoggedIn) {
+                this.hideStatusBar();
+                return;
+            }
+
+            // If logged in but profile not complete
+            if (isLoggedIn && !profileComplete) {
+                this.showCompleteAccountStatus();
+                
+                return;
+            }
+
+            // If logged in, profile complete but not approved
+            if (isLoggedIn && profileComplete && !isApproved) {
+                this.showVerificationStatus();
+                return;
+            }
+
+            // If all conditions are true (logged in, profile complete, approved)
+            if (isLoggedIn && profileComplete && isApproved) {
+                this.hideStatusBar();
+                return;
+            }
+        }
+
+        showCompleteAccountStatus() {
+            this.statusbar.className = 'alert alert-danger alert-dismissible mb-0 text-center';
+            this.statusbarIcon.className = 'fas fa-exclamation-circle me-2';
+            this.statusbarMessage.textContent = 'COMPLETE YOUR ACCOUNT';
+            this.statusbar.style.display = 'block';
+        }
+
+        showVerificationStatus() {
+            this.statusbar.className = 'alert alert-warning alert-dismissible mb-0 text-center';
+            this.statusbarIcon.className = 'fas fa-clock me-2';
+            this.statusbarMessage.textContent = 'YOUR ACCOUNT IS BEING VERIFIED';
+            this.statusbar.style.display = 'block';
+        }
+
+        hideStatusBar() {
+            this.statusbar.style.display = 'none';
+        }
+    }
+
+    // Initialize status bar when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        new StatusBarHandler();
+    });
+</script>
