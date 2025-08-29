@@ -136,7 +136,7 @@ class ProfilePageViewSet(viewsets.ViewSet):
 
 class AdminDashboardViewSet(viewsets.ViewSet):
 
-    def retrive(self, request):
+    def list(self, request):
         """Render the admin dashboard"""
         return render(request, "dashboard.html")
     

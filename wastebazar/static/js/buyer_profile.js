@@ -1910,7 +1910,7 @@ function updateProfileCompletion(userDetails, corporateDetails) {
         }
 
         // Change progress bar color based on completion
-        progressBar.className = 'progress-bar progress-bar-striped ';
+        progressBar.className = 'progress-bar ';
         if (percentage < 30) {
             progressBar.classList.add('bg-danger');
         } else if (percentage < 70) {

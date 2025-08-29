@@ -19,36 +19,14 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="/">WasteBazar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="/marketplace">Marketplace</a>
-                    </li>
-                   
-                </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/seller-profile">Dashboard</a>
-                    </li>
-                    
-                </ul>
-            </div>
-        </div>
-    </nav>
+    {%include 'navbar.html' %}
 
     <!-- Include Status Bar -->
     {% include 'statusbar.html' %}
 
     <div class="form-container" style="margin-top: 100px;">
         <div class="container" style="max-width: 900px;">
-            <div class="form-card">
+            <div class="form-card mt-2">
                 <!-- Success Message -->
                 <div id="successMessage" class="success-message" style="display: none;">
                     <i class="fas fa-check-circle"></i>

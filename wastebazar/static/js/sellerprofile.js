@@ -178,6 +178,8 @@ function renderProfileData() {
 
     const userDetails = seller_data.user_details;
     const corporateDetails = seller_data.corporate_details;
+    localStorage.setItem('is_approved', userDetails.is_approved);
+    localStorage.setItem('profile_complete', userDetails.profile_completed);
     // const walletDetails = seller_data.wallet_details;
 
     // Update profile header
@@ -208,6 +210,7 @@ function updateProfileHeader(userDetails, corporateDetails) {
     const sellerPhoneEl = document.getElementById('sellerPhone');
     const sellerAddressEl = document.getElementById('sellerAddress');
 
+
     const isIndividual = userDetails.role === 'seller_individual';
     const displayName = userDetails.name || 'Seller';
     const companyName = corporateDetails && corporateDetails.company_name ? corporateDetails.company_name : '';
@@ -232,7 +235,7 @@ function updateProfileHeader(userDetails, corporateDetails) {
     }
 
     if (verificationBadgeEl) {
-        if (corporateDetails && corporateDetails.is_approved) {
+        if (userDetails && userDetails.is_approved) {
             verificationBadgeEl.innerHTML = '<i class="fas fa-check-circle me-1"></i>Verified';
             verificationBadgeEl.style.display = 'inline-block';
         } else {
@@ -1011,6 +1014,7 @@ window.cancelListing = async function (listingId) {
             'PUT',
             `/marketplace-api/seller-listings/${listingId}/`,
             {
+
                 user_id: current_user_id,
                 status: 'deleted'
             },
@@ -1295,6 +1299,10 @@ async function saveProfile() {
 
             // Refresh profile data
             await loadSellerProfile();
+
+            // Check if profile is now complete and update localStorage
+            checkAndUpdateProfileCompletion();
+
         } else {
             console.error('❌ Failed to update profile:', response.error);
             showError(response.error || 'Failed to update profile');
@@ -1362,6 +1370,10 @@ async function saveCompanyInfo() {
 
             // Refresh profile data
             await loadSellerProfile();
+
+            // Check if profile is now complete and update localStorage
+            checkAndUpdateProfileCompletion();
+
         } else {
             console.error('❌ Failed to update company info:', response.error);
             showError(response.error || 'Failed to update company information');
@@ -1733,15 +1745,64 @@ function updateProfileCompletion(userDetails, corporateDetails) {
         if (completionPercentage < 30) {
             progressBar.classList.add('bg-danger');
         } else if (completionPercentage < 70) {
-            progressBar.classList.add('bg-warning');
+            // progressBar.classList.add('bg-warning');
         } else {
             progressBar.classList.add('bg-success');
         }
     } else {
         completionCard.style.display = 'none';
+        localStorage.setItem('profile_complete', 'true');
+        localStorage.setItem('is_approved', 'false'); // Set to false when profile is complete but not yet approved
+
+        console.log('✅ Profile complete - awaiting approval');
     }
 
     console.log(`✅ Profile completion updated: ${completionPercentage}%`);
+}
+
+/**
+ * Check and update profile completion status in localStorage
+ */
+function checkAndUpdateProfileCompletion() {
+    try {
+        // Get current user data
+        const userDetails = seller_data?.user_details;
+        const corporateDetails = seller_data?.corporate_details;
+
+        if (!userDetails) {
+            console.log('⚠️ No user details available for profile completion check');
+            return;
+        }
+
+        // Calculate current completion percentage
+        const completionPercentage = calculateProfileCompletion(userDetails, corporateDetails);
+
+        console.log(`🔍 Profile completion check: ${completionPercentage}%`);
+
+        if (completionPercentage >= 100) {
+
+            // Profile is complete
+            localStorage.setItem('profile_complete', 'true');
+            localStorage.setItem('is_approved', 'false'); // Set to false - awaiting approval
+            console.log('✅ Profile complete - localStorage updated (profile_complete: true, is_approved: false)');
+
+            // Show success message about profile completion
+            showSuccess('Profile completed! Your account is now under review for approval.');
+
+            // Refresh the page after a short delay to update the status bar
+            setTimeout(() => {
+                console.log('🔄 Refreshing page to update status bar...');
+                window.location.reload();
+            }, 2000); // 2 second delay to allow user to see the success message
+
+        } else {
+            // Profile is not complete
+            localStorage.setItem('profile_complete', 'false');
+            console.log(`📝 Profile incomplete (${completionPercentage}%) - localStorage updated (profile_complete: false)`);
+        }
+    } catch (error) {
+        console.error('❌ Error checking profile completion:', error);
+    }
 }
 
 /**

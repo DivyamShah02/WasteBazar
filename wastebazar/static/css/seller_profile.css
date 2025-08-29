@@ -1150,12 +1150,15 @@
 
 /* Profile Completion Styles */
 .profile-completion-card {
-    background: var(--gradient-primary);
+
+    /* background-color: rgba(102, 126, 234, 1.0); */
+    /* width: 1400px; */
+
     border-radius: 16px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
+    padding-inline: 10%;
+    /* margin-bottom: 2rem; */
     color: white;
-    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
+    /* box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2); */
     position: relative;
     overflow: hidden;
 }
@@ -1170,7 +1173,8 @@
 }
 
 .completion-info {
-    flex: 1;
+    /* flex: 1; */
+    width: 100%;
 }
 
 .completion-title {
@@ -1201,7 +1205,7 @@
 }
 
 .progress-container-profile .progress-bar {
-    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    background-color: #e6c94a;
     transition: width 0.6s ease;
 }
 
@@ -1218,6 +1222,7 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
     font-weight: 500;
+    width: max-content;
     padding: 0.75rem 1.5rem;
     border-radius: 12px;
     transition: all 0.3s ease;
@@ -1240,19 +1245,19 @@
 /* Responsive adjustments for profile completion */
 @media (max-width: 768px) {
     .profile-completion-card {
-        padding: 1.25rem;
+        /* padding: 1.25rem; */
         margin-bottom: 1.5rem;
     }
 
     .completion-content {
         flex-direction: column;
-        gap: 1.5rem;
+        gap: .5rem;
         text-align: center;
     }
 
     .progress-container-profile {
         width: 100%;
-        flex-direction: column;
+        flex-direction: row;
         gap: 0.75rem;
     }
 

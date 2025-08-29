@@ -39,16 +39,7 @@
 
                                 </div>
                                 
-                                <!-- Bottom Call-to-Action -->
-                                <div class="mega-dropdown-footer">
-                                    <div class="row">
-                                        <div class="col-12 text-center">
-                                            <a href="/marketplace/" class="btn btn-outline-primary btn-sm">
-                                                <i class="fas fa-eye me-1"></i>Browse All Categories
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                     </li>
@@ -122,17 +113,20 @@
     </div>
         
 <!-- Include Status Bar -->
-{% include 'statusbar.html' %}
+
 </nav>
+    {% include 'statusbar.html' %}
 
 
 <!-- Navbar Authentication Script -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const isLoggedIn = localStorage.getItem('is_logged_in') === 'true';
-        const userId = localStorage.getItem('user_id');
-        const userRole = localStorage.getItem('user_role');
-        const userName = localStorage.getItem('user_name');
+        // Add 500ms delay to ensure all elements are loaded
+        setTimeout(function() {
+            const isLoggedIn = localStorage.getItem('is_logged_in') === 'true';
+            const userId = localStorage.getItem('user_id');
+            const userRole = localStorage.getItem('user_role');
+            const userName = localStorage.getItem('user_name');
         
         const loginButtons = document.getElementById('login-buttons');
         const userDropdown = document.getElementById('user-dropdown');
@@ -192,7 +186,7 @@
             
             // Set profile link based on user role
             if (userRole && profileLink) {
-                profileLink.href = '/profile/' + userRole;
+                profileLink.href = '/'+userRole+'-profile/';
             }
             
             // Handle logout
@@ -200,20 +194,28 @@
                 logoutLink.addEventListener('click', function(e) {
                     e.preventDefault();
                     
-                    // Clear localStorage
-                    localStorage.removeItem('is_logged_in');
-                    localStorage.removeItem('user_id');
-                    localStorage.removeItem('user_role');
-                    localStorage.removeItem('user_name');
-                    localStorage.removeItem('login_timestamp');
-                    localStorage.removeItem('is_approved');
-                    localStorage.removeItem('profile_complete');
-                    
-                    // Show success message
-                    console.log('✅ User logged out successfully');
-                    
-                    // Reload page to show login buttons
-                    window.location.reload();
+                    // Use the global logout function if available (from sellerprofile.js)
+                    if (typeof window.logout === 'function') {
+                        window.logout();
+                    } else {
+                        // Fallback logout implementation
+                        if (confirm('Are you sure you want to logout?')) {
+                            // Clear localStorage
+                            localStorage.removeItem('is_logged_in');
+                            localStorage.removeItem('user_id');
+                            localStorage.removeItem('user_role');
+                            localStorage.removeItem('user_name');
+                            localStorage.removeItem('login_timestamp');
+                            localStorage.removeItem('is_approved');
+                            localStorage.removeItem('profile_complete');
+                            
+                            // Show success message
+                            console.log('✅ User logged out successfully');
+                            
+                            // Reload page to show login buttons
+                            window.location.reload();
+                        }
+                    }
                 });
             }
         } else {
@@ -223,5 +225,6 @@
             if (guestNavItems) guestNavItems.style.display = 'flex';
             if (userNavItems) userNavItems.style.display = 'none';
         }
+        }, 500); // 500ms delay
     });
 </script>

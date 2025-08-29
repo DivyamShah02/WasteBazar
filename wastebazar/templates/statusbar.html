@@ -7,16 +7,43 @@
                 <span id="statusbar-message">Complete your account</span>
             </div>
         </div>
+        <!-- Profile Completion Status -->
+            <div class="profile-completion-card m-auto" id="profileCompletionCard" style="display: none;">
+                <div class="completion-content">
+                    <div class="completion-info">
+                        {% comment %} <h6 class="completion-title profile-completion-title">Complete Your Profile</h6>
+                        <p class="completion-text profile-completion-text">Complete your profile to get better recommendations</p> {% endcomment %}
+                        <div class="progress-container-profile">
+                            <div class="progress">
+                                <div class="progress-bar  " 
+                                     role="progressbar" 
+                                     id="profileProgressBar" 
+                                     style="width: 0%" 
+                                     aria-valuenow="0" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                </div>
+                            </div>
+                            <span class="progress-percentage" id="profileProgressText">0%</span>
+                        </div>
+                    </div>
+                    <div class="completion-action">
+                        <button type="button" class="btn btn-primary btn-sm" onclick="completeProfile()">
+                            <i class="fas fa-user-edit me-2"></i>Complete Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
     </div>
 </div>
-
+<script src="/static/js/seller_profile.js"></script>
 <style>
     #statusbar {
-        position: fixed;
-        top: 90px; /* Account for navbar height */
+        
+        top:90px;
         left: 0;
         right: 0;
-        z-index: 500; /* Much lower to ensure all dropdowns appear above */
+       /* Much lower to ensure all dropdowns appear above */
         border-radius: 0;
         border: none;
         font-weight: 500;
@@ -60,6 +87,21 @@
         #statusbar-message {
             font-size: 14px;
         }
+        
+        /* Mobile width adjustments for progress elements */
+        .progress-container-profile {
+            max-width: 90% !important;
+            margin: 0 auto !important;
+        }
+        
+        .progress-container-profile .progress {
+            width: 100% !important;
+        }
+        
+        .profile-completion-card {
+            max-width: 95% !important;
+            margin: 0 auto !important;
+        }
     }
 
     /* Ensure all dropdown menus appear above status bar */
@@ -78,6 +120,7 @@
 <script>
     class StatusBarHandler {
         constructor() {
+            console.log('🚀 StatusBarHandler constructor called');
             this.statusbar = document.getElementById('statusbar');
             this.statusbarIcon = document.getElementById('statusbar-icon');
             this.statusbarMessage = document.getElementById('statusbar-message');
@@ -95,16 +138,20 @@
             });
 
             // Also check periodically in case localStorage changes in same tab
-            setInterval(() => {
-                this.updateStatusBar();
-            }, 1000);
+            
         }
 
         updateStatusBar() {
+            console.log('🔍 StatusBar updateStatusBar() method called');
             const isLoggedIn = localStorage.getItem('is_logged_in') === 'true';
             const isApproved = localStorage.getItem('is_approved') === 'true';
             const profileComplete = localStorage.getItem('profile_complete') === 'true';
-            
+            console.log('📊 Status Bar Update:', { isLoggedIn, isApproved, profileComplete });
+            console.log('📊 Raw localStorage values:', {
+                is_logged_in: localStorage.getItem('is_logged_in'),
+                is_approved: localStorage.getItem('is_approved'),
+                profile_complete: localStorage.getItem('profile_complete')
+            });
             // Hide status bar if user is not logged in
             if (!isLoggedIn) {
                 this.hideStatusBar();
@@ -152,6 +199,10 @@
 
     // Initialize status bar when DOM is loaded
     document.addEventListener('DOMContentLoaded', function() {
-        new StatusBarHandler();
+        console.log('🎯 StatusBar DOMContentLoaded event fired - initializing StatusBarHandler');
+        // Add 500ms delay to ensure all elements are loaded
+        setTimeout(function() {
+            new StatusBarHandler();
+        }, 500);
     });
 </script>

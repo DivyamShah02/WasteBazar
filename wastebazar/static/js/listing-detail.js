@@ -742,8 +742,155 @@ function openImageModal(imageUrl) {
 }
 
 function openContactModal() {
-  const contactModal = new bootstrap.Modal(document.getElementById('contactModal'));
-  contactModal.show();
+  // Check if user is logged in
+  const isLoggedIn = localStorage.getItem('is_logged_in') === 'true';
+
+  if (!isLoggedIn) {
+    // Show login modal if not logged in
+    const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+    loginModal.show();
+
+    // Setup login modal functionality
+    setupLoginModal();
+  } else {
+    // Show contact modal if logged in
+    const contactModal = new bootstrap.Modal(document.getElementById('contactModal'));
+    contactModal.show();
+  }
+}
+
+function setupLoginModal() {
+  const sendOtpBtn = document.getElementById('sendOtpBtn');
+  const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+  const loginMobile = document.getElementById('loginMobile');
+  const loginOtp = document.getElementById('loginOtp');
+  const otpSection = document.getElementById('otpSection');
+  const otpMobileDisplay = document.getElementById('otpMobileDisplay');
+
+  // Get CSRF token
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  // Send OTP functionality
+  sendOtpBtn.addEventListener('click', async function () {
+    const mobileNumber = loginMobile.value.trim();
+
+    if (!mobileNumber || mobileNumber.length !== 10) {
+      showToast('Please enter a valid 10-digit mobile number', 'error');
+      return;
+    }
+
+    // Show loading state
+    sendOtpBtn.disabled = true;
+    sendOtpBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Sending OTP...';
+
+    try {
+      // Call OTP API
+      const [success, response] = await callApi('POST', '/user-api/send-otp/', {
+        contact_number: mobileNumber
+      }, csrfToken);
+
+      if (success && response.success) {
+        // Show OTP section
+        otpSection.style.display = 'block';
+        otpMobileDisplay.textContent = mobileNumber;
+        sendOtpBtn.style.display = 'none';
+        verifyOtpBtn.style.display = 'block';
+        loginMobile.disabled = true;
+
+        showToast('OTP sent successfully!', 'success');
+
+        // Focus on OTP input
+        setTimeout(() => {
+          loginOtp.focus();
+        }, 500);
+
+      } else {
+        throw new Error(response.error || 'Failed to send OTP');
+      }
+    } catch (error) {
+      console.error('Error sending OTP:', error);
+      showToast('Failed to send OTP. Please try again.', 'error');
+
+      // Reset button state
+      sendOtpBtn.disabled = false;
+      sendOtpBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Send OTP';
+    }
+  });
+
+  // Verify OTP functionality
+  verifyOtpBtn.addEventListener('click', async function () {
+    const mobileNumber = loginMobile.value.trim();
+    const otpCode = loginOtp.value.trim();
+
+    if (!otpCode || otpCode.length !== 6) {
+      showToast('Please enter a valid 6-digit OTP', 'error');
+      return;
+    }
+
+    // Show loading state
+    verifyOtpBtn.disabled = true;
+    verifyOtpBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Verifying...';
+
+    try {
+      // Call verify OTP API
+      const [success, response] = await callApi('POST', '/user-api/verify-otp/', {
+        contact_number: mobileNumber,
+        otp: otpCode
+      }, csrfToken);
+
+      if (success && response.success) {
+        // Store login data
+        const userData = response.data;
+        localStorage.setItem('is_logged_in', 'true');
+        localStorage.setItem('user_id', userData.user_id);
+        localStorage.setItem('user_role', userData.role);
+        localStorage.setItem('user_name', userData.name || userData.user_id);
+        localStorage.setItem('login_timestamp', new Date().toISOString());
+        localStorage.setItem('is_approved', userData.is_approved ? 'true' : 'false');
+        localStorage.setItem('profile_complete', userData.profile_complete ? 'true' : 'false');
+
+        showToast('Login successful!', 'success');
+
+        // Hide login modal
+        const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+        loginModal.hide();
+
+        // Wait a bit then show contact modal
+        setTimeout(() => {
+          const contactModal = new bootstrap.Modal(document.getElementById('contactModal'));
+          contactModal.show();
+        }, 500);
+
+        // Reload page to update navbar
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+
+      } else {
+        throw new Error(response.error || 'Invalid OTP');
+      }
+    } catch (error) {
+      console.error('Error verifying OTP:', error);
+      showToast('Invalid OTP. Please try again.', 'error');
+
+      // Reset button state
+      verifyOtpBtn.disabled = false;
+      verifyOtpBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>Login';
+    }
+  });
+
+  // Allow Enter key to submit
+  loginMobile.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter' && !sendOtpBtn.style.display === 'none') {
+      sendOtpBtn.click();
+    }
+  });
+
+  loginOtp.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter' && verifyOtpBtn.style.display !== 'none') {
+      verifyOtpBtn.click();
+    }
+  });
 }
 
 function openInquiryForm() {

@@ -16,61 +16,55 @@
     <link rel="stylesheet" href="/static/css/requirements.css">
     <meta name="csrf-token" content="{{ csrf_token }}">
 </head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg" id="navbar">
+<body><nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="index.html">WasteBazar</a>
-            
+            <a class="navbar-brand" href="/">WasteBazar</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown">
-                            Categories
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/marketplace">
+                            <i class="fas fa-shopping-cart me-1"></i>Buy
                         </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" data-category="plastic">Plastic Waste</a></li>
-                            <li><a class="dropdown-item" href="#" data-category="metal">Metal Scrap</a></li>
-                            <li><a class="dropdown-item" href="#" data-category="paper">Paper Waste</a></li>
-                            <li><a class="dropdown-item" href="#" data-category="electronic">Electronic Waste</a></li>
-                            <li><a class="dropdown-item" href="#" data-category="textile">Textile Waste</a></li>
-                        </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="listings.html">Browse Listings</a>
+                        <a class="nav-link" href="/requirements">
+                            <i class="fas fa-tags me-1"></i>Sell
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="requirements.html">Browse Requirements</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html#market-insights">Marketplace</a>
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-plus-circle me-1"></i>Post Requirement
+                        </a>
                     </li>
                 </ul>
-                
                 <div class="d-flex gap-2">
-                    <button class="btn btn-outline-primary">Logout</button>
-                    <button class="btn btn-primary">Dashboard</button>
+                    <a href="/directlogin" class="btn btn-outline-primary">
+                        <i class="fas fa-sign-in-alt me-1"></i>Login
+                    </a>
+                    <a href="/register" class="btn btn-registration">
+                        <i class="fas fa-user-plus me-1"></i>Register
+                    </a>
                 </div>
             </div>
         </div>
     </nav>
-    
+    <!-- Navbar -->
+    {% include 'navbar.html' %}
     <!-- Include Status Bar -->
     {% include 'statusbar.html' %}
     
     <!-- Top Advertisement Banner (Desktop Only) -->
-    <div class="top-ad-banner d-none d-lg-block" id="topAd">
+    {% comment %} <div class="top-ad-banner d-none d-none" id="topAd">
         <div class="container">
             <div class="ad-container">
                 <img src="https://www.bruker.com/en/applications/industrial/metals/_jcr_content/root/overviewstage/desktopImage.coreimg.82.1920.jpeg/1733859095146/metal-tubes.jpeg" alt="Advertisement" class="ad-image">
                 <button class="ad-close" onclick="closeAd('topAd')">&times;</button>
             </div>
         </div>
-    </div>
+    </div> {% endcomment %}
 
     
 
@@ -89,9 +83,9 @@
     </section>
 
     <!-- Main Content Area -->
-    <div class="main-content">
+    <div class="main-content d-block">
         <!-- Left Sidebar Ads (Desktop Only) -->
-        <div class="left-sidebar-ads d-none d-lg-block">
+        {% comment %} <div class="left-sidebar-ads d-none d-lg-block">
             <div class="sidebar-ad" id="leftAd1">
                 <div class="ad-label">Sponsored</div>
                 <div class="ad-content">
@@ -115,7 +109,7 @@
                 </div>
                 <button class="ad-close" onclick="closeAd('leftAd2')">&times;</button>
             </div>
-        </div>
+        </div> {% endcomment %}
 
         <!-- Center Content -->
         <div class="center-content">
@@ -256,7 +250,7 @@
         </div>
 
         <!-- Right Sidebar Ads (Desktop Only) -->
-        <div class="right-sidebar-ads d-none d-lg-block">
+        {% comment %} <div class="right-sidebar-ads d-none d-lg-block">
             <div class="sidebar-ad" id="rightAd1">
                 <div class="ad-label">Sponsored</div>
                 <div class="ad-content">
@@ -280,7 +274,7 @@
                 </div>
                 <button class="ad-close" onclick="closeAd('rightAd2')">&times;</button>
             </div>
-        </div>
+        </div> {% endcomment %}
     </div>
 
     <!-- Mobile Ad Modal -->

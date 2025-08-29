@@ -1044,7 +1044,7 @@
 }
 
 .completion-info {
-    flex: 1;
+    width: 100%;
 }
 
 .completion-title {

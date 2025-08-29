@@ -232,8 +232,7 @@ class DirectLoginHandler {
                     const userId = result.data.user_id;
                     const userRole = result.data.user_role;
                     const userDetailsExist = result.data.user_details;
-                    const is_approved = result.data.is_approved;
-                    const profile_complete = result.data.profile_completed;
+
                     const loggedin = 'true';
 
                     console.log('✅ OTP verified successfully');
@@ -246,8 +245,6 @@ class DirectLoginHandler {
                     localStorage.setItem('user_role', userRole);
                     localStorage.setItem('login_timestamp', new Date().toISOString());
                     localStorage.setItem('is_logged_in', loggedin);
-                    localStorage.setItem('is_approved', is_approved);
-                    localStorage.setItem('profile_complete', profile_complete);
 
                     // Debug: Confirm values are stored
                     console.log('✅ Stored in localStorage:');
